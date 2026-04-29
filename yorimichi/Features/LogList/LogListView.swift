@@ -1,7 +1,6 @@
 import SwiftUI
 import SwiftData
 import MapKit
-import CoreLocation
 
 struct LogListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -131,19 +130,22 @@ struct LogListView: View {
     private var nearbyLogs: [PlaceLog] {
         guard let current = locationService.currentLocation else { return [] }
         return logs.filter { log in
-            guard log.hasLocation else { return false }
-            let logLocation = CLLocation(latitude: log.latitude ?? 0, longitude: log.longitude ?? 0)
-            return logLocation.distance(from: current) <= 500
+            guard let coord = log.coordinate else { return false }
+            let logLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
+            return logLocation.distance(from: current) <= NearbyPlaceSearchViewModel.defaultRadius
         }
     }
 
-    private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.locale = Locale(identifier: "ja_JP")
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .long
+        f.locale = Locale(identifier: "ja_JP")
+        return f
+    }()
 
+    private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
         let grouped = Dictionary(grouping: nearbyLogs) { log in
-            formatter.string(from: log.date)
+            Self.dateFormatter.string(from: log.date)
         }
         return grouped.sorted { $0.value[0].date > $1.value[0].date }
     }
@@ -159,7 +161,7 @@ private struct NearbyPlaceRow: View {
                     .font(.body)
                     .foregroundStyle(.primary)
 
-                if let address = formatAddress(item.placemark) {
+                if let address = item.placemark.formattedAddress {
                     Text(address)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -171,18 +173,6 @@ private struct NearbyPlaceRow: View {
             Image(systemName: "plus.circle")
                 .foregroundStyle(.tint)
         }
-    }
-
-    private func formatAddress(_ placemark: MKPlacemark) -> String? {
-        let parts = [
-            placemark.administrativeArea,
-            placemark.locality,
-            placemark.subLocality,
-            placemark.thoroughfare,
-            placemark.subThoroughfare,
-        ].compactMap { $0 }
-
-        return parts.isEmpty ? nil : parts.joined()
     }
 }
 

@@ -26,7 +26,7 @@ struct EditLogView: View {
             Section("Photos") {
                 PhotosPicker(
                     selection: $selectedPhotos,
-                    maxSelectionCount: 10,
+                    maxSelectionCount: PhotoLoader.maxSelectionCount,
                     matching: .images
                 ) {
                     Label("Add Photos", systemImage: "photo.on.rectangle.angled")
@@ -113,15 +113,7 @@ struct EditLogView: View {
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
-        var dataList: [Data] = []
-        for item in items {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data),
-               let jpeg = uiImage.jpegData(compressionQuality: 0.8) {
-                dataList.append(jpeg)
-            }
-        }
-        newPhotoDataList = dataList
+        newPhotoDataList = await PhotoLoader.loadJPEGData(from: items)
     }
 
     private func saveChanges() {

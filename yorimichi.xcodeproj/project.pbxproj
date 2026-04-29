@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		01A5B62A53DF7C9D28E25839 /* Impression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE7CFCDD7DE0CA066D39EC4 /* Impression.swift */; };
 		05EA2B444A80D576B48E91D2 /* MapTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4592078E5D2424F06F5763C9 /* MapTabView.swift */; };
+		0AA7216D2056B0954DD08B7A /* MKPlacemark+Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */; };
 		0D49B6E873DDFA896C126353 /* LogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3E9744C003D1C54C215723 /* LogListView.swift */; };
 		0D51D7330F121E1A48D861FE /* AddLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E94F438FB5912F60EA0097B /* AddLogView.swift */; };
 		22607E94E8FE5FB6BFE983A5 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243E007F58CD523B9CBE75C3 /* DesignTokens.swift */; };
@@ -18,6 +19,7 @@
 		44E0910FFBEC6E694ECC42E3 /* CopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325E50A7753D7D2510517808 /* CopyButton.swift */; };
 		47F772A60E06BF7259DA52D4 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9FC5A8D5DB9E8A2C471F33 /* LocationService.swift */; };
 		66B3905CE8A9EC9B2DCAAD19 /* PlaceAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891737CC1DA3B1F35FB5550E /* PlaceAnnotationView.swift */; };
+		68D29DB6FD7DA60FE27353B3 /* PhotoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00C43375916424BEE44E93 /* PhotoLoader.swift */; };
 		6B9E91F9C2E297FFD4208A16 /* PlaceLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17910D6277BCFDD430C34F14 /* PlaceLog.swift */; };
 		81AEB2DE06D8F7E91EFCCB4F /* EditLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C836909687DA226DE9D812F3 /* EditLogView.swift */; };
 		886888259F045CE3E3888195 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DFD529EA78CF81A9F86E66 /* PhotoAttachment.swift */; };
@@ -37,6 +39,7 @@
 		0CD43588879C44383786C9C8 /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		17910D6277BCFDD430C34F14 /* PlaceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLog.swift; sourceTree = "<group>"; };
 		1B3E9744C003D1C54C215723 /* LogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogListView.swift; sourceTree = "<group>"; };
+		22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Address.swift"; sourceTree = "<group>"; };
 		243E007F58CD523B9CBE75C3 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		2FF186FED864129FD26DB8CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		325E50A7753D7D2510517808 /* CopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyButton.swift; sourceTree = "<group>"; };
@@ -49,6 +52,7 @@
 		6BBA83E2A36E69F22637CA1B /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		6C59C1B401DDFC6F4669D1EB /* LogRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRowView.swift; sourceTree = "<group>"; };
 		891737CC1DA3B1F35FB5550E /* PlaceAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnotationView.swift; sourceTree = "<group>"; };
+		8D00C43375916424BEE44E93 /* PhotoLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLoader.swift; sourceTree = "<group>"; };
 		9A5E9878C474FB17B001D6D6 /* NearbyPlaceSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPlaceSearchView.swift; sourceTree = "<group>"; };
 		9E9FC5A8D5DB9E8A2C471F33 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		A396A579A9FFB3671B246E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
@@ -95,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				B543FAD4D5B09534965AD4B0 /* Components */,
+				D28E035DC853DDFD0AC6B96E /* Extensions */,
 				5600F1128543B87CB600545A /* Theme */,
 			);
 			path = DesignSystem;
@@ -147,6 +152,14 @@
 				0CD43588879C44383786C9C8 /* LogDetailView.swift */,
 			);
 			path = LogDetail;
+			sourceTree = "<group>";
+		};
+		9BC1BEF62FA381C309302372 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8D00C43375916424BEE44E93 /* PhotoLoader.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		A49FC6060B99394C0D020C22 /* Location */ = {
@@ -204,11 +217,20 @@
 			);
 			sourceTree = "<group>";
 		};
+		D28E035DC853DDFD0AC6B96E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		E9C06A950AC3AF4469122323 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				A49FC6060B99394C0D020C22 /* Location */,
 				B227E56640330B5C9B6DD387 /* Models */,
+				9BC1BEF62FA381C309302372 /* Utilities */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -297,11 +319,13 @@
 				EAF42AB6CCF0CB068C212F5D /* LogDetailView.swift in Sources */,
 				0D49B6E873DDFA896C126353 /* LogListView.swift in Sources */,
 				284EB0BE8AA4C993A8AF45E3 /* LogRowView.swift in Sources */,
+				0AA7216D2056B0954DD08B7A /* MKPlacemark+Address.swift in Sources */,
 				05EA2B444A80D576B48E91D2 /* MapTabView.swift in Sources */,
 				C41856E6AA3F85191D7F43AB /* NearbyPlaceSearchView.swift in Sources */,
 				44A5DF9385AD094C9245D7A7 /* NearbyPlaceSearchViewModel.swift in Sources */,
 				886888259F045CE3E3888195 /* PhotoAttachment.swift in Sources */,
 				C92F2033FC2FDE45C65E41AF /* PhotoGridView.swift in Sources */,
+				68D29DB6FD7DA60FE27353B3 /* PhotoLoader.swift in Sources */,
 				66B3905CE8A9EC9B2DCAAD19 /* PlaceAnnotationView.swift in Sources */,
 				6B9E91F9C2E297FFD4208A16 /* PlaceLog.swift in Sources */,
 				A492D49CA18C92A977F9B7F8 /* RatingView.swift in Sources */,

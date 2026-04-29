@@ -6,21 +6,17 @@ enum DesignTokens {
 
     enum Accent {
         static let primary = Color(hex: "#C67B4E")
-        static let pressed = Color(hex: "#B06B42")
     }
 
     // MARK: - Background
 
     enum Background {
         static let base = Color("BackgroundBase")
-        static let card = Color(.systemBackground)
-        static let cardSoft = Color("BackgroundCardSoft")
     }
 
     // MARK: - Text
 
     enum Text {
-        static let primary = Color(hex: "#2F241D")
         static let secondary = Color(hex: "#6E6258")
     }
 

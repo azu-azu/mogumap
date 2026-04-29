@@ -1,4 +1,3 @@
-import Foundation
 import MapKit
 
 enum Category: String, CaseIterable, Identifiable, Codable {

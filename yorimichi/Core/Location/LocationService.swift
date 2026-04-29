@@ -5,6 +5,7 @@ import Observation
 @MainActor
 final class LocationService: NSObject, CLLocationManagerDelegate {
     var currentLocation: CLLocation?
+    var locationError: Error?
     var authorizationStatus: CLAuthorizationStatus = .notDetermined
 
     private let manager = CLLocationManager()
@@ -38,7 +39,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         _ manager: CLLocationManager,
         didFailWithError error: Error
     ) {
-        // Location request failed — user can retry manually
+        Task { @MainActor in
+            self.locationError = error
+        }
     }
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

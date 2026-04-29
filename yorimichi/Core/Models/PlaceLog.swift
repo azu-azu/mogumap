@@ -48,11 +48,9 @@ final class PlaceLog {
         self.updatedAt = Date()
     }
 
-    var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(
-            latitude: latitude ?? 0,
-            longitude: longitude ?? 0
-        )
+    var coordinate: CLLocationCoordinate2D? {
+        guard let latitude, let longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 
     var hasLocation: Bool {

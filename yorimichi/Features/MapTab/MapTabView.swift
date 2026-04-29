@@ -6,6 +6,7 @@ struct MapTabView: View {
     @Query private var logs: [PlaceLog]
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var locationService = LocationService()
+    private static let zoomRadius: CLLocationDistance = 800
     @State private var hasSetInitialZoom = false
 
     private var logsWithLocation: [PlaceLog] {
@@ -17,9 +18,11 @@ struct MapTabView: View {
             UserAnnotation()
 
             ForEach(logsWithLocation) { log in
-                Annotation(log.placeName, coordinate: log.coordinate) {
-                    NavigationLink(value: log) {
-                        PlaceAnnotationView(log: log)
+                if let coordinate = log.coordinate {
+                    Annotation(log.placeName, coordinate: coordinate) {
+                        NavigationLink(value: log) {
+                            PlaceAnnotationView(log: log)
+                        }
                     }
                 }
             }
@@ -35,8 +38,8 @@ struct MapTabView: View {
             hasSetInitialZoom = true
             position = .region(MKCoordinateRegion(
                 center: location.coordinate,
-                latitudinalMeters: 800,
-                longitudinalMeters: 800
+                latitudinalMeters: Self.zoomRadius,
+                longitudinalMeters: Self.zoomRadius
             ))
         }
         .toolbar {
@@ -45,8 +48,8 @@ struct MapTabView: View {
                     if let location = locationService.currentLocation {
                         position = .region(MKCoordinateRegion(
                             center: location.coordinate,
-                            latitudinalMeters: 800,
-                            longitudinalMeters: 800
+                            latitudinalMeters: Self.zoomRadius,
+                            longitudinalMeters: Self.zoomRadius
                         ))
                     }
                 } label: {

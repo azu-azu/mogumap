@@ -47,7 +47,7 @@ struct AddLogView: View {
             Section("Photos") {
                 PhotosPicker(
                     selection: $selectedPhotos,
-                    maxSelectionCount: 10,
+                    maxSelectionCount: PhotoLoader.maxSelectionCount,
                     matching: .images
                 ) {
                     Label("Select Photos", systemImage: "photo.on.rectangle.angled")
@@ -147,35 +147,15 @@ struct AddLogView: View {
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
-        var dataList: [Data] = []
-        for item in items {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data),
-               let jpeg = uiImage.jpegData(compressionQuality: 0.8) {
-                dataList.append(jpeg)
-            }
-        }
-        photoDataList = dataList
+        photoDataList = await PhotoLoader.loadJPEGData(from: items)
     }
 
     private func applySelectedPlace(_ item: MKMapItem) {
         placeName = item.name ?? ""
         latitude = item.placemark.coordinate.latitude
         longitude = item.placemark.coordinate.longitude
-        address = formatPlacemarkAddress(item.placemark)
+        address = item.placemark.formattedAddress ?? ""
         category = Category.from(poiCategory: item.pointOfInterestCategory)
-    }
-
-    private func formatPlacemarkAddress(_ placemark: MKPlacemark) -> String {
-        [
-            placemark.administrativeArea,
-            placemark.locality,
-            placemark.subLocality,
-            placemark.thoroughfare,
-            placemark.subThoroughfare,
-        ]
-        .compactMap { $0 }
-        .joined()
     }
 
     private func save() {

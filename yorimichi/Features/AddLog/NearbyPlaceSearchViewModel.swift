@@ -8,8 +8,10 @@ final class NearbyPlaceSearchViewModel {
     var searchText = ""
     var isSearching = false
 
+    static let defaultRadius: CLLocationDistance = 500
+
     private let coordinate: CLLocationCoordinate2D
-    private let radius: CLLocationDistance = 500
+    private let radius: CLLocationDistance = defaultRadius
     private var searchTask: Task<Void, Never>?
 
     private static let poiCategories: [MKPointOfInterestCategory] = [
@@ -80,6 +82,8 @@ final class NearbyPlaceSearchViewModel {
                 results = []
             }
         }
-        isSearching = false
+        if !Task.isCancelled {
+            isSearching = false
+        }
     }
 }

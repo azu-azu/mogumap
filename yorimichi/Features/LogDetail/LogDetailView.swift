@@ -1,5 +1,4 @@
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct LogDetailView: View {
     @Environment(\.modelContext) private var modelContext

@@ -86,23 +86,11 @@ private struct PlaceRow: View {
                 .font(.body)
                 .foregroundStyle(.primary)
 
-            if let address = formatAddress(item.placemark) {
+            if let address = item.placemark.formattedAddress {
                 Text(address)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
-    }
-
-    private func formatAddress(_ placemark: MKPlacemark) -> String? {
-        let parts = [
-            placemark.administrativeArea,
-            placemark.locality,
-            placemark.subLocality,
-            placemark.thoroughfare,
-            placemark.subThoroughfare,
-        ].compactMap { $0 }
-
-        return parts.isEmpty ? nil : parts.joined()
     }
 }
