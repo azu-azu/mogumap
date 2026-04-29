@@ -12,15 +12,9 @@ struct LogRowView: View {
                     .font(.body)
                     .fontWeight(.medium)
 
-                HStack(spacing: 8) {
-                    Text(log.date, format: .dateTime.hour().minute())
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    if let category = Category(rawValue: log.category) {
-                        CategoryBadge(category: category)
-                    }
-                }
+                Text(log.date, format: .dateTime.hour().minute())
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
                 if log.rating > 0 {
                     RatingDisplayView(rating: log.rating)
