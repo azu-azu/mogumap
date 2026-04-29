@@ -18,6 +18,6 @@ struct CategoryBadge: View {
     HStack {
         CategoryBadge(category: .cafe)
         CategoryBadge(category: .restaurant)
-        CategoryBadge(category: .travel)
+        CategoryBadge(category: .scene)
     }
 }
