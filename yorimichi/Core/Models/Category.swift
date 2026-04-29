@@ -1,4 +1,5 @@
 import Foundation
+import MapKit
 
 enum Category: String, CaseIterable, Identifiable, Codable {
     case cafe
@@ -38,6 +39,17 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         case .temple: "building.columns.fill"
         case .museum: "building.2.fill"
         case .other: "mappin.circle.fill"
+        }
+    }
+
+    static func from(poiCategory: MKPointOfInterestCategory?) -> Category {
+        guard let poi = poiCategory else { return .other }
+        switch poi {
+        case .cafe: return .cafe
+        case .restaurant: return .restaurant
+        case .store: return .shop
+        case .museum: return .museum
+        default: return .other
         }
     }
 }

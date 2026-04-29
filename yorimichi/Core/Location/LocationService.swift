@@ -3,7 +3,7 @@ import Observation
 
 @Observable
 @MainActor
-final class LocationManager: NSObject, CLLocationManagerDelegate {
+final class LocationService: NSObject, CLLocationManagerDelegate {
     var currentLocation: CLLocation?
     var authorizationStatus: CLAuthorizationStatus = .notDetermined
 
@@ -20,6 +20,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     func requestCurrentLocation() {
+        requestPermission()
         manager.requestLocation()
     }
 
