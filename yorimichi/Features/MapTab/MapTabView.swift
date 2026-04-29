@@ -36,6 +36,7 @@ struct MapTabView: View {
         }
         .onChange(of: appState.mapFocusCoordinate?.latitude) { _, _ in
             guard let coord = appState.mapFocusCoordinate else { return }
+            hasSetInitialZoom = true
             position = .region(MKCoordinateRegion(
                 center: coord,
                 latitudinalMeters: Self.zoomRadius,
