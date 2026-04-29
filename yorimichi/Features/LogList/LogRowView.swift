@@ -29,6 +29,11 @@ struct LogRowView: View {
 
             Spacer()
 
+            if let raw = log.impression, let imp = Impression(rawValue: raw) {
+                Text(imp.emoji)
+                    .font(.body)
+            }
+
             if let firstPhoto = log.photos.sorted(by: { $0.sortOrder < $1.sortOrder }).first,
                let uiImage = UIImage(data: firstPhoto.imageData) {
                 Image(uiImage: uiImage)

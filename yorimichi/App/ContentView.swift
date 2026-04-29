@@ -7,7 +7,7 @@ struct ContentView: View {
                 LogListView()
             }
             .tabItem {
-                Label("Timeline", systemImage: "clock.fill")
+                Label("Home", systemImage: "house.fill")
             }
 
             NavigationStack {
@@ -18,10 +18,10 @@ struct ContentView: View {
             }
 
             NavigationStack {
-                SearchView()
+                TimelineView()
             }
             .tabItem {
-                Label("Search", systemImage: "magnifyingglass")
+                Label("Timeline", systemImage: "clock.fill")
             }
         }
     }

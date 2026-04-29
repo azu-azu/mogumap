@@ -15,6 +15,7 @@ struct AddLogView: View {
     @State private var date = Date()
     @State private var memo = ""
     @State private var rating = 0
+    @State private var impression: Impression = .neutral
     @State private var latitude: Double?
     @State private var longitude: Double?
     @State private var address: String = ""
@@ -30,7 +31,10 @@ struct AddLogView: View {
     var body: some View {
         Form {
             Section("Place") {
-                TextField("Place name", text: $placeName)
+                HStack {
+                    TextField("Place name", text: $placeName)
+                    CopyButton(text: placeName)
+                }
 
                 Picker("Category", selection: $category) {
                     ForEach(Category.allCases) { cat in
@@ -80,7 +84,10 @@ struct AddLogView: View {
                     .foregroundStyle(.secondary)
                 }
 
-                TextField("Address", text: $address)
+                HStack {
+                    TextField("Address", text: $address)
+                    CopyButton(text: address)
+                }
 
                 if selectedPlace == nil {
                     Button {
@@ -101,6 +108,16 @@ struct AddLogView: View {
 
             Section("Rating") {
                 RatingView(rating: $rating)
+            }
+
+            Section("Impression") {
+                Picker("Impression", selection: $impression) {
+                    ForEach(Impression.allCases) { imp in
+                        Text("\(imp.emoji) \(imp.displayName)")
+                            .tag(imp)
+                    }
+                }
+                .pickerStyle(.segmented)
             }
 
             Section("Memo") {
@@ -168,7 +185,8 @@ struct AddLogView: View {
             longitude: longitude,
             address: address.isEmpty ? nil : address,
             memo: memo,
-            rating: rating
+            rating: rating,
+            impression: impression.rawValue
         )
         modelContext.insert(log)
 

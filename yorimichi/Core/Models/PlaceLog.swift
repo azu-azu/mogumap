@@ -13,6 +13,7 @@ final class PlaceLog {
     var address: String?
     var memo: String
     var rating: Int
+    var impression: String?
     var isFavorite: Bool
     var createdAt: Date
     var updatedAt: Date
@@ -29,6 +30,7 @@ final class PlaceLog {
         address: String? = nil,
         memo: String = "",
         rating: Int = 0,
+        impression: String? = nil,
         isFavorite: Bool = false
     ) {
         self.id = UUID()
@@ -40,6 +42,7 @@ final class PlaceLog {
         self.address = address
         self.memo = memo
         self.rating = rating
+        self.impression = impression
         self.isFavorite = isFavorite
         self.createdAt = Date()
         self.updatedAt = Date()

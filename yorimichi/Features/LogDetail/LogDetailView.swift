@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct LogDetailView: View {
     @Environment(\.modelContext) private var modelContext
@@ -10,13 +11,20 @@ struct LogDetailView: View {
         List {
             Section {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(log.placeName)
-                        .font(.title2)
-                        .fontWeight(.bold)
+                    HStack {
+                        Text(log.placeName)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Spacer()
+                        CopyButton(text: log.placeName)
+                    }
 
                     HStack {
                         if let category = Category(rawValue: log.category) {
                             CategoryBadge(category: category)
+                        }
+                        if let raw = log.impression, let imp = Impression(rawValue: raw) {
+                            Text(imp.emoji)
                         }
                         if log.isFavorite {
                             Image(systemName: "heart.fill")
@@ -42,10 +50,14 @@ struct LogDetailView: View {
 
             if let address = log.address, !address.isEmpty {
                 Section("Address") {
-                    Label {
-                        Text(address)
-                    } icon: {
-                        Image(systemName: "mappin.and.ellipse")
+                    HStack {
+                        Label {
+                            Text(address)
+                        } icon: {
+                            Image(systemName: "mappin.and.ellipse")
+                        }
+                        Spacer()
+                        CopyButton(text: address)
                     }
                 }
             }

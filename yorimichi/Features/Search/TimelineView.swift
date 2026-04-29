@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct SearchView: View {
+struct TimelineView: View {
     @Query(sort: \PlaceLog.date, order: .reverse) private var allLogs: [PlaceLog]
 
     @State private var searchText = ""
@@ -45,7 +45,6 @@ struct SearchView: View {
         }
         .listStyle(.insetGrouped)
         .searchable(text: $searchText, prompt: "Search places...")
-        .navigationTitle("Search")
         .navigationDestination(for: PlaceLog.self) { log in
             LogDetailView(log: log)
         }
@@ -106,7 +105,7 @@ struct SearchView: View {
 
 #Preview {
     NavigationStack {
-        SearchView()
+        TimelineView()
     }
     .modelContainer(for: [PlaceLog.self, PhotoAttachment.self], inMemory: true)
 }

@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import MapKit
+import CoreLocation
 
 struct LogListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -14,16 +15,18 @@ struct LogListView: View {
         List {
             nearbySection
 
-            if logs.isEmpty {
-                ContentUnavailableView(
-                    "No Logs Yet",
-                    systemImage: "mappin.slash",
-                    description: Text("Tap a nearby place to add your first log.")
-                )
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
+            if nearbyLogs.isEmpty {
+                Section("History") {
+                    ContentUnavailableView(
+                        "No Logs Nearby",
+                        systemImage: "mappin.slash",
+                        description: Text("No past visits around here.")
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                }
             } else {
-                ForEach(groupedByDate, id: \.key) { day, dayLogs in
+                ForEach(nearbyGroupedByDate, id: \.key) { day, dayLogs in
                     Section(day) {
                         ForEach(dayLogs) { log in
                             NavigationLink(value: log) {
@@ -53,7 +56,6 @@ struct LogListView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("Timeline")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -123,12 +125,21 @@ struct LogListView: View {
         }
     }
 
-    private var groupedByDate: [(key: String, value: [PlaceLog])] {
+    private var nearbyLogs: [PlaceLog] {
+        guard let current = locationService.currentLocation else { return [] }
+        return logs.filter { log in
+            guard log.hasLocation else { return false }
+            let logLocation = CLLocation(latitude: log.latitude ?? 0, longitude: log.longitude ?? 0)
+            return logLocation.distance(from: current) <= 500
+        }
+    }
+
+    private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.locale = Locale(identifier: "ja_JP")
 
-        let grouped = Dictionary(grouping: logs) { log in
+        let grouped = Dictionary(grouping: nearbyLogs) { log in
             formatter.string(from: log.date)
         }
         return grouped.sorted { $0.value[0].date > $1.value[0].date }

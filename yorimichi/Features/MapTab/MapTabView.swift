@@ -24,7 +24,6 @@ struct MapTabView: View {
                 }
             }
         }
-        .navigationTitle("Map")
         .navigationDestination(for: PlaceLog.self) { log in
             LogDetailView(log: log)
         }

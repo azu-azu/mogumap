@@ -66,6 +66,16 @@ struct EditLogView: View {
                 RatingView(rating: $log.rating)
             }
 
+            Section("Impression") {
+                Picker("Impression", selection: impressionBinding) {
+                    ForEach(Impression.allCases) { imp in
+                        Text("\(imp.emoji) \(imp.displayName)")
+                            .tag(imp)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+
             Section("Memo") {
                 TextEditor(text: $log.memo)
                     .frame(minHeight: 80)
@@ -84,6 +94,13 @@ struct EditLogView: View {
                 }
             }
         }
+    }
+
+    private var impressionBinding: Binding<Impression> {
+        Binding(
+            get: { log.impression.flatMap(Impression.init(rawValue:)) ?? .neutral },
+            set: { log.impression = $0.rawValue }
+        )
     }
 
     private var categoryBinding: Binding<Category> {
