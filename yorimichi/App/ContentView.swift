@@ -1,14 +1,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var appState = AppState()
+
     var body: some View {
-        TabView {
+        TabView(selection: $appState.selectedTab) {
             NavigationStack {
                 LogListView()
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
             }
+            .tag(AppState.Tab.home)
 
             NavigationStack {
                 MapTabView()
@@ -16,6 +19,7 @@ struct ContentView: View {
             .tabItem {
                 Label("Map", systemImage: "map.fill")
             }
+            .tag(AppState.Tab.map)
 
             NavigationStack {
                 TimelineView()
@@ -23,7 +27,9 @@ struct ContentView: View {
             .tabItem {
                 Label("Timeline", systemImage: "clock.fill")
             }
+            .tag(AppState.Tab.timeline)
         }
+        .environment(appState)
     }
 }
 

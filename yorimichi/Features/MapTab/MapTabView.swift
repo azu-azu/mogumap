@@ -3,6 +3,7 @@ import SwiftData
 import MapKit
 
 struct MapTabView: View {
+    @Environment(AppState.self) private var appState
     @Query private var logs: [PlaceLog]
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var locationService = LocationService()
@@ -33,6 +34,15 @@ struct MapTabView: View {
         .task {
             locationService.requestCurrentLocation()
         }
+        .onChange(of: appState.mapFocusCoordinate?.latitude) { _, _ in
+            guard let coord = appState.mapFocusCoordinate else { return }
+            position = .region(MKCoordinateRegion(
+                center: coord,
+                latitudinalMeters: Self.zoomRadius,
+                longitudinalMeters: Self.zoomRadius
+            ))
+            appState.mapFocusCoordinate = nil
+        }
         .onChange(of: locationService.currentLocation?.coordinate.latitude) { _, _ in
             guard !hasSetInitialZoom, let location = locationService.currentLocation else { return }
             hasSetInitialZoom = true
@@ -43,6 +53,13 @@ struct MapTabView: View {
             ))
         }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    GoogleMapsLauncher.openCurrentLocation()
+                } label: {
+                    Image(systemName: "map")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     if let location = locationService.currentLocation {
@@ -64,5 +81,6 @@ struct MapTabView: View {
     NavigationStack {
         MapTabView()
     }
+    .environment(AppState())
     .modelContainer(for: [PlaceLog.self, PhotoAttachment.self], inMemory: true)
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct LogDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppState.self) private var appState
     let log: PlaceLog
     @State private var showDeleteConfirm = false
 
@@ -73,6 +74,22 @@ struct LogDetailView: View {
                 }
             }
 
+            if log.hasLocation {
+                Section {
+                    Button {
+                        showOnMap()
+                    } label: {
+                        Label("Show on Map", systemImage: "mappin.and.ellipse")
+                    }
+
+                    Button {
+                        openInGoogleMaps()
+                    } label: {
+                        Label("Open in Google Maps", systemImage: "map")
+                    }
+                }
+            }
+
             Section {
                 Button(role: .destructive) {
                     showDeleteConfirm = true
@@ -93,11 +110,22 @@ struct LogDetailView: View {
                 }
             }
         }
-        .confirmationDialog("Delete this log?", isPresented: $showDeleteConfirm) {
+        .confirmationDialog("Delete this log?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 modelContext.delete(log)
                 dismiss()
             }
         }
+    }
+
+    private func showOnMap() {
+        guard let coordinate = log.coordinate else { return }
+        appState.mapFocusCoordinate = coordinate
+        appState.selectedTab = .map
+    }
+
+    private func openInGoogleMaps() {
+        guard let coordinate = log.coordinate else { return }
+        GoogleMapsLauncher.open(latitude: coordinate.latitude, longitude: coordinate.longitude, query: log.placeName)
     }
 }
