@@ -14,7 +14,7 @@ struct CopyButton: View {
             }
         } label: {
             Image(systemName: copied ? "checkmark" : "doc.on.doc")
-                .foregroundStyle(copied ? .green : .secondary)
+                .foregroundStyle(copied ? DesignTokens.Semantic.good : DesignTokens.Text.secondary)
                 .font(.caption)
         }
         .buttonStyle(.plain)

@@ -8,7 +8,8 @@ struct CategoryBadge: View {
             .font(.caption)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(.fill.tertiary)
+            .foregroundStyle(.white)
+            .background(DesignTokens.Accent.primary)
             .clipShape(Capsule())
     }
 }

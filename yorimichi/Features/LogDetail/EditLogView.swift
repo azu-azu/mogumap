@@ -85,6 +85,8 @@ struct EditLogView: View {
                 Toggle("Favorite", isOn: $log.isFavorite)
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.Background.base)
         .navigationTitle("Edit")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

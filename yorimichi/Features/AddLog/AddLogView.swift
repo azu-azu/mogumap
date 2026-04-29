@@ -125,6 +125,8 @@ struct AddLogView: View {
                     .frame(minHeight: 80)
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.Background.base)
         .navigationTitle("New Log")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

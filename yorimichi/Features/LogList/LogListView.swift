@@ -56,6 +56,8 @@ struct LogListView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.Background.base)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -111,6 +113,7 @@ struct LogListView: View {
                         } label: {
                             NearbyPlaceRow(item: item)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             } else {

@@ -8,7 +8,7 @@ struct RatingView: View {
         HStack(spacing: 4) {
             ForEach(1...maxRating, id: \.self) { index in
                 Image(systemName: index <= rating ? "star.fill" : "star")
-                    .foregroundStyle(index <= rating ? .yellow : .gray.opacity(0.4))
+                    .foregroundStyle(index <= rating ? DesignTokens.Accent.primary : DesignTokens.Semantic.neutral.opacity(0.4))
                     .onTapGesture {
                         rating = index == rating ? 0 : index
                     }
@@ -26,7 +26,7 @@ struct RatingDisplayView: View {
         HStack(spacing: 2) {
             ForEach(1...maxRating, id: \.self) { index in
                 Image(systemName: index <= rating ? "star.fill" : "star")
-                    .foregroundStyle(index <= rating ? .yellow : .gray.opacity(0.4))
+                    .foregroundStyle(index <= rating ? DesignTokens.Accent.primary : DesignTokens.Semantic.neutral.opacity(0.4))
             }
         }
         .font(.caption)

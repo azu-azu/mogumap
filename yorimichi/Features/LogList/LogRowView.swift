@@ -57,7 +57,7 @@ struct LogRowView: View {
         let cat = Category(rawValue: log.category) ?? .other
         return Image(systemName: cat.icon)
             .font(.title3)
-            .foregroundStyle(.tint)
+            .foregroundStyle(DesignTokens.Accent.primary)
             .frame(width: 32, height: 32)
     }
 }

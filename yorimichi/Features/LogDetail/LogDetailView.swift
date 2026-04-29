@@ -83,6 +83,8 @@ struct LogDetailView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.Background.base)
         .navigationTitle("Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

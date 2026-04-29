@@ -10,11 +10,11 @@ struct PlaceAnnotationView: View {
                 .font(.caption)
                 .padding(6)
                 .foregroundStyle(.white)
-                .background(Circle().fill(.tint))
+                .background(Circle().fill(DesignTokens.Accent.primary))
 
             Image(systemName: "triangle.fill")
                 .font(.system(size: 8))
-                .foregroundStyle(.tint)
+                .foregroundStyle(DesignTokens.Accent.primary)
                 .rotationEffect(.degrees(180))
                 .offset(y: -2)
         }

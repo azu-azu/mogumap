@@ -25,9 +25,9 @@ enum Impression: String, CaseIterable, Identifiable, Codable {
 
     var color: Color {
         switch self {
-        case .good: .green
-        case .neutral: .orange
-        case .bad: .red
+        case .good: DesignTokens.Semantic.good
+        case .neutral: DesignTokens.Semantic.neutral
+        case .bad: DesignTokens.Semantic.bad
         }
     }
 }

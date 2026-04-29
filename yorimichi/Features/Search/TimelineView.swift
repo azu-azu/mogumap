@@ -44,6 +44,8 @@ struct TimelineView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.Background.base)
         .searchable(text: $searchText, prompt: "Search places...")
         .navigationDestination(for: PlaceLog.self) { log in
             LogDetailView(log: log)
@@ -96,9 +98,12 @@ struct TimelineView: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(isSelected ? Color.accentColor : Color(.systemGray5))
-            .foregroundStyle(isSelected ? .white : .primary)
+            .background(isSelected ? DesignTokens.Accent.primary : .clear)
+            .foregroundStyle(isSelected ? .white : DesignTokens.Text.secondary)
             .clipShape(Capsule())
+            .overlay(
+                Capsule().stroke(isSelected ? .clear : DesignTokens.Semantic.neutral, lineWidth: 1)
+            )
         }
     }
 }
