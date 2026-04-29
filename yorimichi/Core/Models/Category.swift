@@ -3,12 +3,12 @@ import MapKit
 enum Category: String, CaseIterable, Identifiable, Codable {
     case cafe
     case restaurant
-    case travel
-    case walk
-    case event
+    case scene
     case shop
     case temple
     case museum
+    case event
+    case hotel
     case other
 
     var id: String { rawValue }
@@ -17,8 +17,8 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .cafe: "Cafe"
         case .restaurant: "Restaurant"
-        case .travel: "Travel"
-        case .walk: "Walk"
+        case .hotel: "Hotel"
+        case .scene: "Scene"
         case .event: "Event"
         case .shop: "Shop"
         case .temple: "Temple"
@@ -31,8 +31,8 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .cafe: "cup.and.saucer.fill"
         case .restaurant: "fork.knife"
-        case .travel: "airplane"
-        case .walk: "figure.walk"
+        case .hotel: "bed.double.fill"
+        case .scene: "sun.and.horizon.fill"
         case .event: "star.fill"
         case .shop: "bag.fill"
         case .temple: "building.columns.fill"
