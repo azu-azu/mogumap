@@ -1,6 +1,6 @@
-import MapKit
+import CoreLocation
 
-extension MKPlacemark {
+extension CLPlacemark {
     var formattedAddress: String? {
         let parts = [
             administrativeArea,

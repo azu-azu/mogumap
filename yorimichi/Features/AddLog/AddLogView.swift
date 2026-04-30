@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
-import MapKit
+@preconcurrency import MapKit
 
 struct AddLogView: View {
     @Environment(\.modelContext) private var modelContext
@@ -92,8 +92,13 @@ struct AddLogView: View {
                 }
 
                 HStack {
-                    TextField("Address", text: $address)
+                    TextField("Address or Google Maps URL", text: $address)
                     CopyButton(text: address)
+                }
+                .onChange(of: address) { _, newValue in
+                    if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
+                        Task { await handleGoogleMapsURL(newValue) }
+                    }
                 }
 
                 if selectedPlace == nil {
@@ -168,6 +173,41 @@ struct AddLogView: View {
         longitude = item.placemark.coordinate.longitude
         address = item.placemark.formattedAddress ?? ""
         category = Category.from(poiCategory: item.pointOfInterestCategory)
+    }
+
+    private func handleGoogleMapsURL(_ urlString: String) async {
+        var resolvedURL = urlString
+
+        if GoogleMapsURLParser.isShortURL(urlString) {
+            if let resolved = await URLResolver.resolveRedirect(urlString) {
+                resolvedURL = resolved
+            }
+        }
+
+        guard let result = GoogleMapsURLParser.parse(resolvedURL) else { return }
+
+        latitude = result.coordinate.latitude
+        longitude = result.coordinate.longitude
+
+        if let name = result.placeName {
+            placeName = name
+        }
+
+        let location = CLLocation(latitude: result.coordinate.latitude, longitude: result.coordinate.longitude)
+        let geocoder = CLGeocoder()
+        if let placemark = try? await geocoder.reverseGeocodeLocation(location).first {
+            address = placemark.formattedAddress ?? ""
+        }
+
+        let request = MKLocalPointsOfInterestRequest(center: result.coordinate, radius: GoogleMapsURLParser.pinpointRadius)
+        let search = MKLocalSearch(request: request)
+        if let response = try? await search.start(),
+           let closest = response.mapItems.first {
+            if placeName.isEmpty {
+                placeName = closest.name ?? ""
+            }
+            category = Category.from(poiCategory: closest.pointOfInterestCategory)
+        }
     }
 
     private func save() {
