@@ -9,6 +9,7 @@ struct EditLogView: View {
 
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var newPhotoDataList: [Data] = []
+    @State private var showCamera = false
 
     var body: some View {
         Form {
@@ -33,6 +34,12 @@ struct EditLogView: View {
                 }
                 .onChange(of: selectedPhotos) { _, newItems in
                     Task { await loadPhotos(from: newItems) }
+                }
+
+                Button {
+                    showCamera = true
+                } label: {
+                    Label("Take Photo", systemImage: "camera")
                 }
 
                 if !log.photos.isEmpty || !newPhotoDataList.isEmpty {
@@ -76,7 +83,7 @@ struct EditLogView: View {
                 .pickerStyle(.segmented)
             }
 
-            Section("Memo") {
+            Section("Thoughts (free log)") {
                 TextEditor(text: $log.memo)
                     .frame(minHeight: 80)
             }
@@ -94,6 +101,11 @@ struct EditLogView: View {
                 Button("Done") {
                     saveChanges()
                 }
+            }
+        }
+        .fullScreenCover(isPresented: $showCamera) {
+            CameraView { imageData in
+                newPhotoDataList.append(imageData)
             }
         }
     }

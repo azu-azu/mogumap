@@ -22,6 +22,7 @@ struct AddLogView: View {
     @State private var locationService = LocationService()
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
+    @State private var showCamera = false
 
     init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
         self.selectedPlace = selectedPlace
@@ -54,6 +55,12 @@ struct AddLogView: View {
                 }
                 .onChange(of: selectedPhotos) { _, newItems in
                     Task { await loadPhotos(from: newItems) }
+                }
+
+                Button {
+                    showCamera = true
+                } label: {
+                    Label("Take Photo", systemImage: "camera")
                 }
 
                 if !photoDataList.isEmpty {
@@ -120,7 +127,7 @@ struct AddLogView: View {
                 .pickerStyle(.segmented)
             }
 
-            Section("Memo") {
+            Section("Thoughts (free log)") {
                 TextEditor(text: $memo)
                     .frame(minHeight: 80)
             }
@@ -142,6 +149,11 @@ struct AddLogView: View {
                 applySelectedPlace(place)
             } else {
                 locationService.requestCurrentLocation()
+            }
+        }
+        .fullScreenCover(isPresented: $showCamera) {
+            CameraView { imageData in
+                photoDataList.append(imageData)
             }
         }
     }

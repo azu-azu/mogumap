@@ -35,6 +35,7 @@
 		E5395EC5C013E7BD3FDAE5C4 /* CategoryBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D288AFB4094A864E795FEA4C /* CategoryBadge.swift */; };
 		EAF42AB6CCF0CB068C212F5D /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD43588879C44383786C9C8 /* LogDetailView.swift */; };
 		EC0EEA7F5F44B7DB7FDCB2EE /* YorimichiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712AB0C8C6FD99636668798 /* YorimichiApp.swift */; };
+		FF21121558379B8EFEF3DC4F /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B124572651EE4A4ED274DD73 /* CameraView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		A396A579A9FFB3671B246E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		A5DFD529EA78CF81A9F86E66 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		A83F76567B9455752EF817FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B124572651EE4A4ED274DD73 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		B3B611DA7E14859307509082 /* yorimichi.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = yorimichi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFBA76D6984CEA89C82D1D0 /* GoogleMapsLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsLauncher.swift; sourceTree = "<group>"; };
 		C836909687DA226DE9D812F3 /* EditLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLogView.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 		B543FAD4D5B09534965AD4B0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				B124572651EE4A4ED274DD73 /* CameraView.swift */,
 				D288AFB4094A864E795FEA4C /* CategoryBadge.swift */,
 				325E50A7753D7D2510517808 /* CopyButton.swift */,
 				5CBA2DA480B3F20FA4FF4848 /* PhotoGridView.swift */,
@@ -316,6 +319,7 @@
 			files = (
 				0D51D7330F121E1A48D861FE /* AddLogView.swift in Sources */,
 				D375166A8A596C29C54A312A /* AppState.swift in Sources */,
+				FF21121558379B8EFEF3DC4F /* CameraView.swift in Sources */,
 				90984DCE1825005B05B708D4 /* Category.swift in Sources */,
 				E5395EC5C013E7BD3FDAE5C4 /* CategoryBadge.swift in Sources */,
 				C519D1488E8374F8F82D715E /* ColorExtensions.swift in Sources */,
@@ -356,6 +360,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = yorimichi/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "写真を撮影してログに添付します。";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地を取得して、チェックイン場所を記録します。";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "写真をログに添付するため、フォトライブラリにアクセスします。";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -444,6 +449,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = yorimichi/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "写真を撮影してログに添付します。";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地を取得して、チェックイン場所を記録します。";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "写真をログに添付するため、フォトライブラリにアクセスします。";
 				LD_RUNPATH_SEARCH_PATHS = (

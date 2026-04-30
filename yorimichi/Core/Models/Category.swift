@@ -17,12 +17,12 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .cafe: "Cafe"
         case .restaurant: "Restaurant"
-        case .hotel: "Hotel"
         case .scene: "Scene"
-        case .event: "Event"
         case .shop: "Shop"
         case .temple: "Temple"
         case .museum: "Museum"
+        case .event: "Event"
+        case .hotel: "Hotel"
         case .other: "Other"
         }
     }
@@ -31,12 +31,12 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .cafe: "cup.and.saucer.fill"
         case .restaurant: "fork.knife"
-        case .hotel: "bed.double.fill"
         case .scene: "sun.and.horizon.fill"
-        case .event: "star.fill"
         case .shop: "bag.fill"
         case .temple: "building.columns.fill"
         case .museum: "building.2.fill"
+        case .event: "star.fill"
+        case .hotel: "bed.double.fill"
         case .other: "mappin.circle.fill"
         }
     }
@@ -44,11 +44,14 @@ enum Category: String, CaseIterable, Identifiable, Codable {
     static func from(poiCategory: MKPointOfInterestCategory?) -> Category {
         guard let poi = poiCategory else { return .other }
         switch poi {
-        case .cafe: return .cafe
-        case .restaurant: return .restaurant
-        case .store: return .shop
-        case .museum: return .museum
-        default: return .other
+        case .cafe, .bakery:                    return .cafe
+        case .restaurant, .brewery, .winery:    return .restaurant
+        case .store, .foodMarket:               return .shop
+        case .museum:                           return .museum
+        case .hotel:                            return .hotel
+        case .park, .beach, .nationalPark:      return .scene
+        case .theater, .nightlife, .stadium:    return .event
+        default:                                return .other
         }
     }
 }

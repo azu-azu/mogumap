@@ -69,7 +69,7 @@ struct LogDetailView: View {
             }
 
             if !log.memo.isEmpty {
-                Section("Memo") {
+                Section("Thoughts (free log)") {
                     Text(log.memo)
                 }
             }
