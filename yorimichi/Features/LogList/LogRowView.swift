@@ -51,6 +51,7 @@ struct LogRowView: View {
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(DesignTokens.Background.card)
+                .shadow(color: .black.opacity(0.8), radius: 6, x: 0, y: 3)
         )
     }
 
