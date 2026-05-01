@@ -31,6 +31,9 @@ struct LogListView: View {
                             NavigationLink(value: log) {
                                 LogRowView(log: log)
                             }
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {
                                     modelContext.delete(log)
@@ -120,6 +123,9 @@ struct LogListView: View {
                             NearbyPlaceRow(item: item)
                         }
                         .buttonStyle(.plain)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
                 }
             } else {
@@ -166,6 +172,7 @@ private struct NearbyPlaceRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.name ?? "Unknown")
                     .font(.body)
+                    .fontWeight(.medium)
                     .foregroundStyle(.primary)
 
                 if let address = item.placemark.formattedAddress {
@@ -177,9 +184,15 @@ private struct NearbyPlaceRow: View {
 
             Spacer()
 
-            Image(systemName: "plus.circle")
-                .foregroundStyle(.tint)
+            Image(systemName: "plus.circle.fill")
+                .font(.title3)
+                .foregroundStyle(DesignTokens.Accent.primary)
         }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(DesignTokens.Background.card)
+        )
     }
 }
 

@@ -12,6 +12,7 @@ enum DesignTokens {
 
     enum Background {
         static let base = Color("BackgroundBase")
+        static let card = Color("BackgroundCard")
     }
 
     // MARK: - Text

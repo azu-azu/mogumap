@@ -39,6 +39,9 @@ struct TimelineView: View {
                         NavigationLink(value: log) {
                             LogRowView(log: log)
                         }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
                 }
             }

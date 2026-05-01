@@ -10,7 +10,7 @@ struct LogRowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(log.placeName)
                     .font(.body)
-                    .fontWeight(.medium)
+                    .fontWeight(.semibold)
 
                 Text(log.date, format: .dateTime.hour().minute())
                     .font(.caption)
@@ -23,35 +23,46 @@ struct LogRowView: View {
 
             Spacer()
 
-            if let raw = log.impression, let imp = Impression(rawValue: raw) {
-                Text(imp.emoji)
-                    .font(.body)
-            }
+            VStack(alignment: .trailing, spacing: 6) {
+                HStack(spacing: 4) {
+                    if let raw = log.impression, let imp = Impression(rawValue: raw) {
+                        Text(imp.emoji)
+                            .font(.callout)
+                    }
+                    if log.isFavorite {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.red)
+                            .font(.caption)
+                    }
+                }
 
-            if let firstPhoto = log.photos.sorted(by: { $0.sortOrder < $1.sortOrder }).first,
-               let uiImage = UIImage(data: firstPhoto.imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 44, height: 44)
-                    .clipped()
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-            }
-
-            if log.isFavorite {
-                Image(systemName: "heart.fill")
-                    .foregroundStyle(.red)
-                    .font(.caption)
+                if let firstPhoto = log.photos.sorted(by: { $0.sortOrder < $1.sortOrder }).first,
+                   let uiImage = UIImage(data: firstPhoto.imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 48, height: 48)
+                        .clipped()
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
             }
         }
-        .padding(.vertical, 4)
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(DesignTokens.Background.card)
+        )
     }
 
     private var categoryIcon: some View {
         let cat = Category(rawValue: log.category) ?? .other
         return Image(systemName: cat.icon)
             .font(.title3)
-            .foregroundStyle(DesignTokens.Accent.primary)
-            .frame(width: 32, height: 32)
+            .foregroundStyle(.white)
+            .frame(width: 36, height: 36)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(DesignTokens.Accent.primary)
+            )
     }
 }
