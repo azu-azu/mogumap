@@ -34,24 +34,16 @@ struct MapTabView: View {
         .task {
             locationService.requestCurrentLocation()
         }
-        .onChange(of: appState.mapFocusCoordinate?.latitude) { _, _ in
+        .onChange(of: appState.mapFocusVersion) { _, _ in
             guard let coord = appState.mapFocusCoordinate else { return }
             hasSetInitialZoom = true
-            position = .region(MKCoordinateRegion(
-                center: coord,
-                latitudinalMeters: Self.zoomRadius,
-                longitudinalMeters: Self.zoomRadius
-            ))
+            zoomTo(coord)
             appState.mapFocusCoordinate = nil
         }
-        .onChange(of: locationService.currentLocation?.coordinate.latitude) { _, _ in
+        .onChange(of: locationService.locationVersion) { _, _ in
             guard !hasSetInitialZoom, let location = locationService.currentLocation else { return }
             hasSetInitialZoom = true
-            position = .region(MKCoordinateRegion(
-                center: location.coordinate,
-                latitudinalMeters: Self.zoomRadius,
-                longitudinalMeters: Self.zoomRadius
-            ))
+            zoomTo(location.coordinate)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -64,17 +56,21 @@ struct MapTabView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     if let location = locationService.currentLocation {
-                        position = .region(MKCoordinateRegion(
-                            center: location.coordinate,
-                            latitudinalMeters: Self.zoomRadius,
-                            longitudinalMeters: Self.zoomRadius
-                        ))
+                        zoomTo(location.coordinate)
                     }
                 } label: {
                     Image(systemName: "location")
                 }
             }
         }
+    }
+
+    private func zoomTo(_ coordinate: CLLocationCoordinate2D) {
+        position = .region(MKCoordinateRegion(
+            center: coordinate,
+            latitudinalMeters: Self.zoomRadius,
+            longitudinalMeters: Self.zoomRadius
+        ))
     }
 }
 

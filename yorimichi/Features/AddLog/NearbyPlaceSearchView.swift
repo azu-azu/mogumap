@@ -67,7 +67,7 @@ struct NearbyPlaceSearchView: View {
             .task {
                 locationService.requestCurrentLocation()
             }
-            .onChange(of: locationService.currentLocation?.coordinate.latitude) { _, _ in
+            .onChange(of: locationService.locationVersion) { _, _ in
                 guard viewModel == nil, let location = locationService.currentLocation else { return }
                 let vm = NearbyPlaceSearchViewModel(coordinate: location.coordinate)
                 viewModel = vm

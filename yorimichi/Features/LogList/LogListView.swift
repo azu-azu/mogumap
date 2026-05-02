@@ -104,7 +104,7 @@ struct LogListView: View {
         .task {
             locationService.requestCurrentLocation()
         }
-        .onChange(of: locationService.currentLocation?.coordinate.latitude) { _, _ in
+        .onChange(of: locationService.locationVersion) { _, _ in
             guard nearbyViewModel == nil, let location = locationService.currentLocation else { return }
             let vm = NearbyPlaceSearchViewModel(coordinate: location.coordinate)
             nearbyViewModel = vm
@@ -172,7 +172,7 @@ struct LogListView: View {
         let grouped = Dictionary(grouping: nearbyLogs) { log in
             Self.dateFormatter.string(from: log.date)
         }
-        return grouped.sorted { $0.value[0].date > $1.value[0].date }
+        return grouped.sorted { ($0.value.first?.date ?? .distantPast) > ($1.value.first?.date ?? .distantPast) }
     }
 }
 

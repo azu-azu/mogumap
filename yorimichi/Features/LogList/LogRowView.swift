@@ -36,7 +36,7 @@ struct LogRowView: View {
                     }
                 }
 
-                if let firstPhoto = log.photos.sorted(by: { $0.sortOrder < $1.sortOrder }).first,
+                if let firstPhoto = log.photos.min(by: { $0.sortOrder < $1.sortOrder }),
                    let uiImage = UIImage(data: firstPhoto.imageData) {
                     Image(uiImage: uiImage)
                         .resizable()

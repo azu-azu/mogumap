@@ -254,13 +254,20 @@ struct AddLogView: View {
             placeName = name
         }
 
-        let location = CLLocation(latitude: result.coordinate.latitude, longitude: result.coordinate.longitude)
+        await reverseGeocode(result.coordinate)
+        await findNearbyPOI(at: result.coordinate)
+    }
+
+    private func reverseGeocode(_ coordinate: CLLocationCoordinate2D) async {
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let geocoder = CLGeocoder()
         if let placemark = try? await geocoder.reverseGeocodeLocation(location).first {
             address = placemark.formattedAddress ?? ""
         }
+    }
 
-        let request = MKLocalPointsOfInterestRequest(center: result.coordinate, radius: GoogleMapsURLParser.pinpointRadius)
+    private func findNearbyPOI(at coordinate: CLLocationCoordinate2D) async {
+        let request = MKLocalPointsOfInterestRequest(center: coordinate, radius: GoogleMapsURLParser.pinpointRadius)
         let search = MKLocalSearch(request: request)
         if let response = try? await search.start(),
            let closest = response.mapItems.first {

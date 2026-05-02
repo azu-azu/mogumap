@@ -120,8 +120,7 @@ struct LogDetailView: View {
 
     private func showOnMap() {
         guard let coordinate = log.coordinate else { return }
-        appState.mapFocusCoordinate = coordinate
-        appState.selectedTab = .map
+        appState.focusMap(on: coordinate)
     }
 
     private func openInGoogleMaps() {

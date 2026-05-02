@@ -9,14 +9,13 @@
 /* Begin PBXBuildFile section */
 		01A5B62A53DF7C9D28E25839 /* Impression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE7CFCDD7DE0CA066D39EC4 /* Impression.swift */; };
 		05EA2B444A80D576B48E91D2 /* MapTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4592078E5D2424F06F5763C9 /* MapTabView.swift */; };
-		0AA7216D2056B0954DD08B7A /* MKPlacemark+Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */; };
 		0D49B6E873DDFA896C126353 /* LogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3E9744C003D1C54C215723 /* LogListView.swift */; };
 		0D51D7330F121E1A48D861FE /* AddLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E94F438FB5912F60EA0097B /* AddLogView.swift */; };
-		1B188A30A8DDA5124E5E089E /* View+CardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E0B6CC14D41C003CBB512F /* View+CardBackground.swift */; };
 		22607E94E8FE5FB6BFE983A5 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243E007F58CD523B9CBE75C3 /* DesignTokens.swift */; };
 		284EB0BE8AA4C993A8AF45E3 /* LogRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C1B401DDFC6F4669D1EB /* LogRowView.swift */; };
 		2F17F7FDED6A0C71C55D6B0D /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D4F9B3CE8F607C780A446 /* TimelineView.swift */; };
 		3B69D38337A9BA8C2685005B /* GoogleMapsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA76D6984CEA89C82D1D0 /* GoogleMapsLauncher.swift */; };
+		3DC7BD4B56576712515C34C0 /* CLPlacemark+Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03F2F6074A758A205B5EA40 /* CLPlacemark+Address.swift */; };
 		44A5DF9385AD094C9245D7A7 /* NearbyPlaceSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB33F714976D8CEBB86F3A /* NearbyPlaceSearchViewModel.swift */; };
 		44E0910FFBEC6E694ECC42E3 /* CopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325E50A7753D7D2510517808 /* CopyButton.swift */; };
 		47F772A60E06BF7259DA52D4 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9FC5A8D5DB9E8A2C471F33 /* LocationService.swift */; };
@@ -42,13 +41,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		09E0B6CC14D41C003CBB512F /* View+CardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CardBackground.swift"; sourceTree = "<group>"; };
 		0B20319C2182364B6188F84D /* URLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResolver.swift; sourceTree = "<group>"; };
 		0CD43588879C44383786C9C8 /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		130DEA43CAAA30926B05037C /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		17910D6277BCFDD430C34F14 /* PlaceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLog.swift; sourceTree = "<group>"; };
 		1B3E9744C003D1C54C215723 /* LogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogListView.swift; sourceTree = "<group>"; };
-		22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Address.swift"; sourceTree = "<group>"; };
 		243E007F58CD523B9CBE75C3 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		2FF186FED864129FD26DB8CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		325E50A7753D7D2510517808 /* CopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyButton.swift; sourceTree = "<group>"; };
@@ -70,11 +67,12 @@
 		A5DFD529EA78CF81A9F86E66 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		A83F76567B9455752EF817FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B124572651EE4A4ED274DD73 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		B3B611DA7E14859307509082 /* yorimichi.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = yorimichi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3B611DA7E14859307509082 /* yorimichi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yorimichi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFBA76D6984CEA89C82D1D0 /* GoogleMapsLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsLauncher.swift; sourceTree = "<group>"; };
 		C836909687DA226DE9D812F3 /* EditLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLogView.swift; sourceTree = "<group>"; };
 		D288AFB4094A864E795FEA4C /* CategoryBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBadge.swift; sourceTree = "<group>"; };
 		E5AB33F714976D8CEBB86F3A /* NearbyPlaceSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPlaceSearchViewModel.swift; sourceTree = "<group>"; };
+		F03F2F6074A758A205B5EA40 /* CLPlacemark+Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLPlacemark+Address.swift"; sourceTree = "<group>"; };
 		FB216100D380FF9BDDBEC264 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -239,8 +237,7 @@
 		D28E035DC853DDFD0AC6B96E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */,
-				09E0B6CC14D41C003CBB512F /* View+CardBackground.swift */,
+				F03F2F6074A758A205B5EA40 /* CLPlacemark+Address.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -283,7 +280,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					CB35A0C5DB148394028BF27D = {
 						DevelopmentTeam = ZD854UM35V;
@@ -328,6 +325,7 @@
 			files = (
 				0D51D7330F121E1A48D861FE /* AddLogView.swift in Sources */,
 				D375166A8A596C29C54A312A /* AppState.swift in Sources */,
+				3DC7BD4B56576712515C34C0 /* CLPlacemark+Address.swift in Sources */,
 				FF21121558379B8EFEF3DC4F /* CameraView.swift in Sources */,
 				90984DCE1825005B05B708D4 /* Category.swift in Sources */,
 				E5395EC5C013E7BD3FDAE5C4 /* CategoryBadge.swift in Sources */,
@@ -343,7 +341,6 @@
 				EAF42AB6CCF0CB068C212F5D /* LogDetailView.swift in Sources */,
 				0D49B6E873DDFA896C126353 /* LogListView.swift in Sources */,
 				284EB0BE8AA4C993A8AF45E3 /* LogRowView.swift in Sources */,
-				0AA7216D2056B0954DD08B7A /* MKPlacemark+Address.swift in Sources */,
 				05EA2B444A80D576B48E91D2 /* MapTabView.swift in Sources */,
 				C41856E6AA3F85191D7F43AB /* NearbyPlaceSearchView.swift in Sources */,
 				44A5DF9385AD094C9245D7A7 /* NearbyPlaceSearchViewModel.swift in Sources */,
@@ -355,7 +352,6 @@
 				A492D49CA18C92A977F9B7F8 /* RatingView.swift in Sources */,
 				2F17F7FDED6A0C71C55D6B0D /* TimelineView.swift in Sources */,
 				D66CF967E07469696A42957F /* URLResolver.swift in Sources */,
-				1B188A30A8DDA5124E5E089E /* View+CardBackground.swift in Sources */,
 				EC0EEA7F5F44B7DB7FDCB2EE /* YorimichiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,6 +421,7 @@
 				DEVELOPMENT_TEAM = ZD854UM35V;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -514,6 +511,7 @@
 				DEVELOPMENT_TEAM = ZD854UM35V;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

@@ -5,6 +5,7 @@ import Observation
 @MainActor
 final class LocationService: NSObject, CLLocationManagerDelegate {
     var currentLocation: CLLocation?
+    var locationVersion = 0
     var locationError: Error?
     var authorizationStatus: CLAuthorizationStatus = .notDetermined
 
@@ -32,6 +33,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         let location = locations.last
         Task { @MainActor in
             self.currentLocation = location
+            self.locationVersion += 1
         }
     }
 

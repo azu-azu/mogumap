@@ -9,7 +9,7 @@ enum URLResolver {
 
         do {
             let (_, response) = try await URLSession.shared.data(for: request)
-            return (response as? HTTPURLResponse)?.url?.absoluteString ?? response.url?.absoluteString
+            return response.url?.absoluteString
         } catch {
             return nil
         }
