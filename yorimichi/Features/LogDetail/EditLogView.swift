@@ -12,7 +12,7 @@ struct EditLogView: View {
     @State private var showCamera = false
 
     var body: some View {
-        Form {
+        List {
             Section("Place") {
                 TextField("Place name", text: $log.placeName)
 
@@ -92,6 +92,7 @@ struct EditLogView: View {
                 Toggle("Favorite", isOn: $log.isFavorite)
             }
         }
+        .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .navigationTitle("Edit")

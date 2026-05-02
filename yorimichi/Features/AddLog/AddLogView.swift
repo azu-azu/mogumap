@@ -30,114 +30,160 @@ struct AddLogView: View {
     }
 
     var body: some View {
-        Form {
-            Section("Place") {
-                HStack {
-                    TextField("Place name", text: $placeName)
-                    CopyButton(text: placeName)
-                }
+        ScrollView {
+            VStack(spacing: 20) {
+                formSection("Place") {
+                    VStack(spacing: 0) {
+                        HStack {
+                            TextField("Place name", text: $placeName)
+                            CopyButton(text: placeName)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
 
-                Picker("Category", selection: $category) {
-                    ForEach(Category.allCases) { cat in
-                        Label(cat.displayName, systemImage: cat.icon)
-                            .tag(cat)
-                    }
-                }
-            }
+                        Divider().padding(.leading, 16)
 
-            Section("Photos") {
-                PhotosPicker(
-                    selection: $selectedPhotos,
-                    maxSelectionCount: PhotoLoader.maxSelectionCount,
-                    matching: .images
-                ) {
-                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
-                }
-                .onChange(of: selectedPhotos) { _, newItems in
-                    Task { await loadPhotos(from: newItems) }
-                }
-
-                Button {
-                    showCamera = true
-                } label: {
-                    Label("Take Photo", systemImage: "camera")
-                }
-
-                if !photoDataList.isEmpty {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 8) {
-                            ForEach(photoDataList.indices, id: \.self) { index in
-                                if let uiImage = UIImage(data: photoDataList[index]) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 80, height: 80)
-                                        .clipped()
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                }
+                        Picker("Category", selection: $category) {
+                            ForEach(Category.allCases) { cat in
+                                Label(cat.displayName, systemImage: cat.icon)
+                                    .tag(cat)
                             }
                         }
-                    }
-                }
-            }
-
-            Section("Location") {
-                if let lat = latitude, let lng = longitude {
-                    Label(
-                        String(format: "%.4f, %.4f", lat, lng),
-                        systemImage: "location.fill"
-                    )
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
-
-                HStack {
-                    TextField("Address or Google Maps URL", text: $address)
-                    CopyButton(text: address)
-                }
-                .onChange(of: address) { _, newValue in
-                    if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
-                        Task { await handleGoogleMapsURL(newValue) }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
                     }
                 }
 
-                if selectedPlace == nil {
-                    Button {
-                        if let location = locationService.currentLocation {
-                            latitude = location.coordinate.latitude
-                            longitude = location.coordinate.longitude
+                formSection("Photos") {
+                    VStack(spacing: 0) {
+                        PhotosPicker(
+                            selection: $selectedPhotos,
+                            maxSelectionCount: PhotoLoader.maxSelectionCount,
+                            matching: .images
+                        ) {
+                            Label("Select Photos", systemImage: "photo.on.rectangle.angled")
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                    } label: {
-                        Label("Use Current Location", systemImage: "location")
+                        .onChange(of: selectedPhotos) { _, newItems in
+                            Task { await loadPhotos(from: newItems) }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+
+                        Divider().padding(.leading, 16)
+
+                        Button {
+                            showCamera = true
+                        } label: {
+                            Label("Take Photo", systemImage: "camera")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+
+                        if !photoDataList.isEmpty {
+                            Divider().padding(.leading, 16)
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 8) {
+                                    ForEach(photoDataList.indices, id: \.self) { index in
+                                        if let uiImage = UIImage(data: photoDataList[index]) {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 80, height: 80)
+                                                .clipped()
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                        }
                     }
-                    .disabled(locationService.currentLocation == nil)
+                }
+
+                formSection("Location") {
+                    VStack(spacing: 0) {
+                        if let lat = latitude, let lng = longitude {
+                            Label(
+                                String(format: "%.4f, %.4f", lat, lng),
+                                systemImage: "location.fill"
+                            )
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+
+                            Divider().padding(.leading, 16)
+                        }
+
+                        HStack {
+                            TextField("Address or Google Maps URL", text: $address)
+                            CopyButton(text: address)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .onChange(of: address) { _, newValue in
+                            if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
+                                Task { await handleGoogleMapsURL(newValue) }
+                            }
+                        }
+
+                        if selectedPlace == nil {
+                            Divider().padding(.leading, 16)
+                            Button {
+                                if let location = locationService.currentLocation {
+                                    latitude = location.coordinate.latitude
+                                    longitude = location.coordinate.longitude
+                                }
+                            } label: {
+                                Label("Use Current Location", systemImage: "location")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .disabled(locationService.currentLocation == nil)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                        }
+                    }
+                }
+
+                formSection("Date") {
+                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                }
+
+                formSection("Rating") {
+                    RatingView(rating: $rating)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                }
+
+                formSection("Impression") {
+                    Picker("Impression", selection: $impression) {
+                        ForEach(Impression.allCases) { imp in
+                            Text("\(imp.emoji) \(imp.displayName)")
+                                .tag(imp)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+
+                formSection("Thoughts (free log)") {
+                    TextEditor(text: $memo)
+                        .frame(minHeight: 80)
+                        .scrollContentBackground(.hidden)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
                 }
             }
-
-            Section("Date") {
-                DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
-            }
-
-            Section("Rating") {
-                RatingView(rating: $rating)
-            }
-
-            Section("Impression") {
-                Picker("Impression", selection: $impression) {
-                    ForEach(Impression.allCases) { imp in
-                        Text("\(imp.emoji) \(imp.displayName)")
-                            .tag(imp)
-                    }
-                }
-                .pickerStyle(.segmented)
-            }
-
-            Section("Thoughts (free log)") {
-                TextEditor(text: $memo)
-                    .frame(minHeight: 80)
-            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
         }
-        .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .navigationTitle("New Log")
         .navigationBarTitleDisplayMode(.inline)
@@ -160,6 +206,21 @@ struct AddLogView: View {
             CameraView { imageData in
                 photoDataList.append(imageData)
             }
+        }
+    }
+
+    private func formSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title.uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.leading, 4)
+
+            content()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(DesignTokens.Background.formCell)
+                )
         }
     }
 

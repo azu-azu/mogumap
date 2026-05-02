@@ -28,10 +28,21 @@ struct TimelineView: View {
         List {
             Section {
                 categoryFilter
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 ratingFilter
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
             }
 
-            Section("Results (\(filteredLogs.count))") {
+            Section {
+                Text("Results (\(filteredLogs.count))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
+
                 if filteredLogs.isEmpty {
                     ContentUnavailableView.search(text: searchText)
                 } else {
@@ -46,7 +57,7 @@ struct TimelineView: View {
                 }
             }
         }
-        .listStyle(.insetGrouped)
+        .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .searchable(text: $searchText, prompt: "Search places...")

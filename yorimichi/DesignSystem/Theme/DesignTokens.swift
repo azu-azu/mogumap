@@ -13,6 +13,7 @@ enum DesignTokens {
     enum Background {
         static let base = Color("BackgroundBase")
         static let card = Color("BackgroundCard")
+        static let formCell = Color(hex: "#2C2826")
     }
 
     // MARK: - Text

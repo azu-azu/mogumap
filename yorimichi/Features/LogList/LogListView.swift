@@ -15,7 +15,7 @@ struct LogListView: View {
             nearbySection
 
             if nearbyLogs.isEmpty {
-                Section("History") {
+                Section {
                     ContentUnavailableView(
                         "No Logs Nearby",
                         systemImage: "mappin.slash",
@@ -26,7 +26,14 @@ struct LogListView: View {
                 }
             } else {
                 ForEach(nearbyGroupedByDate, id: \.key) { day, dayLogs in
-                    Section(day) {
+                    Section {
+                        Text(day)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
+
                         ForEach(dayLogs) { log in
                             NavigationLink(value: log) {
                                 LogRowView(log: log)
@@ -57,7 +64,7 @@ struct LogListView: View {
                 }
             }
         }
-        .listStyle(.insetGrouped)
+        .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .toolbar {
@@ -108,6 +115,13 @@ struct LogListView: View {
     @ViewBuilder
     private var nearbySection: some View {
         Section {
+            Label("Nearby", systemImage: "location.fill")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
+
             if let vm = nearbyViewModel {
                 if vm.isSearching && vm.results.isEmpty {
                     HStack {
@@ -135,8 +149,6 @@ struct LogListView: View {
                     Spacer()
                 }
             }
-        } header: {
-            Label("Nearby", systemImage: "location.fill")
         }
     }
 

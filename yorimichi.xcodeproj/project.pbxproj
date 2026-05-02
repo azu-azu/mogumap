@@ -12,6 +12,7 @@
 		0AA7216D2056B0954DD08B7A /* MKPlacemark+Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */; };
 		0D49B6E873DDFA896C126353 /* LogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3E9744C003D1C54C215723 /* LogListView.swift */; };
 		0D51D7330F121E1A48D861FE /* AddLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E94F438FB5912F60EA0097B /* AddLogView.swift */; };
+		1B188A30A8DDA5124E5E089E /* View+CardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E0B6CC14D41C003CBB512F /* View+CardBackground.swift */; };
 		22607E94E8FE5FB6BFE983A5 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243E007F58CD523B9CBE75C3 /* DesignTokens.swift */; };
 		284EB0BE8AA4C993A8AF45E3 /* LogRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C1B401DDFC6F4669D1EB /* LogRowView.swift */; };
 		2F17F7FDED6A0C71C55D6B0D /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D4F9B3CE8F607C780A446 /* TimelineView.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09E0B6CC14D41C003CBB512F /* View+CardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CardBackground.swift"; sourceTree = "<group>"; };
 		0B20319C2182364B6188F84D /* URLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResolver.swift; sourceTree = "<group>"; };
 		0CD43588879C44383786C9C8 /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		130DEA43CAAA30926B05037C /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				22CA52B7EAE4855572E3BEA8 /* MKPlacemark+Address.swift */,
+				09E0B6CC14D41C003CBB512F /* View+CardBackground.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				A492D49CA18C92A977F9B7F8 /* RatingView.swift in Sources */,
 				2F17F7FDED6A0C71C55D6B0D /* TimelineView.swift in Sources */,
 				D66CF967E07469696A42957F /* URLResolver.swift in Sources */,
+				1B188A30A8DDA5124E5E089E /* View+CardBackground.swift in Sources */,
 				EC0EEA7F5F44B7DB7FDCB2EE /* YorimichiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
