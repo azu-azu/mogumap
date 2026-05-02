@@ -30,6 +30,7 @@ struct ContentView: View {
             .tag(AppState.Tab.timeline)
         }
         .environment(appState)
+        .fontDesign(.rounded)
     }
 }
 
