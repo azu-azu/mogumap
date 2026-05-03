@@ -67,7 +67,7 @@
 		A5DFD529EA78CF81A9F86E66 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		A83F76567B9455752EF817FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B124572651EE4A4ED274DD73 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		B3B611DA7E14859307509082 /* yorimichi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yorimichi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3B611DA7E14859307509082 /* yorimichi.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = yorimichi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFBA76D6984CEA89C82D1D0 /* GoogleMapsLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsLauncher.swift; sourceTree = "<group>"; };
 		C836909687DA226DE9D812F3 /* EditLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLogView.swift; sourceTree = "<group>"; };
 		D288AFB4094A864E795FEA4C /* CategoryBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBadge.swift; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					CB35A0C5DB148394028BF27D = {
 						DevelopmentTeam = ZD854UM35V;
@@ -421,7 +421,6 @@
 				DEVELOPMENT_TEAM = ZD854UM35V;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -511,7 +510,6 @@
 				DEVELOPMENT_TEAM = ZD854UM35V;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

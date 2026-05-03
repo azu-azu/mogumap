@@ -13,13 +13,13 @@ enum DesignTokens {
     enum Background {
         static let base = Color("BackgroundBase")
         static let card = Color("BackgroundCard")
-        static let formCell = Color(hex: "#2C2826")
+        static let formCell = Color("BackgroundFormCell")
     }
 
     // MARK: - Text
 
     enum Text {
-        static let secondary = Color(hex: "#6E6258")
+        static let secondary = Color("TextSecondary")
     }
 
     // MARK: - Semantic
