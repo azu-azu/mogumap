@@ -10,6 +10,7 @@ struct EditLogView: View {
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var newPhotoDataList: [Data] = []
     @State private var showCamera = false
+    @State private var showThoughtsEditor = false
 
     var body: some View {
         List {
@@ -84,8 +85,16 @@ struct EditLogView: View {
             }
 
             Section("Thoughts (free log)") {
-                TextEditor(text: $log.memo)
-                    .frame(minHeight: 80)
+                Button {
+                    showThoughtsEditor = true
+                } label: {
+                    Text(log.memo.isEmpty ? "Tap to write..." : log.memo)
+                        .foregroundStyle(log.memo.isEmpty ? .secondary : .primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineLimit(3)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
 
             Section {
@@ -97,12 +106,16 @@ struct EditLogView: View {
         .background(DesignTokens.Background.base.ignoresSafeArea())
         .navigationTitle("Edit")
         .navigationBarTitleDisplayMode(.inline)
+        .keyboardCloseToolbar()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
                     saveChanges()
                 }
             }
+        }
+        .sheet(isPresented: $showThoughtsEditor) {
+            FullTextEditorSheet(text: $log.memo)
         }
         .fullScreenCover(isPresented: $showCamera) {
             CameraView { imageData in

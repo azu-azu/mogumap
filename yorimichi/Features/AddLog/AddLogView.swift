@@ -23,6 +23,7 @@ struct AddLogView: View {
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
     @State private var showCamera = false
+    @State private var showThoughtsEditor = false
 
     init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
         self.selectedPlace = selectedPlace
@@ -30,9 +31,8 @@ struct AddLogView: View {
     }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
+        ScrollView {
+            VStack(spacing: 20) {
                 formSection("Place") {
                     VStack(spacing: 0) {
                         HStack {
@@ -175,25 +175,27 @@ struct AddLogView: View {
                 }
 
                 formSection("Thoughts (free log)") {
-                    TextField("Write your thoughts...", text: $memo, axis: .vertical)
-                        .lineLimit(3...12)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
+                    Button {
+                        showThoughtsEditor = true
+                    } label: {
+                        Text(memo.isEmpty ? "Tap to write..." : memo)
+                            .foregroundStyle(memo.isEmpty ? .secondary : .primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .lineLimit(3)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
                 }
-                .id("thoughts")
             }
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
-            }
-            .onChange(of: memo) { _, _ in
-                withAnimation {
-                    proxy.scrollTo("thoughts", anchor: .bottom)
-                }
-            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
         }
         .background(DesignTokens.Background.base.ignoresSafeArea())
         .navigationTitle("New Log")
         .navigationBarTitleDisplayMode(.inline)
+        .keyboardCloseToolbar()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
@@ -208,6 +210,9 @@ struct AddLogView: View {
             } else {
                 locationService.requestCurrentLocation()
             }
+        }
+        .sheet(isPresented: $showThoughtsEditor) {
+            FullTextEditorSheet(text: $memo)
         }
         .fullScreenCover(isPresented: $showCamera) {
             CameraView { imageData in
