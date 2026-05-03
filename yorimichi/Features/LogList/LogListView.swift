@@ -114,14 +114,7 @@ struct LogListView: View {
 
     @ViewBuilder
     private var nearbySection: some View {
-        Section {
-            Label("Nearby", systemImage: "location.fill")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
-
+        Section("Nearby") {
             if let vm = nearbyViewModel {
                 if vm.isSearching && vm.results.isEmpty {
                     HStack {
@@ -137,9 +130,6 @@ struct LogListView: View {
                             NearbyPlaceRow(item: item)
                         }
                         .buttonStyle(.plain)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
                 }
             } else {
@@ -148,8 +138,6 @@ struct LogListView: View {
                     ProgressView("Getting location...")
                     Spacer()
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
             }
         }
     }
@@ -202,12 +190,6 @@ private struct NearbyPlaceRow: View {
                 .font(.title3)
                 .foregroundStyle(DesignTokens.Accent.primary)
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(DesignTokens.Background.card)
-                .shadow(color: .black.opacity(0.8), radius: 6, x: 0, y: 3)
-        )
     }
 }
 
