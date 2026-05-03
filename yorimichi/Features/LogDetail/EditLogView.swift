@@ -94,7 +94,7 @@ struct EditLogView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(DesignTokens.Background.base)
+        .background(DesignTokens.Background.base.ignoresSafeArea())
         .navigationTitle("Edit")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

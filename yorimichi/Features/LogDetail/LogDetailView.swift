@@ -100,7 +100,7 @@ struct LogDetailView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(DesignTokens.Background.base)
+        .background(DesignTokens.Background.base.ignoresSafeArea())
         .navigationTitle("Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

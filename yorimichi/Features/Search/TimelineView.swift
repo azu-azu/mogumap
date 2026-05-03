@@ -57,7 +57,7 @@ struct TimelineView: View {
                 }
             }
         }
-        .listStyle(.plain)
+        .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .searchable(text: $searchText, prompt: "Search places...")

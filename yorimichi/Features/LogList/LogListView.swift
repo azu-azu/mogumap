@@ -64,7 +64,7 @@ struct LogListView: View {
                 }
             }
         }
-        .listStyle(.plain)
+        .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .toolbar {
@@ -148,6 +148,8 @@ struct LogListView: View {
                     ProgressView("Getting location...")
                     Spacer()
                 }
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
             }
         }
     }

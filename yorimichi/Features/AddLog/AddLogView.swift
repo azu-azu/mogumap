@@ -184,7 +184,7 @@ struct AddLogView: View {
             .padding(.horizontal, 16)
             .padding(.top, 8)
         }
-        .background(DesignTokens.Background.base)
+        .background(DesignTokens.Background.base.ignoresSafeArea())
         .navigationTitle("New Log")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
