@@ -30,8 +30,9 @@ struct AddLogView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
                 formSection("Place") {
                     VStack(spacing: 0) {
                         HStack {
@@ -174,15 +175,21 @@ struct AddLogView: View {
                 }
 
                 formSection("Thoughts (free log)") {
-                    TextEditor(text: $memo)
-                        .frame(minHeight: 80)
-                        .scrollContentBackground(.hidden)
+                    TextField("Write your thoughts...", text: $memo, axis: .vertical)
+                        .lineLimit(3...12)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                 }
+                .id("thoughts")
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 8)
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+            }
+            .onChange(of: memo) { _, _ in
+                withAnimation {
+                    proxy.scrollTo("thoughts", anchor: .bottom)
+                }
+            }
         }
         .background(DesignTokens.Background.base.ignoresSafeArea())
         .navigationTitle("New Log")
