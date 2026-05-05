@@ -18,6 +18,8 @@
 		3DC7BD4B56576712515C34C0 /* CLPlacemark+Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03F2F6074A758A205B5EA40 /* CLPlacemark+Address.swift */; };
 		4350FD37792E6961C2CEB873 /* FullTextEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5C1459FD39885031033F45 /* FullTextEditorSheet.swift */; };
 		44A5DF9385AD094C9245D7A7 /* NearbyPlaceSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB33F714976D8CEBB86F3A /* NearbyPlaceSearchViewModel.swift */; };
+		3A1C8F0E1B2D3E4F5A6B7C8D /* CinemaLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1C8F0E1B2D3E4F5A6B7C8E /* CinemaLog.swift */; };
+		3A1C8F0E1B2D3E4F5A6B7C8F /* CinemaPhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1C8F0E1B2D3E4F5A6B7C90 /* CinemaPhotoAttachment.swift */; };
 		44E0910FFBEC6E694ECC42E3 /* CopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325E50A7753D7D2510517808 /* CopyButton.swift */; };
 		47F772A60E06BF7259DA52D4 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9FC5A8D5DB9E8A2C471F33 /* LocationService.swift */; };
 		55F4BE58D5DE9894E82B6C4C /* GoogleMapsURLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99EE245068A8087244FD83 /* GoogleMapsURLParser.swift */; };
@@ -46,6 +48,8 @@
 		0B20319C2182364B6188F84D /* URLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResolver.swift; sourceTree = "<group>"; };
 		0CD43588879C44383786C9C8 /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		130DEA43CAAA30926B05037C /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		3A1C8F0E1B2D3E4F5A6B7C8E /* CinemaLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaLog.swift; sourceTree = "<group>"; };
+		3A1C8F0E1B2D3E4F5A6B7C90 /* CinemaPhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaPhotoAttachment.swift; sourceTree = "<group>"; };
 		17910D6277BCFDD430C34F14 /* PlaceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLog.swift; sourceTree = "<group>"; };
 		1B3E9744C003D1C54C215723 /* LogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogListView.swift; sourceTree = "<group>"; };
 		243E007F58CD523B9CBE75C3 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
@@ -194,6 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				6BBA83E2A36E69F22637CA1B /* Category.swift */,
+				3A1C8F0E1B2D3E4F5A6B7C8E /* CinemaLog.swift */,
+				3A1C8F0E1B2D3E4F5A6B7C90 /* CinemaPhotoAttachment.swift */,
 				4FE7CFCDD7DE0CA066D39EC4 /* Impression.swift */,
 				A5DFD529EA78CF81A9F86E66 /* PhotoAttachment.swift */,
 				17910D6277BCFDD430C34F14 /* PlaceLog.swift */,
@@ -334,6 +340,8 @@
 				3DC7BD4B56576712515C34C0 /* CLPlacemark+Address.swift in Sources */,
 				FF21121558379B8EFEF3DC4F /* CameraView.swift in Sources */,
 				90984DCE1825005B05B708D4 /* Category.swift in Sources */,
+				3A1C8F0E1B2D3E4F5A6B7C8D /* CinemaLog.swift in Sources */,
+				3A1C8F0E1B2D3E4F5A6B7C8F /* CinemaPhotoAttachment.swift in Sources */,
 				E5395EC5C013E7BD3FDAE5C4 /* CategoryBadge.swift in Sources */,
 				C519D1488E8374F8F82D715E /* ColorExtensions.swift in Sources */,
 				C0BB92E978AAFA79D7C579D3 /* ContentView.swift in Sources */,
