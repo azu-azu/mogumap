@@ -8,8 +8,8 @@ struct YorimichiApp: App {
             ContentView()
         }
         .modelContainer(for: [
-                PlaceLog.self, PhotoAttachment.self,
-                CinemaLog.self, CinemaPhotoAttachment.self,
-            ])
+            PlaceLog.self, PhotoAttachment.self,
+            CinemaLog.self, CinemaPhotoAttachment.self,
+        ])
     }
 }

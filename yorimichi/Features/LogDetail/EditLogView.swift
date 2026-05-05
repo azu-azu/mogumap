@@ -143,7 +143,7 @@ struct EditLogView: View {
     }
 
     private func saveChanges() {
-        log.updatedAt = Date()
+        log.touch()
 
         let startIndex = log.photos.count
         for (index, data) in newPhotoDataList.enumerated() {

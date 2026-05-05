@@ -4,6 +4,7 @@ import CoreLocation
 
 @Model
 final class PlaceLog {
+    static let maxRating = 5
     var id: UUID
     var date: Date
     var placeName: String
@@ -41,7 +42,7 @@ final class PlaceLog {
         self.longitude = longitude
         self.address = address
         self.memo = memo
-        self.rating = rating
+        self.rating = min(max(rating, 0), Self.maxRating)
         self.impression = impression
         self.isFavorite = isFavorite
         self.createdAt = Date()
@@ -55,5 +56,24 @@ final class PlaceLog {
 
     var hasLocation: Bool {
         latitude != nil && longitude != nil
+    }
+
+    var impressionType: Impression? {
+        get {
+            guard let impression else { return nil }
+            return Impression(rawValue: impression)
+        }
+        set {
+            impression = newValue?.rawValue
+        }
+    }
+
+    func setRating(_ value: Int) {
+        rating = min(max(value, 0), Self.maxRating)
+        touch()
+    }
+
+    func touch() {
+        updatedAt = Date()
     }
 }

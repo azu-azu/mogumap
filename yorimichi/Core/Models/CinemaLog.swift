@@ -4,6 +4,7 @@ import CoreLocation
 
 @Model
 final class CinemaLog {
+    static let maxRating = 5
     var id: UUID
     var watchedDate: Date
 
@@ -66,7 +67,7 @@ final class CinemaLog {
         self.latitude = latitude
         self.longitude = longitude
         self.address = address
-        self.rating = min(max(rating, 0), 5)
+        self.rating = min(max(rating, 0), Self.maxRating)
         self.impression = impression
         self.memo = memo
         self.isFavorite = isFavorite
@@ -104,7 +105,7 @@ final class CinemaLog {
     // MARK: - Methods
 
     func setRating(_ value: Int) {
-        rating = min(max(value, 0), 5)
+        rating = min(max(value, 0), Self.maxRating)
         touch()
     }
 
