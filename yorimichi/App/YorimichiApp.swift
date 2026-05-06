@@ -7,9 +7,6 @@ struct YorimichiApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [
-            PlaceLog.self, PhotoAttachment.self,
-            CinemaLog.self, CinemaPhotoAttachment.self,
-        ])
+        .modelContainer(for: [PlaceLog.self, PhotoAttachment.self])
     }
 }

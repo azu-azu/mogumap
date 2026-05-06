@@ -16,6 +16,7 @@ final class PlaceLog {
     var rating: Int
     var impression: String?
     var isFavorite: Bool
+    var price: Int?
     var createdAt: Date
     var updatedAt: Date
 
@@ -32,7 +33,8 @@ final class PlaceLog {
         memo: String = "",
         rating: Int = 0,
         impression: String? = nil,
-        isFavorite: Bool = false
+        isFavorite: Bool = false,
+        price: Int? = nil
     ) {
         self.id = UUID()
         self.date = date
@@ -45,6 +47,7 @@ final class PlaceLog {
         self.rating = min(max(rating, 0), Self.maxRating)
         self.impression = impression
         self.isFavorite = isFavorite
+        self.price = price
         self.createdAt = Date()
         self.updatedAt = Date()
     }
