@@ -1,57 +1,62 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
-@preconcurrency import MapKit
 
-struct AddLogView: View {
+struct AddCinemaLogView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    let selectedPlace: MKMapItem?
-    let onComplete: (() -> Void)?
-
-    @State private var placeName = ""
-    @State private var category: Category = .other
-    @State private var date = Date()
+    @State private var movieTitle = ""
+    @State private var theaterName = ""
+    @State private var screenName = ""
+    @State private var seatNumber = ""
+    @State private var watchedDate = Date()
+    @State private var showScreeningTime = false
+    @State private var screeningStartsAt = Date()
+    @State private var screeningEndsAt = Date()
     @State private var memo = ""
     @State private var rating = 0
     @State private var impression: Impression = .neutral
     @State private var latitude: Double?
     @State private var longitude: Double?
-    @State private var address: String = ""
+    @State private var address = ""
+    @State private var priceText = ""
+    @State private var ticketType = ""
     @State private var locationService = LocationService()
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
     @State private var showCamera = false
     @State private var showThoughtsEditor = false
 
-    init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
-        self.selectedPlace = selectedPlace
-        self.onComplete = onComplete
-    }
-
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                FormSection(title:"Place") {
+                FormSection(title:"Movie") {
+                    HStack {
+                        TextField("Movie title", text: $movieTitle)
+                        CopyButton(text: movieTitle)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+
+                FormSection(title:"Theater") {
                     VStack(spacing: 0) {
-                        HStack {
-                            TextField("Place name", text: $placeName)
-                            CopyButton(text: placeName)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
+                        TextField("Theater name", text: $theaterName)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
 
                         Divider().padding(.leading, 16)
 
-                        Picker("Category", selection: $category) {
-                            ForEach(Category.allCases) { cat in
-                                Label(cat.displayName, systemImage: cat.icon)
-                                    .tag(cat)
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
+                        TextField("Screen (IMAX, Dolby, etc.)", text: $screenName)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+
+                        Divider().padding(.leading, 16)
+
+                        TextField("Seat number", text: $seatNumber)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
                     }
                 }
 
@@ -120,40 +125,72 @@ struct AddLogView: View {
                             Divider().padding(.leading, 16)
                         }
 
-                        HStack {
-                            TextField("Address or Google Maps URL", text: $address)
-                            CopyButton(text: address)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .onChange(of: address) { _, newValue in
-                            if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
-                                Task { await handleGoogleMapsURL(newValue) }
-                            }
-                        }
-
-                        if selectedPlace == nil {
-                            Divider().padding(.leading, 16)
-                            Button {
-                                if let location = locationService.currentLocation {
-                                    latitude = location.coordinate.latitude
-                                    longitude = location.coordinate.longitude
-                                }
-                            } label: {
-                                Label("Use Current Location", systemImage: "location")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .disabled(locationService.currentLocation == nil)
+                        TextField("Address", text: $address)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
+
+                        Divider().padding(.leading, 16)
+
+                        Button {
+                            if let location = locationService.currentLocation {
+                                latitude = location.coordinate.latitude
+                                longitude = location.coordinate.longitude
+                            }
+                        } label: {
+                            Label("Use Current Location", systemImage: "location")
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
+                        .disabled(locationService.currentLocation == nil)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
                     }
                 }
 
                 FormSection(title:"Date") {
-                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("Watched", selection: $watchedDate, displayedComponents: [.date, .hourAndMinute])
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
+                }
+
+                FormSection(title:"Screening Time") {
+                    VStack(spacing: 0) {
+                        Toggle("Set screening time", isOn: $showScreeningTime)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+
+                        if showScreeningTime {
+                            Divider().padding(.leading, 16)
+
+                            DatePicker("Start", selection: $screeningStartsAt, displayedComponents: [.date, .hourAndMinute])
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+
+                            Divider().padding(.leading, 16)
+
+                            DatePicker("End", selection: $screeningEndsAt, displayedComponents: [.date, .hourAndMinute])
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                        }
+                    }
+                }
+
+                FormSection(title:"Ticket") {
+                    VStack(spacing: 0) {
+                        HStack {
+                            TextField("Price", text: $priceText)
+                                .keyboardType(.numberPad)
+                            Text("yen")
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+
+                        Divider().padding(.leading, 16)
+
+                        TextField("Ticket type (General, Late Show, etc.)", text: $ticketType)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                    }
                 }
 
                 FormSection(title:"Rating") {
@@ -174,7 +211,7 @@ struct AddLogView: View {
                     .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Thoughts (free log)") {
+                FormSection(title:"Thoughts") {
                     Button {
                         showThoughtsEditor = true
                     } label: {
@@ -193,7 +230,7 @@ struct AddLogView: View {
             .padding(.top, 8)
         }
         .background(DesignTokens.Background.base.ignoresSafeArea())
-        .navigationTitle("New Log")
+        .navigationTitle("New Cinema Log")
         .navigationBarTitleDisplayMode(.inline)
         .keyboardCloseToolbar()
         .toolbar {
@@ -201,15 +238,11 @@ struct AddLogView: View {
                 Button("Save") {
                     save()
                 }
-                .disabled(placeName.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(movieTitle.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
         .task {
-            if let place = selectedPlace {
-                applySelectedPlace(place)
-            } else {
-                locationService.requestCurrentLocation()
-            }
+            locationService.requestCurrentLocation()
         }
         .sheet(isPresented: $showThoughtsEditor) {
             FullTextEditorSheet(text: $memo)
@@ -226,87 +259,32 @@ struct AddLogView: View {
         photoDataList = await PhotoLoader.loadJPEGData(from: items)
     }
 
-    private func applySelectedPlace(_ item: MKMapItem) {
-        placeName = item.name ?? ""
-        latitude = item.placemark.coordinate.latitude
-        longitude = item.placemark.coordinate.longitude
-        address = item.placemark.formattedAddress ?? ""
-        category = Category.from(poiCategory: item.pointOfInterestCategory)
-    }
-
-    private func handleGoogleMapsURL(_ urlString: String) async {
-        var resolvedURL = urlString
-
-        if GoogleMapsURLParser.isShortURL(urlString) {
-            if let resolved = await URLResolver.resolveRedirect(urlString) {
-                resolvedURL = resolved
-            }
-        }
-
-        guard let result = GoogleMapsURLParser.parse(resolvedURL) else { return }
-
-        latitude = result.coordinate.latitude
-        longitude = result.coordinate.longitude
-
-        if let name = result.placeName {
-            placeName = name
-        }
-
-        await reverseGeocode(result.coordinate)
-        await findNearbyPOI(at: result.coordinate)
-    }
-
-    private func reverseGeocode(_ coordinate: CLLocationCoordinate2D) async {
-        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        let geocoder = CLGeocoder()
-        if let placemark = try? await geocoder.reverseGeocodeLocation(location).first {
-            address = placemark.formattedAddress ?? ""
-        }
-    }
-
-    private func findNearbyPOI(at coordinate: CLLocationCoordinate2D) async {
-        let request = MKLocalPointsOfInterestRequest(center: coordinate, radius: GoogleMapsURLParser.pinpointRadius)
-        let search = MKLocalSearch(request: request)
-        if let response = try? await search.start(),
-           let closest = response.mapItems.first {
-            if placeName.isEmpty {
-                placeName = closest.name ?? ""
-            }
-            category = Category.from(poiCategory: closest.pointOfInterestCategory)
-        }
-    }
-
     private func save() {
-        let log = PlaceLog(
-            date: date,
-            placeName: placeName.trimmingCharacters(in: .whitespaces),
-            category: category.rawValue,
+        let log = CinemaLog(
+            watchedDate: watchedDate,
+            movieTitle: movieTitle.trimmingCharacters(in: .whitespaces),
+            screeningStartsAt: showScreeningTime ? screeningStartsAt : nil,
+            screeningEndsAt: showScreeningTime ? screeningEndsAt : nil,
+            theaterName: theaterName.isEmpty ? nil : theaterName,
+            screenName: screenName.isEmpty ? nil : screenName,
+            seatNumber: seatNumber.isEmpty ? nil : seatNumber,
             latitude: latitude,
             longitude: longitude,
             address: address.isEmpty ? nil : address,
-            memo: memo,
             rating: rating,
-            impression: impression.rawValue
+            impression: impression.rawValue,
+            memo: memo,
+            price: Int(priceText),
+            ticketType: ticketType.isEmpty ? nil : ticketType
         )
         modelContext.insert(log)
 
         for (index, data) in photoDataList.enumerated() {
-            let photo = PhotoAttachment(imageData: data, sortOrder: index)
-            photo.placeLog = log
+            let photo = CinemaPhotoAttachment(imageData: data, sortOrder: index)
+            photo.cinemaLog = log
             modelContext.insert(photo)
         }
 
-        if let onComplete {
-            onComplete()
-        } else {
-            dismiss()
-        }
+        dismiss()
     }
-}
-
-#Preview {
-    NavigationStack {
-        AddLogView()
-    }
-    .modelContainer(for: [PlaceLog.self, PhotoAttachment.self], inMemory: true)
 }

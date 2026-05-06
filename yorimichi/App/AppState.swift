@@ -8,6 +8,7 @@ final class AppState {
         case home = 0
         case map = 1
         case timeline = 2
+        case cinema = 3
     }
 
     var selectedTab = Tab.home

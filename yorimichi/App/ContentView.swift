@@ -28,6 +28,14 @@ struct ContentView: View {
                 Label("Timeline", systemImage: "clock.fill")
             }
             .tag(AppState.Tab.timeline)
+
+            NavigationStack {
+                CinemaListView()
+            }
+            .tabItem {
+                Label("Cinema", systemImage: "film.fill")
+            }
+            .tag(AppState.Tab.cinema)
         }
         .environment(appState)
         .fontDesign(.rounded)
@@ -36,5 +44,8 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [PlaceLog.self, PhotoAttachment.self], inMemory: true)
+        .modelContainer(for: [
+            PlaceLog.self, PhotoAttachment.self,
+            CinemaLog.self, CinemaPhotoAttachment.self,
+        ], inMemory: true)
 }
