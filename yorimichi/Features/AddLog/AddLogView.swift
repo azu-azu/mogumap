@@ -33,7 +33,7 @@ struct AddLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                FormSection(title:"Place") {
+                FormSection(title: "Place") {
                     VStack(spacing: 0) {
                         HStack {
                             TextField("Place name", text: $placeName)
@@ -55,7 +55,7 @@ struct AddLogView: View {
                     }
                 }
 
-                FormSection(title:"Photos") {
+                FormSection(title: "Photos") {
                     VStack(spacing: 0) {
                         PhotosPicker(
                             selection: $selectedPhotos,
@@ -104,7 +104,7 @@ struct AddLogView: View {
                     }
                 }
 
-                FormSection(title:"Location") {
+                FormSection(title: "Location") {
                     VStack(spacing: 0) {
                         if let lat = latitude, let lng = longitude {
                             Label(
@@ -150,19 +150,19 @@ struct AddLogView: View {
                     }
                 }
 
-                FormSection(title:"Date") {
+                FormSection(title: "Date") {
                     DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Rating") {
+                FormSection(title: "Rating") {
                     RatingView(rating: $rating)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Impression") {
+                FormSection(title: "Impression") {
                     Picker("Impression", selection: $impression) {
                         ForEach(Impression.allCases) { imp in
                             Text("\(imp.emoji) \(imp.displayName)")
@@ -174,7 +174,7 @@ struct AddLogView: View {
                     .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Thoughts (free log)") {
+                FormSection(title: "Thoughts (free log)") {
                     Button {
                         showThoughtsEditor = true
                     } label: {
@@ -220,7 +220,6 @@ struct AddLogView: View {
             }
         }
     }
-
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
         photoDataList = await PhotoLoader.loadJPEGData(from: items)

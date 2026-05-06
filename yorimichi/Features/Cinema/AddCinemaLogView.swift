@@ -31,7 +31,7 @@ struct AddCinemaLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                FormSection(title:"Movie") {
+                FormSection(title: "Movie") {
                     HStack {
                         TextField("Movie title", text: $movieTitle)
                         CopyButton(text: movieTitle)
@@ -40,7 +40,7 @@ struct AddCinemaLogView: View {
                     .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Theater") {
+                FormSection(title: "Theater") {
                     VStack(spacing: 0) {
                         TextField("Theater name", text: $theaterName)
                             .padding(.horizontal, 16)
@@ -60,7 +60,7 @@ struct AddCinemaLogView: View {
                     }
                 }
 
-                FormSection(title:"Photos") {
+                FormSection(title: "Photos") {
                     VStack(spacing: 0) {
                         PhotosPicker(
                             selection: $selectedPhotos,
@@ -109,7 +109,7 @@ struct AddCinemaLogView: View {
                     }
                 }
 
-                FormSection(title:"Location") {
+                FormSection(title: "Location") {
                     VStack(spacing: 0) {
                         if let lat = latitude, let lng = longitude {
                             Label(
@@ -146,13 +146,13 @@ struct AddCinemaLogView: View {
                     }
                 }
 
-                FormSection(title:"Date") {
+                FormSection(title: "Date") {
                     DatePicker("Watched", selection: $watchedDate, displayedComponents: [.date, .hourAndMinute])
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Screening Time") {
+                FormSection(title: "Screening Time") {
                     VStack(spacing: 0) {
                         Toggle("Set screening time", isOn: $showScreeningTime)
                             .padding(.horizontal, 16)
@@ -174,7 +174,7 @@ struct AddCinemaLogView: View {
                     }
                 }
 
-                FormSection(title:"Ticket") {
+                FormSection(title: "Ticket") {
                     VStack(spacing: 0) {
                         HStack {
                             TextField("Price", text: $priceText)
@@ -193,13 +193,13 @@ struct AddCinemaLogView: View {
                     }
                 }
 
-                FormSection(title:"Rating") {
+                FormSection(title: "Rating") {
                     RatingView(rating: $rating)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Impression") {
+                FormSection(title: "Impression") {
                     Picker("Impression", selection: $impression) {
                         ForEach(Impression.allCases) { imp in
                             Text("\(imp.emoji) \(imp.displayName)")
@@ -211,7 +211,7 @@ struct AddCinemaLogView: View {
                     .padding(.vertical, 12)
                 }
 
-                FormSection(title:"Thoughts") {
+                FormSection(title: "Thoughts") {
                     Button {
                         showThoughtsEditor = true
                     } label: {
