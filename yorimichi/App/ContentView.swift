@@ -28,7 +28,6 @@ struct ContentView: View {
                 Label("Timeline", systemImage: "clock.fill")
             }
             .tag(AppState.Tab.timeline)
-
         }
         .environment(appState)
         .fontDesign(.rounded)
