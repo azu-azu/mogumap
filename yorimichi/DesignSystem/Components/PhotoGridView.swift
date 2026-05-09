@@ -17,12 +17,19 @@ struct PhotoGridView: View {
         LazyVGrid(columns: gridColumns, spacing: 4) {
             ForEach(photos) { photo in
                 if let uiImage = UIImage(data: photo.imageData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(minHeight: 100)
-                        .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    ZStack(alignment: .bottomTrailing) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(minHeight: 100)
+                            .clipped()
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                        if photo.isReceipt {
+                            ReceiptBadge()
+                                .offset(x: -4, y: -4)
+                        }
+                    }
                 }
             }
         }

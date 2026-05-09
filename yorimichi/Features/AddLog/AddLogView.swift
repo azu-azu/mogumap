@@ -22,7 +22,10 @@ struct AddLogView: View {
     @State private var locationService = LocationService()
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
+    @State private var priceText = ""
+    @State private var receiptIndices: Set<Int> = []
     @State private var showCamera = false
+    @State private var showReceiptCamera = false
     @State private var showThoughtsEditor = false
 
     init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
@@ -33,7 +36,7 @@ struct AddLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                formSection("Place") {
+                FormSection(title: "Place") {
                     VStack(spacing: 0) {
                         HStack {
                             TextField("Place name", text: $placeName)
@@ -55,7 +58,7 @@ struct AddLogView: View {
                     }
                 }
 
-                formSection("Photos") {
+                FormSection(title: "Photos") {
                     VStack(spacing: 0) {
                         PhotosPicker(
                             selection: $selectedPhotos,
@@ -82,18 +85,36 @@ struct AddLogView: View {
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
 
+                        Divider().padding(.leading, 16)
+
+                        Button {
+                            showReceiptCamera = true
+                        } label: {
+                            Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+
                         if !photoDataList.isEmpty {
                             Divider().padding(.leading, 16)
                             ScrollView(.horizontal) {
                                 HStack(spacing: 8) {
                                     ForEach(photoDataList.indices, id: \.self) { index in
                                         if let uiImage = UIImage(data: photoDataList[index]) {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 80, height: 80)
-                                                .clipped()
-                                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                            ZStack(alignment: .bottomTrailing) {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 80, height: 80)
+                                                    .clipped()
+                                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                                                if receiptIndices.contains(index) {
+                                                    ReceiptBadge()
+                                                        .offset(x: 2, y: 2)
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -104,7 +125,7 @@ struct AddLogView: View {
                     }
                 }
 
-                formSection("Location") {
+                FormSection(title: "Location") {
                     VStack(spacing: 0) {
                         if let lat = latitude, let lng = longitude {
                             Label(
@@ -150,19 +171,19 @@ struct AddLogView: View {
                     }
                 }
 
-                formSection("Date") {
+                FormSection(title: "Date") {
                     DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                 }
 
-                formSection("Rating") {
+                FormSection(title: "Rating") {
                     RatingView(rating: $rating)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                 }
 
-                formSection("Impression") {
+                FormSection(title: "Impression") {
                     Picker("Impression", selection: $impression) {
                         ForEach(Impression.allCases) { imp in
                             Text("\(imp.emoji) \(imp.displayName)")
@@ -174,7 +195,18 @@ struct AddLogView: View {
                     .padding(.vertical, 12)
                 }
 
-                formSection("Thoughts (free log)") {
+                FormSection(title: "Price") {
+                    HStack {
+                        TextField("Price", text: $priceText)
+                            .keyboardType(.numberPad)
+                        Text("yen")
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+
+                FormSection(title: "Thoughts (free log)") {
                     Button {
                         showThoughtsEditor = true
                     } label: {
@@ -219,20 +251,11 @@ struct AddLogView: View {
                 photoDataList.append(imageData)
             }
         }
-    }
-
-    private func formSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title.uppercased())
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .padding(.leading, 4)
-
-            content()
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(DesignTokens.Background.formCell)
-                )
+        .fullScreenCover(isPresented: $showReceiptCamera) {
+            CameraView { imageData in
+                receiptIndices.insert(photoDataList.count)
+                photoDataList.append(imageData)
+            }
         }
     }
 
@@ -300,12 +323,13 @@ struct AddLogView: View {
             address: address.isEmpty ? nil : address,
             memo: memo,
             rating: rating,
-            impression: impression.rawValue
+            impression: impression.rawValue,
+            price: Int(priceText)
         )
         modelContext.insert(log)
 
         for (index, data) in photoDataList.enumerated() {
-            let photo = PhotoAttachment(imageData: data, sortOrder: index)
+            let photo = PhotoAttachment(imageData: data, sortOrder: index, isReceipt: receiptIndices.contains(index))
             photo.placeLog = log
             modelContext.insert(photo)
         }

@@ -40,6 +40,8 @@
 		EAF42AB6CCF0CB068C212F5D /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD43588879C44383786C9C8 /* LogDetailView.swift */; };
 		EC0EEA7F5F44B7DB7FDCB2EE /* YorimichiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712AB0C8C6FD99636668798 /* YorimichiApp.swift */; };
 		FF21121558379B8EFEF3DC4F /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B124572651EE4A4ED274DD73 /* CameraView.swift */; };
+		5A1B2C3D4E5F607D /* View+FormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B2C3D4E5F607E /* View+FormSection.swift */; };
+		6C2A3B4D5E6F7081 /* ReceiptBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A3B4D5E6F7082 /* ReceiptBadge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +80,8 @@
 		E5AB33F714976D8CEBB86F3A /* NearbyPlaceSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPlaceSearchViewModel.swift; sourceTree = "<group>"; };
 		F03F2F6074A758A205B5EA40 /* CLPlacemark+Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLPlacemark+Address.swift"; sourceTree = "<group>"; };
 		FB216100D380FF9BDDBEC264 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		5A1B2C3D4E5F607E /* View+FormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+FormSection.swift"; sourceTree = "<group>"; };
+		6C2A3B4D5E6F7082 /* ReceiptBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptBadge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -209,6 +213,7 @@
 				325E50A7753D7D2510517808 /* CopyButton.swift */,
 				7B5C1459FD39885031033F45 /* FullTextEditorSheet.swift */,
 				5CBA2DA480B3F20FA4FF4848 /* PhotoGridView.swift */,
+				6C2A3B4D5E6F7082 /* ReceiptBadge.swift */,
 				FB216100D380FF9BDDBEC264 /* RatingView.swift */,
 			);
 			path = Components;
@@ -243,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				F03F2F6074A758A205B5EA40 /* CLPlacemark+Address.swift */,
+				5A1B2C3D4E5F607E /* View+FormSection.swift */,
 				9E45B1DF3089862E804BB11A /* View+Keyboard.swift */,
 			);
 			path = Extensions;
@@ -360,6 +366,8 @@
 				2F17F7FDED6A0C71C55D6B0D /* TimelineView.swift in Sources */,
 				D66CF967E07469696A42957F /* URLResolver.swift in Sources */,
 				E8A4F6E2BFECBF1A6D1AE654 /* View+Keyboard.swift in Sources */,
+				5A1B2C3D4E5F607D /* View+FormSection.swift in Sources */,
+				6C2A3B4D5E6F7081 /* ReceiptBadge.swift in Sources */,
 				EC0EEA7F5F44B7DB7FDCB2EE /* YorimichiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

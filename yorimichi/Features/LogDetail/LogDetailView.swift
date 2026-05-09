@@ -48,6 +48,12 @@ struct LogDetailView: View {
                 }
             }
 
+            if let price = log.price {
+                Section("Price") {
+                    Label("\(price) yen", systemImage: "yensign.circle")
+                }
+            }
+
             if let address = log.address, !address.isEmpty {
                 Section("Address") {
                     HStack {
