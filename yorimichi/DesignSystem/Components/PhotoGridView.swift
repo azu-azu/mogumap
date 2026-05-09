@@ -17,12 +17,24 @@ struct PhotoGridView: View {
         LazyVGrid(columns: gridColumns, spacing: 4) {
             ForEach(photos) { photo in
                 if let uiImage = UIImage(data: photo.imageData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(minHeight: 100)
-                        .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    ZStack(alignment: .bottomTrailing) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(minHeight: 100)
+                            .clipped()
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                        if photo.isReceipt {
+                            Image(systemName: "doc.text.fill")
+                                .font(.caption2)
+                                .foregroundStyle(.white)
+                                .padding(4)
+                                .background(DesignTokens.Accent.primary)
+                                .clipShape(Circle())
+                                .offset(x: -4, y: -4)
+                        }
+                    }
                 }
             }
         }

@@ -23,7 +23,9 @@ struct AddLogView: View {
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
     @State private var priceText = ""
+    @State private var receiptIndices: Set<Int> = []
     @State private var showCamera = false
+    @State private var showReceiptCamera = false
     @State private var showThoughtsEditor = false
 
     init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
@@ -83,18 +85,41 @@ struct AddLogView: View {
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
 
+                        Divider().padding(.leading, 16)
+
+                        Button {
+                            showReceiptCamera = true
+                        } label: {
+                            Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+
                         if !photoDataList.isEmpty {
                             Divider().padding(.leading, 16)
                             ScrollView(.horizontal) {
                                 HStack(spacing: 8) {
                                     ForEach(photoDataList.indices, id: \.self) { index in
                                         if let uiImage = UIImage(data: photoDataList[index]) {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 80, height: 80)
-                                                .clipped()
-                                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                            ZStack(alignment: .bottomTrailing) {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 80, height: 80)
+                                                    .clipped()
+                                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                                                if receiptIndices.contains(index) {
+                                                    Image(systemName: "doc.text.fill")
+                                                        .font(.caption2)
+                                                        .foregroundStyle(.white)
+                                                        .padding(3)
+                                                        .background(DesignTokens.Accent.primary)
+                                                        .clipShape(Circle())
+                                                        .offset(x: 2, y: 2)
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -231,6 +256,12 @@ struct AddLogView: View {
                 photoDataList.append(imageData)
             }
         }
+        .fullScreenCover(isPresented: $showReceiptCamera) {
+            CameraView { imageData in
+                receiptIndices.insert(photoDataList.count)
+                photoDataList.append(imageData)
+            }
+        }
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
@@ -303,7 +334,7 @@ struct AddLogView: View {
         modelContext.insert(log)
 
         for (index, data) in photoDataList.enumerated() {
-            let photo = PhotoAttachment(imageData: data, sortOrder: index)
+            let photo = PhotoAttachment(imageData: data, sortOrder: index, isReceipt: receiptIndices.contains(index))
             photo.placeLog = log
             modelContext.insert(photo)
         }

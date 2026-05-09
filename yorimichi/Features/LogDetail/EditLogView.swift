@@ -10,8 +10,10 @@ struct EditLogView: View {
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var newPhotoDataList: [Data] = []
     @State private var showCamera = false
+    @State private var showReceiptCamera = false
     @State private var showThoughtsEditor = false
     @State private var priceText: String
+    @State private var newReceiptIndices: Set<Int> = []
 
     init(log: PlaceLog) {
         self.log = log
@@ -47,6 +49,12 @@ struct EditLogView: View {
                     showCamera = true
                 } label: {
                     Label("Take Photo", systemImage: "camera")
+                }
+
+                Button {
+                    showReceiptCamera = true
+                } label: {
+                    Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
                 }
 
                 if !log.photos.isEmpty || !newPhotoDataList.isEmpty {
@@ -137,6 +145,12 @@ struct EditLogView: View {
                 newPhotoDataList.append(imageData)
             }
         }
+        .fullScreenCover(isPresented: $showReceiptCamera) {
+            CameraView { imageData in
+                newReceiptIndices.insert(newPhotoDataList.count)
+                newPhotoDataList.append(imageData)
+            }
+        }
     }
 
     private var impressionBinding: Binding<Impression> {
@@ -163,7 +177,7 @@ struct EditLogView: View {
 
         let startIndex = log.photos.count
         for (index, data) in newPhotoDataList.enumerated() {
-            let photo = PhotoAttachment(imageData: data, sortOrder: startIndex + index)
+            let photo = PhotoAttachment(imageData: data, sortOrder: startIndex + index, isReceipt: newReceiptIndices.contains(index))
             photo.placeLog = log
             modelContext.insert(photo)
         }
