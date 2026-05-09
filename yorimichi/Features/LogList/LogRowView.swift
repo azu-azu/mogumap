@@ -12,9 +12,18 @@ struct LogRowView: View {
                     .font(.body)
                     .fontWeight(.semibold)
 
-                Text(log.date, format: .dateTime.hour().minute())
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                HStack(spacing: 6) {
+                    Text(log.date, format: .dateTime.hour().minute())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if let price = log.price {
+                        Text("¥\(price)")
+                            .font(.caption)
+                            .fontDesign(.monospaced)
+                            .foregroundStyle(.secondary)
+                    }
+                }
 
                 if log.rating > 0 {
                     RatingDisplayView(rating: log.rating)
