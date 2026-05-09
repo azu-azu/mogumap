@@ -7,6 +7,7 @@ enum Category: String, CaseIterable, Identifiable, Codable {
     case shop
     case temple
     case museum
+    case cinema
     case event
     case hotel
     case other
@@ -21,6 +22,7 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         case .shop: "Shop"
         case .temple: "Temple"
         case .museum: "Museum"
+        case .cinema: "Cinema"
         case .event: "Event"
         case .hotel: "Hotel"
         case .other: "Other"
@@ -35,6 +37,7 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         case .shop: "bag.fill"
         case .temple: "building.columns.fill"
         case .museum: "building.2.fill"
+        case .cinema: "film.fill"
         case .event: "star.fill"
         case .hotel: "bed.double.fill"
         case .other: "mappin.circle.fill"
@@ -50,6 +53,7 @@ enum Category: String, CaseIterable, Identifiable, Codable {
         case .museum:                           return .museum
         case .hotel:                            return .hotel
         case .park, .beach, .nationalPark:      return .scene
+        case .movieTheater:                     return .cinema
         case .theater, .nightlife, .stadium:    return .event
         default:                                return .other
         }
