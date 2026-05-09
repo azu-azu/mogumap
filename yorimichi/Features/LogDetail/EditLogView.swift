@@ -14,6 +14,7 @@ struct EditLogView: View {
     @State private var showThoughtsEditor = false
     @State private var priceText: String
     @State private var newReceiptIndices: Set<Int> = []
+    @State private var isProcessingOCR = false
 
     init(log: PlaceLog) {
         self.log = log
@@ -54,7 +55,13 @@ struct EditLogView: View {
                 Button {
                     showReceiptCamera = true
                 } label: {
-                    Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
+                    HStack {
+                        Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
+                        Spacer()
+                        if isProcessingOCR {
+                            ProgressView()
+                        }
+                    }
                 }
 
                 if !log.photos.isEmpty || !newPhotoDataList.isEmpty {
@@ -156,6 +163,7 @@ struct EditLogView: View {
             CameraView { imageData in
                 newReceiptIndices.insert(newPhotoDataList.count)
                 newPhotoDataList.append(imageData)
+                Task { await processReceiptOCR(imageData) }
             }
         }
     }
@@ -172,6 +180,27 @@ struct EditLogView: View {
             get: { Category(rawValue: log.category) ?? .other },
             set: { log.category = $0.rawValue }
         )
+    }
+
+    private func processReceiptOCR(_ imageData: Data) async {
+        isProcessingOCR = true
+        defer { isProcessingOCR = false }
+
+        guard let text = await ReceiptOCRService.recognizeText(from: imageData) else { return }
+        let result = ReceiptOCRService.parse(text)
+
+        if let name = result.placeName, log.placeName.isEmpty {
+            log.placeName = name
+        }
+        if let price = result.price, priceText.isEmpty {
+            priceText = String(price)
+        }
+        if let extractedDate = result.date {
+            log.date = extractedDate
+        }
+        if !result.notes.isEmpty {
+            log.memo = log.memo.isEmpty ? result.notes : log.memo + "\n" + result.notes
+        }
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {

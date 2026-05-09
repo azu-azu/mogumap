@@ -27,6 +27,7 @@ struct AddLogView: View {
     @State private var showCamera = false
     @State private var showReceiptCamera = false
     @State private var showThoughtsEditor = false
+    @State private var isProcessingOCR = false
 
     init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
         self.selectedPlace = selectedPlace
@@ -90,8 +91,13 @@ struct AddLogView: View {
                         Button {
                             showReceiptCamera = true
                         } label: {
-                            Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            HStack {
+                                Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
+                                Spacer()
+                                if isProcessingOCR {
+                                    ProgressView()
+                                }
+                            }
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
@@ -255,7 +261,29 @@ struct AddLogView: View {
             CameraView { imageData in
                 receiptIndices.insert(photoDataList.count)
                 photoDataList.append(imageData)
+                Task { await processReceiptOCR(imageData) }
             }
+        }
+    }
+
+    private func processReceiptOCR(_ imageData: Data) async {
+        isProcessingOCR = true
+        defer { isProcessingOCR = false }
+
+        guard let text = await ReceiptOCRService.recognizeText(from: imageData) else { return }
+        let result = ReceiptOCRService.parse(text)
+
+        if let name = result.placeName, placeName.isEmpty {
+            placeName = name
+        }
+        if let price = result.price, priceText.isEmpty {
+            priceText = String(price)
+        }
+        if let extractedDate = result.date {
+            date = extractedDate
+        }
+        if !result.notes.isEmpty {
+            memo = memo.isEmpty ? result.notes : memo + "\n" + result.notes
         }
     }
 
