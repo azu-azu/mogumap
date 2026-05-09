@@ -7,6 +7,7 @@ struct TimelineView: View {
     @State private var searchText = ""
     @State private var selectedCategory: Category?
     @State private var minimumRating = 0
+    @State private var priceOnly = false
 
     private var filteredLogs: [PlaceLog] {
         allLogs.filter { log in
@@ -20,7 +21,9 @@ struct TimelineView: View {
 
             let matchesRating = log.rating >= minimumRating
 
-            return matchesText && matchesCategory && matchesRating
+            let matchesPrice = !priceOnly || log.price != nil
+
+            return matchesText && matchesCategory && matchesRating && matchesPrice
         }
     }
 
@@ -33,15 +36,25 @@ struct TimelineView: View {
                 ratingFilter
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
+                priceFilter
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
             }
 
             Section {
-                Text("Results (\(filteredLogs.count))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
+                HStack {
+                    Text("Results (\(filteredLogs.count))")
+                    Spacer()
+                    if totalPrice > 0 {
+                        Text("¥\(totalPrice)")
+                            .fontDesign(.monospaced)
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
 
                 if filteredLogs.isEmpty {
                     ContentUnavailableView.search(text: searchText)
@@ -84,6 +97,15 @@ struct TimelineView: View {
             }
             .padding(.vertical, 4)
         }
+    }
+
+    private var totalPrice: Int {
+        filteredLogs.compactMap(\.price).reduce(0, +)
+    }
+
+    private var priceFilter: some View {
+        Toggle("Price only", isOn: $priceOnly)
+            .font(.subheadline)
     }
 
     private var ratingFilter: some View {
