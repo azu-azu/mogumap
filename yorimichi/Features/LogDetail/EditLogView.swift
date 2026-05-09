@@ -11,6 +11,12 @@ struct EditLogView: View {
     @State private var newPhotoDataList: [Data] = []
     @State private var showCamera = false
     @State private var showThoughtsEditor = false
+    @State private var priceText: String
+
+    init(log: PlaceLog) {
+        self.log = log
+        _priceText = State(initialValue: log.price.map(String.init) ?? "")
+    }
 
     var body: some View {
         List {
@@ -84,6 +90,15 @@ struct EditLogView: View {
                 .pickerStyle(.segmented)
             }
 
+            Section("Price") {
+                HStack {
+                    TextField("Price", text: $priceText)
+                        .keyboardType(.numberPad)
+                    Text("yen")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
             Section("Thoughts (free log)") {
                 Button {
                     showThoughtsEditor = true
@@ -143,6 +158,7 @@ struct EditLogView: View {
     }
 
     private func saveChanges() {
+        log.price = Int(priceText)
         log.touch()
 
         let startIndex = log.photos.count

@@ -22,6 +22,7 @@ struct AddLogView: View {
     @State private var locationService = LocationService()
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
+    @State private var priceText = ""
     @State private var showCamera = false
     @State private var showThoughtsEditor = false
 
@@ -174,6 +175,17 @@ struct AddLogView: View {
                     .padding(.vertical, 12)
                 }
 
+                FormSection(title: "Price") {
+                    HStack {
+                        TextField("Price", text: $priceText)
+                            .keyboardType(.numberPad)
+                        Text("yen")
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+
                 FormSection(title: "Thoughts (free log)") {
                     Button {
                         showThoughtsEditor = true
@@ -285,7 +297,8 @@ struct AddLogView: View {
             address: address.isEmpty ? nil : address,
             memo: memo,
             rating: rating,
-            impression: impression.rawValue
+            impression: impression.rawValue,
+            price: Int(priceText)
         )
         modelContext.insert(log)
 
