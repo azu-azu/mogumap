@@ -111,12 +111,7 @@ struct AddLogView: View {
                                                     .clipShape(RoundedRectangle(cornerRadius: 8))
 
                                                 if receiptIndices.contains(index) {
-                                                    Image(systemName: "doc.text.fill")
-                                                        .font(.caption2)
-                                                        .foregroundStyle(.white)
-                                                        .padding(3)
-                                                        .background(DesignTokens.Accent.primary)
-                                                        .clipShape(Circle())
+                                                    ReceiptBadge()
                                                         .offset(x: 2, y: 2)
                                                 }
                                             }

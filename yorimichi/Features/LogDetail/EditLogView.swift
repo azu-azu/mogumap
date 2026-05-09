@@ -62,12 +62,19 @@ struct EditLogView: View {
 
                     ForEach(newPhotoDataList.indices, id: \.self) { index in
                         if let uiImage = UIImage(data: newPhotoDataList[index]) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(height: 100)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                            ZStack(alignment: .bottomTrailing) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 100)
+                                    .clipped()
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                                if newReceiptIndices.contains(index) {
+                                    ReceiptBadge()
+                                        .offset(x: -4, y: -4)
+                                }
+                            }
                         }
                     }
                 }

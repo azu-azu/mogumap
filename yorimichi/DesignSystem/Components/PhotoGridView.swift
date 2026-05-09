@@ -26,12 +26,7 @@ struct PhotoGridView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 8))
 
                         if photo.isReceipt {
-                            Image(systemName: "doc.text.fill")
-                                .font(.caption2)
-                                .foregroundStyle(.white)
-                                .padding(4)
-                                .background(DesignTokens.Accent.primary)
-                                .clipShape(Circle())
+                            ReceiptBadge()
                                 .offset(x: -4, y: -4)
                         }
                     }
