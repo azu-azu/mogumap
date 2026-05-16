@@ -38,6 +38,8 @@ struct AddLogView: View {
     @State private var isProcessingOCR = false
     @State private var scanLibraryPhotos: [PhotosPickerItem] = []
     @State private var showScanLibraryPicker = false
+    @State private var showLibraryPicker = false
+    @State private var showAddOptions = false
 
     private static let sheetAnimationDelay: Duration = .milliseconds(600)
 
@@ -52,8 +54,7 @@ struct AddLogView: View {
             VStack(spacing: 20) {
                 dateSection
                 placeSection
-                photosSection
-                scanSection
+                attachmentsSection
                 priceSection
                 thoughtsSection
                 ratingSection
@@ -94,6 +95,19 @@ struct AddLogView: View {
         }
         .onChange(of: selectedPhotos) { _, newItems in
             Task { await loadPhotos(from: newItems) }
+        }
+        .photosPicker(
+            isPresented: $showLibraryPicker,
+            selection: $selectedPhotos,
+            maxSelectionCount: PhotoLoader.maxSelectionCount,
+            matching: .images
+        )
+        .confirmationDialog("Add Attachment", isPresented: $showAddOptions) {
+            Button("Take Photo") { showCamera = true }
+            Button("Select from Library") { showLibraryPicker = true }
+            Button("Scan from Camera") { showReceiptCamera = true }
+            Button("Scan from Library") { showScanLibraryPicker = true }
+            Button("Paste Image or Text") { handleClipboard() }
         }
         .photosPicker(
             isPresented: $showScanLibraryPicker,
@@ -345,34 +359,11 @@ struct AddLogView: View {
         }
     }
 
-    private var photosSection: some View {
-        FormSection(title: "Photos") {
+    private var attachmentsSection: some View {
+        FormSection(title: "Attachments") {
             VStack(spacing: 0) {
-                PhotosPicker(
-                    selection: $selectedPhotos,
-                    maxSelectionCount: PhotoLoader.maxSelectionCount,
-                    matching: .images
-                ) {
-                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                Divider().padding(.leading, 16)
-
-                Button {
-                    showCamera = true
-                } label: {
-                    Label("Take Photo", systemImage: "camera")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
                 if !photoDataList.isEmpty {
-                    Divider().padding(.leading, 16)
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(photoDataList.indices, id: \.self) { index in
                                 if let uiImage = UIImage(data: photoDataList[index]) {
@@ -393,44 +384,16 @@ struct AddLogView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
+                    Divider().padding(.leading, 16)
                 }
-            }
-        }
-    }
-
-    private var scanSection: some View {
-        FormSection(title: "Scan") {
-            VStack(spacing: 0) {
                 Button {
-                    showReceiptCamera = true
+                    showAddOptions = true
                 } label: {
                     HStack {
-                        Label("Scan from Camera", systemImage: "doc.text.viewfinder")
+                        Label("Add", systemImage: "plus.circle")
                             .frame(maxWidth: .infinity, alignment: .leading)
                         if isProcessingOCR { ProgressView() }
                     }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                Divider().padding(.leading, 16)
-
-                Button {
-                    showScanLibraryPicker = true
-                } label: {
-                    Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                Divider().padding(.leading, 16)
-
-                Button {
-                    handleClipboard()
-                } label: {
-                    Label("Paste Image or Text", systemImage: "doc.on.clipboard")
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
