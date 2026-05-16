@@ -1,6 +1,9 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
+import UIKit
+import CoreLocation
+@preconcurrency import MapKit
 
 struct EditLogView: View {
     @Environment(\.dismiss) private var dismiss
@@ -15,6 +18,8 @@ struct EditLogView: View {
     @State private var priceText: String
     @State private var newReceiptIndices: Set<Int> = []
     @State private var isProcessingOCR = false
+    @State private var scanLibraryPhotos: [PhotosPickerItem] = []
+    @State private var showScanLibraryPicker = false
 
     init(log: PlaceLog) {
         self.log = log
@@ -40,7 +45,7 @@ struct EditLogView: View {
                     maxSelectionCount: PhotoLoader.maxSelectionCount,
                     matching: .images
                 ) {
-                    Label("Add Photos", systemImage: "photo.on.rectangle.angled")
+                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
                 }
                 .onChange(of: selectedPhotos) { _, newItems in
                     Task { await loadPhotos(from: newItems) }
@@ -50,18 +55,6 @@ struct EditLogView: View {
                     showCamera = true
                 } label: {
                     Label("Take Photo", systemImage: "camera")
-                }
-
-                Button {
-                    showReceiptCamera = true
-                } label: {
-                    HStack {
-                        Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
-                        Spacer()
-                        if isProcessingOCR {
-                            ProgressView()
-                        }
-                    }
                 }
 
                 if !log.photos.isEmpty || !newPhotoDataList.isEmpty {
@@ -84,6 +77,32 @@ struct EditLogView: View {
                             }
                         }
                     }
+                }
+            }
+
+            Section("Scan") {
+                Button {
+                    showReceiptCamera = true
+                } label: {
+                    HStack {
+                        Label("Scan from Camera", systemImage: "doc.text.viewfinder")
+                        Spacer()
+                        if isProcessingOCR {
+                            ProgressView()
+                        }
+                    }
+                }
+
+                Button {
+                    showScanLibraryPicker = true
+                } label: {
+                    Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
+                }
+
+                Button {
+                    handleClipboard()
+                } label: {
+                    Label("Paste Image or Text", systemImage: "doc.on.clipboard")
                 }
             }
 
@@ -166,6 +185,25 @@ struct EditLogView: View {
                 Task { await processReceiptOCR(imageData) }
             }
         }
+        .photosPicker(
+            isPresented: $showScanLibraryPicker,
+            selection: $scanLibraryPhotos,
+            maxSelectionCount: PhotoLoader.maxSelectionCount,
+            matching: .images
+        )
+        .onChange(of: scanLibraryPhotos) { _, newItems in
+            Task {
+                let dataList = await PhotoLoader.loadJPEGData(from: newItems)
+                let startIndex = newPhotoDataList.count
+                for (i, data) in dataList.enumerated() {
+                    newReceiptIndices.insert(startIndex + i)
+                    newPhotoDataList.append(data)
+                }
+                for data in dataList {
+                    await processReceiptOCR(data)
+                }
+            }
+        }
     }
 
     private var impressionBinding: Binding<Impression> {
@@ -180,6 +218,50 @@ struct EditLogView: View {
             get: { Category(rawValue: log.category) ?? .other },
             set: { log.category = $0.rawValue }
         )
+    }
+
+    private func handleClipboard() {
+        let pb = UIPasteboard.general
+        if let image = pb.image,
+           let data = image.jpegData(compressionQuality: PhotoLoader.compressionQuality) {
+            newReceiptIndices.insert(newPhotoDataList.count)
+            newPhotoDataList.append(data)
+            Task { await processReceiptOCR(data) }
+        } else if let url = pb.url {
+            Task { await handleGoogleMapsURL(url.absoluteString) }
+        } else if let text = pb.string, !text.isEmpty {
+            applyPasteResult(PlaceInfoParser.parse(text))
+        }
+    }
+
+    private func applyPasteResult(_ result: PasteResult) {
+        if let name = result.placeName, log.placeName.isEmpty { log.placeName = name }
+        if let addr = result.address, log.address == nil { log.address = addr }
+        if let price = result.price, priceText.isEmpty { priceText = String(price) }
+        if let date = result.date { log.date = date }
+        if !result.notes.isEmpty {
+            log.memo = log.memo.isEmpty ? result.notes : log.memo + "\n" + result.notes
+        }
+    }
+
+    private func handleGoogleMapsURL(_ urlString: String) async {
+        var resolvedURL = urlString
+        if GoogleMapsURLParser.isShortURL(urlString),
+           let resolved = await URLResolver.resolveRedirect(urlString) {
+            resolvedURL = resolved
+        }
+        guard let result = GoogleMapsURLParser.parse(resolvedURL) else { return }
+
+        log.latitude = result.coordinate.latitude
+        log.longitude = result.coordinate.longitude
+        if let name = result.placeName, log.placeName.isEmpty {
+            log.placeName = name
+        }
+
+        let location = CLLocation(latitude: result.coordinate.latitude, longitude: result.coordinate.longitude)
+        if let placemark = try? await CLGeocoder().reverseGeocodeLocation(location).first {
+            log.address = placemark.formattedAddress
+        }
     }
 
     private func processReceiptOCR(_ imageData: Data) async {

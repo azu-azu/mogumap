@@ -111,17 +111,17 @@ struct LogListView: View {
                 AddLogView()
             }
         }
-        .confirmationDialog("Add Log", isPresented: $showScanOptions) {
-            Button("Select Photos") {
-                quickScanMode = .photoLibrary
+        .confirmationDialog("Scan", isPresented: $showScanOptions) {
+            Button("Scan from Camera") {
+                quickScanMode = .scanCamera
                 showQuickAdd = true
             }
-            Button("Take Photo") {
-                quickScanMode = .camera
+            Button("Scan from Library") {
+                quickScanMode = .scanLibrary
                 showQuickAdd = true
             }
-            Button("Scan Receipt / Ticket") {
-                quickScanMode = .receipt
+            Button("Paste Image or Text") {
+                quickScanMode = .paste
                 showQuickAdd = true
             }
         }
