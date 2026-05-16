@@ -13,10 +13,10 @@ enum PlaceInfoParser {
     private static let addrRegex = try? NSRegularExpression(
         pattern: #"〒\s?\d{3}-?\d{4}|.+(都|道|府|県).+(市|区|町|村)"#
     )
-    private static let datePatterns = [
+    private static let dateRegexes: [NSRegularExpression] = [
         #"(\d{4})[/.\-](\d{1,2})[/.\-](\d{1,2})"#,
         #"(\d{4})年(\d{1,2})月(\d{1,2})日"#
-    ]
+    ].compactMap { try? NSRegularExpression(pattern: $0) }
 
     static func parse(_ text: String) -> PasteResult {
         let lines = text.components(separatedBy: .newlines)
@@ -39,12 +39,12 @@ enum PlaceInfoParser {
         }
 
         // Date: 2026/05/09, 2026年5月9日
-        for pattern in Self.datePatterns {
-            guard let regex = try? NSRegularExpression(pattern: pattern),
-                  let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
-                  match.numberOfRanges >= 4 else { continue }
-            let ns = text as NSString
-            guard let y = Int(ns.substring(with: match.range(at: 1))),
+        let ns = text as NSString
+        let textRange = NSRange(text.startIndex..., in: text)
+        for regex in Self.dateRegexes {
+            guard let match = regex.firstMatch(in: text, range: textRange),
+                  match.numberOfRanges >= 4,
+                  let y = Int(ns.substring(with: match.range(at: 1))),
                   let m = Int(ns.substring(with: match.range(at: 2))),
                   let d = Int(ns.substring(with: match.range(at: 3))) else { continue }
             var comps = DateComponents()
@@ -73,10 +73,9 @@ enum PlaceInfoParser {
                line.range(of: #"[¥￥][\d,\s]+|[\d,]+\s?円"#, options: .regularExpression) != nil {
                 usedIndices.insert(i)
             }
-            for pattern in Self.datePatterns {
-                if line.range(of: pattern, options: .regularExpression) != nil {
-                    usedIndices.insert(i)
-                }
+            let lineRange = NSRange(line.startIndex..., in: line)
+            for regex in Self.dateRegexes where regex.firstMatch(in: line, range: lineRange) != nil {
+                usedIndices.insert(i)
             }
         }
 

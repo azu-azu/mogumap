@@ -1,14 +1,43 @@
 import Vision
 import UIKit
+import SwiftUI
 
 struct ReceiptResult {
     var placeName: String?
     var price: Int?
     var date: Date?
     var notes: String
+
+    func apply(
+        placeName: Binding<String>,
+        priceText: Binding<String>,
+        date: Binding<Date>,
+        memo: Binding<String>
+    ) {
+        if let name = self.placeName, placeName.wrappedValue.isEmpty {
+            placeName.wrappedValue = name
+        }
+        if let price = self.price, priceText.wrappedValue.isEmpty {
+            priceText.wrappedValue = String(price)
+        }
+        if let d = self.date {
+            date.wrappedValue = d
+        }
+        if !notes.isEmpty {
+            let current = memo.wrappedValue
+            memo.wrappedValue = current.isEmpty ? notes : current + "\n" + notes
+        }
+    }
 }
 
 enum ReceiptOCRService {
+
+    private static let dateRegexes: [NSRegularExpression] = [
+        #"(\d{4})[/.\-](\d{1,2})[/.\-](\d{1,2})"#,
+        #"(\d{4})年(\d{1,2})月(\d{1,2})日"#,
+    ].compactMap { try? NSRegularExpression(pattern: $0) }
+
+    private static let timeRegex = try? NSRegularExpression(pattern: #"(\d{1,2}):(\d{2})"#)
 
     static func recognizeText(from imageData: Data) async -> String? {
         guard let image = UIImage(data: imageData)?.cgImage else { return nil }
@@ -47,36 +76,28 @@ enum ReceiptOCRService {
         }
 
         // Date: 2026/05/09, 2026.05.09, 2026-05-09, 2026年5月9日
-        let datePatterns = [
-            #"(\d{4})[/.\-](\d{1,2})[/.\-](\d{1,2})"#,
-            #"(\d{4})年(\d{1,2})月(\d{1,2})日"#,
-        ]
-        for pattern in datePatterns {
-            if let regex = try? NSRegularExpression(pattern: pattern),
-               let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
-               match.numberOfRanges >= 4 {
-                let year = Int((text as NSString).substring(with: match.range(at: 1)))
-                let month = Int((text as NSString).substring(with: match.range(at: 2)))
-                let day = Int((text as NSString).substring(with: match.range(at: 3)))
+        let ns = text as NSString
+        let textRange = NSRange(text.startIndex..., in: text)
+        for regex in Self.dateRegexes {
+            guard let match = regex.firstMatch(in: text, range: textRange),
+                  match.numberOfRanges >= 4,
+                  let y = Int(ns.substring(with: match.range(at: 1))),
+                  let m = Int(ns.substring(with: match.range(at: 2))),
+                  let d = Int(ns.substring(with: match.range(at: 3))) else { continue }
 
-                if let y = year, let m = month, let d = day {
-                    var components = DateComponents()
-                    components.year = y
-                    components.month = m
-                    components.day = d
+            var components = DateComponents()
+            components.year = y; components.month = m; components.day = d
 
-                    // Time: HH:MM
-                    if let timeRegex = try? NSRegularExpression(pattern: #"(\d{1,2}):(\d{2})"#),
-                       let timeMatch = timeRegex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
-                       timeMatch.numberOfRanges >= 3 {
-                        components.hour = Int((text as NSString).substring(with: timeMatch.range(at: 1)))
-                        components.minute = Int((text as NSString).substring(with: timeMatch.range(at: 2)))
-                    }
-
-                    result.date = Calendar.current.date(from: components)
-                    break
-                }
+            // Time: HH:MM
+            if let timeRegex = Self.timeRegex,
+               let timeMatch = timeRegex.firstMatch(in: text, range: textRange),
+               timeMatch.numberOfRanges >= 3 {
+                components.hour = Int(ns.substring(with: timeMatch.range(at: 1)))
+                components.minute = Int(ns.substring(with: timeMatch.range(at: 2)))
             }
+
+            result.date = Calendar.current.date(from: components)
+            break
         }
 
         // PlaceName: first line (most receipts/tickets have the venue name on top)
@@ -90,10 +111,9 @@ enum ReceiptOCRService {
             if result.price != nil && line.range(of: #"[¥￥][\d,\s]+|[\d,]+\s?円"#, options: .regularExpression) != nil {
                 usedLines.insert(i)
             }
-            for pattern in datePatterns {
-                if line.range(of: pattern, options: .regularExpression) != nil {
-                    usedLines.insert(i)
-                }
+            let lineRange = NSRange(line.startIndex..., in: line)
+            for regex in Self.dateRegexes where regex.firstMatch(in: line, range: lineRange) != nil {
+                usedLines.insert(i)
             }
         }
 

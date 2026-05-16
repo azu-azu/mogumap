@@ -269,20 +269,12 @@ struct EditLogView: View {
         defer { isProcessingOCR = false }
 
         guard let text = await ReceiptOCRService.recognizeText(from: imageData) else { return }
-        let result = ReceiptOCRService.parse(text)
-
-        if let name = result.placeName, log.placeName.isEmpty {
-            log.placeName = name
-        }
-        if let price = result.price, priceText.isEmpty {
-            priceText = String(price)
-        }
-        if let extractedDate = result.date {
-            log.date = extractedDate
-        }
-        if !result.notes.isEmpty {
-            log.memo = log.memo.isEmpty ? result.notes : log.memo + "\n" + result.notes
-        }
+        ReceiptOCRService.parse(text).apply(
+            placeName: $log.placeName,
+            priceText: $priceText,
+            date: $log.date,
+            memo: $log.memo
+        )
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {

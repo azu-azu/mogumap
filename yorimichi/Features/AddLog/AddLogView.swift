@@ -39,6 +39,8 @@ struct AddLogView: View {
     @State private var scanLibraryPhotos: [PhotosPickerItem] = []
     @State private var showScanLibraryPicker = false
 
+    private static let sheetAnimationDelay: Duration = .milliseconds(600)
+
     init(selectedPlace: MKMapItem? = nil, quickScanMode: QuickScanMode? = nil, onComplete: (() -> Void)? = nil) {
         self.selectedPlace = selectedPlace
         self.quickScanMode = quickScanMode
@@ -78,7 +80,7 @@ struct AddLogView: View {
             guard let mode = quickScanMode else { return }
             // Wait for sheet animation to complete before presenting another sheet/cover
             if mode != .paste {
-                try? await Task.sleep(for: .milliseconds(600))
+                try? await Task.sleep(for: Self.sheetAnimationDelay)
             }
             switch mode {
             case .scanCamera:   showReceiptCamera = true
@@ -155,20 +157,12 @@ struct AddLogView: View {
         defer { isProcessingOCR = false }
 
         guard let text = await ReceiptOCRService.recognizeText(from: imageData) else { return }
-        let result = ReceiptOCRService.parse(text)
-
-        if let name = result.placeName, placeName.isEmpty {
-            placeName = name
-        }
-        if let price = result.price, priceText.isEmpty {
-            priceText = String(price)
-        }
-        if let extractedDate = result.date {
-            date = extractedDate
-        }
-        if !result.notes.isEmpty {
-            memo = memo.isEmpty ? result.notes : memo + "\n" + result.notes
-        }
+        ReceiptOCRService.parse(text).apply(
+            placeName: $placeName,
+            priceText: $priceText,
+            date: $date,
+            memo: $memo
+        )
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
