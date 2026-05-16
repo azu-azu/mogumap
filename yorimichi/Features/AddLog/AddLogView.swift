@@ -103,11 +103,21 @@ struct AddLogView: View {
             matching: .images
         )
         .confirmationDialog("Add Attachment", isPresented: $showAddOptions) {
-            Button("Take Photo") { showCamera = true }
-            Button("Select from Library") { showLibraryPicker = true }
-            Button("Scan from Camera") { showReceiptCamera = true }
-            Button("Scan from Library") { showScanLibraryPicker = true }
-            Button("Paste Image or Text") { handleClipboard() }
+            Button { showCamera = true } label: {
+                Label("Take Photo", systemImage: "camera")
+            }
+            Button { showLibraryPicker = true } label: {
+                Label("Select from Library", systemImage: "photo.on.rectangle.angled")
+            }
+            Button { showReceiptCamera = true } label: {
+                Label("Scan from Camera", systemImage: "doc.text.viewfinder")
+            }
+            Button { showScanLibraryPicker = true } label: {
+                Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
+            }
+            Button { handleClipboard() } label: {
+                Label("Paste Image or Text", systemImage: "doc.on.clipboard")
+            }
         }
         .photosPicker(
             isPresented: $showScanLibraryPicker,
