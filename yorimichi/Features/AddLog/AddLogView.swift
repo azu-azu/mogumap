@@ -27,12 +27,15 @@ private struct AttachmentPickerSheet: View {
                 row("Take Photo", icon: "camera", action: .takePhoto)
                 row("Select from Library", icon: "photo.on.rectangle.angled", action: .selectLibrary)
             }
-            Section("Scan (OCR)") {
-                row("Scan from Camera", icon: "doc.text.viewfinder", action: .scanCamera) {
-                    if isProcessingOCR { ProgressView() }
-                }
+            Section {
+                row("Scan from Camera", icon: "doc.text.viewfinder", action: .scanCamera)
                 row("Scan from Library", icon: "photo.on.rectangle.angled", action: .scanLibrary)
                 row("Paste Image or Text", icon: "doc.on.clipboard", action: .paste)
+            } header: {
+                HStack(spacing: 6) {
+                    Text("Scan (OCR)")
+                    if isProcessingOCR { ProgressView().scaleEffect(0.7) }
+                }
             }
         }
         .listStyle(.insetGrouped)
@@ -42,7 +45,6 @@ private struct AttachmentPickerSheet: View {
         .presentationDragIndicator(.visible)
     }
 
-    @ViewBuilder
     private func row(
         _ title: String,
         icon: String,
