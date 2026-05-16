@@ -50,11 +50,15 @@ struct AddLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                dateSection
                 placeSection
                 photosSection
                 scanSection
+                priceSection
+                thoughtsSection
+                ratingSection
+                impressionSection
                 locationSection
-                detailsSection
             }
             .padding(.horizontal, 16)
             .padding(.top, 8)
@@ -284,50 +288,60 @@ struct AddLogView: View {
         }
     }
 
-    private var detailsSection: some View {
-        VStack(spacing: 20) {
-            FormSection(title: "Date") {
-                DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-            }
-            FormSection(title: "Rating") {
-                RatingView(rating: $rating)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-            }
-            FormSection(title: "Impression") {
-                Picker("Impression", selection: $impression) {
-                    ForEach(Impression.allCases) { imp in
-                        Text("\(imp.emoji) \(imp.displayName)").tag(imp)
-                    }
-                }
-                .pickerStyle(.segmented)
+    private var dateSection: some View {
+        FormSection(title: "Date") {
+            DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
+        }
+    }
+
+    private var priceSection: some View {
+        FormSection(title: "Price") {
+            HStack {
+                TextField("Price", text: $priceText).keyboardType(.numberPad)
+                Text("yen").foregroundStyle(.secondary)
             }
-            FormSection(title: "Price") {
-                HStack {
-                    TextField("Price", text: $priceText).keyboardType(.numberPad)
-                    Text("yen").foregroundStyle(.secondary)
-                }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+    }
+
+    private var thoughtsSection: some View {
+        FormSection(title: "Thoughts (free log)") {
+            Button {
+                showThoughtsEditor = true
+            } label: {
+                Text(memo.isEmpty ? "Tap to write..." : memo)
+                    .foregroundStyle(memo.isEmpty ? .secondary : .primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .lineLimit(3)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var ratingSection: some View {
+        FormSection(title: "Rating") {
+            RatingView(rating: $rating)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-            }
-            FormSection(title: "Thoughts (free log)") {
-                Button {
-                    showThoughtsEditor = true
-                } label: {
-                    Text(memo.isEmpty ? "Tap to write..." : memo)
-                        .foregroundStyle(memo.isEmpty ? .secondary : .primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .lineLimit(3)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .contentShape(Rectangle())
+        }
+    }
+
+    private var impressionSection: some View {
+        FormSection(title: "Impression") {
+            Picker("Impression", selection: $impression) {
+                ForEach(Impression.allCases) { imp in
+                    Text("\(imp.emoji) \(imp.displayName)").tag(imp)
                 }
-                .buttonStyle(.plain)
             }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
         }
     }
 
