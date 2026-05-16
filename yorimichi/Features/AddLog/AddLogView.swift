@@ -10,6 +10,60 @@ enum QuickScanMode {
     case paste
 }
 
+// MARK: - Attachment picker
+
+private enum AttachmentAction {
+    case takePhoto, selectLibrary, scanCamera, scanLibrary, paste
+}
+
+private struct AttachmentPickerSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let isProcessingOCR: Bool
+    let onSelect: (AttachmentAction) -> Void
+
+    var body: some View {
+        List {
+            Section("Photos") {
+                row("Take Photo", icon: "camera", action: .takePhoto)
+                row("Select from Library", icon: "photo.on.rectangle.angled", action: .selectLibrary)
+            }
+            Section("Scan (OCR)") {
+                row("Scan from Camera", icon: "doc.text.viewfinder", action: .scanCamera) {
+                    if isProcessingOCR { ProgressView() }
+                }
+                row("Scan from Library", icon: "photo.on.rectangle.angled", action: .scanLibrary)
+                row("Paste Image or Text", icon: "doc.on.clipboard", action: .paste)
+            }
+        }
+        .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.Background.base)
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
+    }
+
+    @ViewBuilder
+    private func row(
+        _ title: String,
+        icon: String,
+        action: AttachmentAction,
+        @ViewBuilder trailing: () -> some View = { EmptyView() }
+    ) -> some View {
+        Button {
+            onSelect(action)
+            dismiss()
+        } label: {
+            HStack {
+                Label(title, systemImage: icon)
+                Spacer()
+                trailing()
+            }
+        }
+    }
+}
+
+// MARK: - AddLogView
+
 struct AddLogView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -38,6 +92,9 @@ struct AddLogView: View {
     @State private var isProcessingOCR = false
     @State private var scanLibraryPhotos: [PhotosPickerItem] = []
     @State private var showScanLibraryPicker = false
+    @State private var showLibraryPicker = false
+    @State private var showAttachmentPicker = false
+    @State private var pendingAttachmentAction: AttachmentAction?
 
     private static let sheetAnimationDelay: Duration = .milliseconds(600)
 
@@ -52,8 +109,7 @@ struct AddLogView: View {
             VStack(spacing: 20) {
                 dateSection
                 placeSection
-                photosSection
-                scanSection
+                mediaSection
                 priceSection
                 thoughtsSection
                 ratingSection
@@ -69,10 +125,8 @@ struct AddLogView: View {
         .keyboardCloseToolbar()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
-                    save()
-                }
-                .disabled(placeName.trimmingCharacters(in: .whitespaces).isEmpty)
+                Button("Save") { save() }
+                    .disabled(placeName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
         .task {
@@ -82,7 +136,6 @@ struct AddLogView: View {
                 locationService.requestCurrentLocation()
             }
             guard let mode = quickScanMode else { return }
-            // Wait for sheet animation to complete before presenting another sheet/cover
             if mode != .paste {
                 try? await Task.sleep(for: Self.sheetAnimationDelay)
             }
@@ -95,6 +148,12 @@ struct AddLogView: View {
         .onChange(of: selectedPhotos) { _, newItems in
             Task { await loadPhotos(from: newItems) }
         }
+        .photosPicker(
+            isPresented: $showLibraryPicker,
+            selection: $selectedPhotos,
+            maxSelectionCount: PhotoLoader.maxSelectionCount,
+            matching: .images
+        )
         .photosPicker(
             isPresented: $showScanLibraryPicker,
             selection: $scanLibraryPhotos,
@@ -114,6 +173,11 @@ struct AddLogView: View {
                 }
             }
         }
+        .sheet(isPresented: $showAttachmentPicker, onDismiss: executePendingAttachmentAction) {
+            AttachmentPickerSheet(isProcessingOCR: isProcessingOCR) { action in
+                pendingAttachmentAction = action
+            }
+        }
         .sheet(isPresented: $showThoughtsEditor) {
             FullTextEditorSheet(text: $memo)
         }
@@ -128,6 +192,18 @@ struct AddLogView: View {
                 photoDataList.append(imageData)
                 Task { await processReceiptOCR(imageData) }
             }
+        }
+    }
+
+    private func executePendingAttachmentAction() {
+        guard let action = pendingAttachmentAction else { return }
+        pendingAttachmentAction = nil
+        switch action {
+        case .takePhoto:     showCamera = true
+        case .selectLibrary: showLibraryPicker = true
+        case .scanCamera:    showReceiptCamera = true
+        case .scanLibrary:   showScanLibraryPicker = true
+        case .paste:         handleClipboard()
         }
     }
 
@@ -183,30 +259,21 @@ struct AddLogView: View {
 
     private func handleGoogleMapsURL(_ urlString: String) async {
         var resolvedURL = urlString
-
-        if GoogleMapsURLParser.isShortURL(urlString) {
-            if let resolved = await URLResolver.resolveRedirect(urlString) {
-                resolvedURL = resolved
-            }
+        if GoogleMapsURLParser.isShortURL(urlString),
+           let resolved = await URLResolver.resolveRedirect(urlString) {
+            resolvedURL = resolved
         }
-
         guard let result = GoogleMapsURLParser.parse(resolvedURL) else { return }
-
         latitude = result.coordinate.latitude
         longitude = result.coordinate.longitude
-
-        if let name = result.placeName {
-            placeName = name
-        }
-
+        if let name = result.placeName { placeName = name }
         await reverseGeocode(result.coordinate)
         await findNearbyPOI(at: result.coordinate)
     }
 
     private func reverseGeocode(_ coordinate: CLLocationCoordinate2D) async {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        let geocoder = CLGeocoder()
-        if let placemark = try? await geocoder.reverseGeocodeLocation(location).first {
+        if let placemark = try? await CLGeocoder().reverseGeocodeLocation(location).first {
             address = placemark.formattedAddress ?? ""
         }
     }
@@ -216,10 +283,18 @@ struct AddLogView: View {
         let search = MKLocalSearch(request: request)
         if let response = try? await search.start(),
            let closest = response.mapItems.first {
-            if placeName.isEmpty {
-                placeName = closest.name ?? ""
-            }
+            if placeName.isEmpty { placeName = closest.name ?? "" }
             category = Category.from(poiCategory: closest.pointOfInterestCategory)
+        }
+    }
+
+    // MARK: - Sections
+
+    private var dateSection: some View {
+        FormSection(title: "Date") {
+            DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
         }
     }
 
@@ -246,33 +321,10 @@ struct AddLogView: View {
         }
     }
 
-    private var photosSection: some View {
-        FormSection(title: "Photos") {
+    private var mediaSection: some View {
+        FormSection(title: "Media") {
             VStack(spacing: 0) {
-                PhotosPicker(
-                    selection: $selectedPhotos,
-                    maxSelectionCount: PhotoLoader.maxSelectionCount,
-                    matching: .images
-                ) {
-                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                Divider().padding(.leading, 16)
-
-                Button {
-                    showCamera = true
-                } label: {
-                    Label("Take Photo", systemImage: "camera")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
                 if !photoDataList.isEmpty {
-                    Divider().padding(.leading, 16)
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(photoDataList.indices, id: \.self) { index in
@@ -294,98 +346,17 @@ struct AddLogView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                }
-            }
-        }
-    }
-
-    private var scanSection: some View {
-        FormSection(title: "Scan") {
-            VStack(spacing: 0) {
-                Button {
-                    showReceiptCamera = true
-                } label: {
-                    HStack {
-                        Label("Scan from Camera", systemImage: "doc.text.viewfinder")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        if isProcessingOCR { ProgressView() }
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                Divider().padding(.leading, 16)
-
-                Button {
-                    showScanLibraryPicker = true
-                } label: {
-                    Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                Divider().padding(.leading, 16)
-
-                Button {
-                    handleClipboard()
-                } label: {
-                    Label("Paste Image or Text", systemImage: "doc.on.clipboard")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-            }
-        }
-    }
-
-    private var locationSection: some View {
-        FormSection(title: "Location") {
-            VStack(spacing: 0) {
-                if let lat = latitude, let lng = longitude {
-                    Label(String(format: "%.4f, %.4f", lat, lng), systemImage: "location.fill")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
                     Divider().padding(.leading, 16)
                 }
-                HStack {
-                    TextField("Address or Google Maps URL", text: $address)
-                    CopyButton(text: address)
+                Button {
+                    showAttachmentPicker = true
+                } label: {
+                    Label("Add", systemImage: "plus.circle")
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .onChange(of: address) { _, newValue in
-                    if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
-                        Task { await handleGoogleMapsURL(newValue) }
-                    }
-                }
-                if selectedPlace == nil {
-                    Divider().padding(.leading, 16)
-                    Button {
-                        if let location = locationService.currentLocation {
-                            latitude = location.coordinate.latitude
-                            longitude = location.coordinate.longitude
-                        }
-                    } label: {
-                        Label("Use Current Location", systemImage: "location")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .disabled(locationService.currentLocation == nil)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                }
             }
-        }
-    }
-
-    private var dateSection: some View {
-        FormSection(title: "Date") {
-            DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
         }
     }
 
@@ -437,6 +408,50 @@ struct AddLogView: View {
             .padding(.vertical, 12)
         }
     }
+
+    private var locationSection: some View {
+        FormSection(title: "Location") {
+            VStack(spacing: 0) {
+                if let lat = latitude, let lng = longitude {
+                    Label(String(format: "%.4f, %.4f", lat, lng), systemImage: "location.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                    Divider().padding(.leading, 16)
+                }
+                HStack {
+                    TextField("Address or Google Maps URL", text: $address)
+                    CopyButton(text: address)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .onChange(of: address) { _, newValue in
+                    if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
+                        Task { await handleGoogleMapsURL(newValue) }
+                    }
+                }
+                if selectedPlace == nil {
+                    Divider().padding(.leading, 16)
+                    Button {
+                        if let location = locationService.currentLocation {
+                            latitude = location.coordinate.latitude
+                            longitude = location.coordinate.longitude
+                        }
+                    } label: {
+                        Label("Use Current Location", systemImage: "location")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .disabled(locationService.currentLocation == nil)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+            }
+        }
+    }
+
+    // MARK: - Save
 
     private func save() {
         let log = PlaceLog(
