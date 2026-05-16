@@ -3,11 +3,18 @@ import SwiftData
 import PhotosUI
 @preconcurrency import MapKit
 
+enum QuickScanMode {
+    case photoLibrary
+    case camera
+    case receipt
+}
+
 struct AddLogView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
     let selectedPlace: MKMapItem?
+    let quickScanMode: QuickScanMode?
     let onComplete: (() -> Void)?
 
     @State private var placeName = ""
@@ -28,9 +35,11 @@ struct AddLogView: View {
     @State private var showReceiptCamera = false
     @State private var showThoughtsEditor = false
     @State private var isProcessingOCR = false
+    @State private var showPhotoPicker = false
 
-    init(selectedPlace: MKMapItem? = nil, onComplete: (() -> Void)? = nil) {
+    init(selectedPlace: MKMapItem? = nil, quickScanMode: QuickScanMode? = nil, onComplete: (() -> Void)? = nil) {
         self.selectedPlace = selectedPlace
+        self.quickScanMode = quickScanMode
         self.onComplete = onComplete
     }
 
@@ -248,7 +257,19 @@ struct AddLogView: View {
             } else {
                 locationService.requestCurrentLocation()
             }
+            switch quickScanMode {
+            case .photoLibrary: showPhotoPicker = true
+            case .camera:       showCamera = true
+            case .receipt:      showReceiptCamera = true
+            case nil:           break
+            }
         }
+        .photosPicker(
+            isPresented: $showPhotoPicker,
+            selection: $selectedPhotos,
+            maxSelectionCount: PhotoLoader.maxSelectionCount,
+            matching: .images
+        )
         .sheet(isPresented: $showThoughtsEditor) {
             FullTextEditorSheet(text: $memo)
         }

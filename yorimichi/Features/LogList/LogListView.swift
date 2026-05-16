@@ -9,6 +9,9 @@ struct LogListView: View {
     @State private var nearbyViewModel: NearbyPlaceSearchViewModel?
     @State private var selectedPlace: MKMapItem?
     @State private var showManualAdd = false
+    @State private var showScanOptions = false
+    @State private var quickScanMode: QuickScanMode?
+    @State private var showQuickAdd = false
 
     var body: some View {
         List {
@@ -76,10 +79,17 @@ struct LogListView: View {
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showManualAdd = true
-                } label: {
-                    Image(systemName: "plus")
+                HStack(spacing: 4) {
+                    Button {
+                        showScanOptions = true
+                    } label: {
+                        Image(systemName: "doc.text.viewfinder")
+                    }
+                    Button {
+                        showManualAdd = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
             }
         }
@@ -99,6 +109,25 @@ struct LogListView: View {
         .sheet(isPresented: $showManualAdd) {
             NavigationStack {
                 AddLogView()
+            }
+        }
+        .confirmationDialog("Add Log", isPresented: $showScanOptions) {
+            Button("Select Photos") {
+                quickScanMode = .photoLibrary
+                showQuickAdd = true
+            }
+            Button("Take Photo") {
+                quickScanMode = .camera
+                showQuickAdd = true
+            }
+            Button("Scan Receipt / Ticket") {
+                quickScanMode = .receipt
+                showQuickAdd = true
+            }
+        }
+        .sheet(isPresented: $showQuickAdd, onDismiss: { quickScanMode = nil }) {
+            NavigationStack {
+                AddLogView(quickScanMode: quickScanMode)
             }
         }
         .task {
