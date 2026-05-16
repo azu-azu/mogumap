@@ -38,8 +38,6 @@ struct AddLogView: View {
     @State private var isProcessingOCR = false
     @State private var scanLibraryPhotos: [PhotosPickerItem] = []
     @State private var showScanLibraryPicker = false
-    @State private var showLibraryPicker = false
-    @State private var showAddOptions = false
 
     private static let sheetAnimationDelay: Duration = .milliseconds(600)
 
@@ -54,7 +52,8 @@ struct AddLogView: View {
             VStack(spacing: 20) {
                 dateSection
                 placeSection
-                attachmentsSection
+                photosSection
+                scanSection
                 priceSection
                 thoughtsSection
                 ratingSection
@@ -95,29 +94,6 @@ struct AddLogView: View {
         }
         .onChange(of: selectedPhotos) { _, newItems in
             Task { await loadPhotos(from: newItems) }
-        }
-        .photosPicker(
-            isPresented: $showLibraryPicker,
-            selection: $selectedPhotos,
-            maxSelectionCount: PhotoLoader.maxSelectionCount,
-            matching: .images
-        )
-        .confirmationDialog("Add Attachment", isPresented: $showAddOptions) {
-            Button { showCamera = true } label: {
-                Label("Take Photo", systemImage: "camera")
-            }
-            Button { showLibraryPicker = true } label: {
-                Label("Select from Library", systemImage: "photo.on.rectangle.angled")
-            }
-            Button { showReceiptCamera = true } label: {
-                Label("Scan from Camera", systemImage: "doc.text.viewfinder")
-            }
-            Button { showScanLibraryPicker = true } label: {
-                Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
-            }
-            Button { handleClipboard() } label: {
-                Label("Paste Image or Text", systemImage: "doc.on.clipboard")
-            }
         }
         .photosPicker(
             isPresented: $showScanLibraryPicker,
@@ -270,6 +246,99 @@ struct AddLogView: View {
         }
     }
 
+    private var photosSection: some View {
+        FormSection(title: "Photos") {
+            VStack(spacing: 0) {
+                PhotosPicker(
+                    selection: $selectedPhotos,
+                    maxSelectionCount: PhotoLoader.maxSelectionCount,
+                    matching: .images
+                ) {
+                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Button {
+                    showCamera = true
+                } label: {
+                    Label("Take Photo", systemImage: "camera")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                if !photoDataList.isEmpty {
+                    Divider().padding(.leading, 16)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(photoDataList.indices, id: \.self) { index in
+                                if let uiImage = UIImage(data: photoDataList[index]) {
+                                    ZStack(alignment: .bottomTrailing) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 80, height: 80)
+                                            .clipped()
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        if receiptIndices.contains(index) {
+                                            ReceiptBadge().offset(x: 2, y: 2)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+            }
+        }
+    }
+
+    private var scanSection: some View {
+        FormSection(title: "Scan") {
+            VStack(spacing: 0) {
+                Button {
+                    showReceiptCamera = true
+                } label: {
+                    HStack {
+                        Label("Scan from Camera", systemImage: "doc.text.viewfinder")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if isProcessingOCR { ProgressView() }
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Button {
+                    showScanLibraryPicker = true
+                } label: {
+                    Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Button {
+                    handleClipboard()
+                } label: {
+                    Label("Paste Image or Text", systemImage: "doc.on.clipboard")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+        }
+    }
+
     private var locationSection: some View {
         FormSection(title: "Location") {
             VStack(spacing: 0) {
@@ -366,48 +435,6 @@ struct AddLogView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-        }
-    }
-
-    private var attachmentsSection: some View {
-        FormSection(title: "Attachments") {
-            VStack(spacing: 0) {
-                if !photoDataList.isEmpty {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(photoDataList.indices, id: \.self) { index in
-                                if let uiImage = UIImage(data: photoDataList[index]) {
-                                    ZStack(alignment: .bottomTrailing) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 80, height: 80)
-                                            .clipped()
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        if receiptIndices.contains(index) {
-                                            ReceiptBadge().offset(x: 2, y: 2)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    Divider().padding(.leading, 16)
-                }
-                Button {
-                    showAddOptions = true
-                } label: {
-                    HStack {
-                        Label("Add", systemImage: "plus.circle")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        if isProcessingOCR { ProgressView() }
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-            }
         }
     }
 
