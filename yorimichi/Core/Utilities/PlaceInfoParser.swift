@@ -17,6 +17,7 @@ enum PlaceInfoParser {
         #"(\d{4})[/.\-](\d{1,2})[/.\-](\d{1,2})"#,
         #"(\d{4})年(\d{1,2})月(\d{1,2})日"#
     ].compactMap { try? NSRegularExpression(pattern: $0) }
+    private static let pricePatterns = [#"[¥￥]\s?[\d,]+"#, #"[\d,]+\s?円"#]
 
     static func parse(_ text: String) -> PasteResult {
         let lines = text.components(separatedBy: .newlines)
@@ -27,8 +28,7 @@ enum PlaceInfoParser {
         var usedIndices: Set<Int> = []
 
         // Price: ¥1,900 / 1,900円
-        let pricePatterns = [#"[¥￥]\s?[\d,]+"#, #"[\d,]+\s?円"#]
-        for pattern in pricePatterns {
+        for pattern in Self.pricePatterns {
             if let match = text.range(of: pattern, options: .regularExpression) {
                 let digits = String(text[match]).filter(\.isNumber)
                 if let p = Int(digits), p > 0 {
@@ -69,9 +69,11 @@ enum PlaceInfoParser {
 
         // Mark price/date lines as used
         for (i, line) in lines.enumerated() {
-            if result.price != nil,
-               line.range(of: #"[¥￥][\d,\s]+|[\d,]+\s?円"#, options: .regularExpression) != nil {
-                usedIndices.insert(i)
+            if result.price != nil {
+                for pattern in Self.pricePatterns where line.range(of: pattern, options: .regularExpression) != nil {
+                    usedIndices.insert(i)
+                    break
+                }
             }
             let lineRange = NSRange(line.startIndex..., in: line)
             for regex in Self.dateRegexes where regex.firstMatch(in: line, range: lineRange) != nil {

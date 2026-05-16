@@ -270,10 +270,10 @@ struct EditLogView: View {
 
         guard let text = await ReceiptOCRService.recognizeText(from: imageData) else { return }
         ReceiptOCRService.parse(text).apply(
-            placeName: $log.placeName,
-            priceText: $priceText,
-            date: $log.date,
-            memo: $log.memo
+            placeName: &log.placeName,
+            priceText: &priceText,
+            date: &log.date,
+            memo: &log.memo
         )
     }
 

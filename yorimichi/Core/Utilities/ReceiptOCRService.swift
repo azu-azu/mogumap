@@ -1,6 +1,5 @@
 import Vision
 import UIKit
-import SwiftUI
 
 struct ReceiptResult {
     var placeName: String?
@@ -9,23 +8,16 @@ struct ReceiptResult {
     var notes: String
 
     func apply(
-        placeName: Binding<String>,
-        priceText: Binding<String>,
-        date: Binding<Date>,
-        memo: Binding<String>
+        placeName: inout String,
+        priceText: inout String,
+        date: inout Date,
+        memo: inout String
     ) {
-        if let name = self.placeName, placeName.wrappedValue.isEmpty {
-            placeName.wrappedValue = name
-        }
-        if let price = self.price, priceText.wrappedValue.isEmpty {
-            priceText.wrappedValue = String(price)
-        }
-        if let d = self.date {
-            date.wrappedValue = d
-        }
+        if let name = self.placeName, placeName.isEmpty { placeName = name }
+        if let price = self.price, priceText.isEmpty { priceText = String(price) }
+        if let d = self.date { date = d }
         if !notes.isEmpty {
-            let current = memo.wrappedValue
-            memo.wrappedValue = current.isEmpty ? notes : current + "\n" + notes
+            memo = memo.isEmpty ? notes : memo + "\n" + notes
         }
     }
 }
