@@ -1,12 +1,13 @@
 import SwiftUI
 import SwiftData
 import PhotosUI
+import UIKit
 @preconcurrency import MapKit
 
 enum QuickScanMode {
-    case photoLibrary
-    case camera
-    case receipt
+    case scanCamera
+    case scanLibrary
+    case paste
 }
 
 struct AddLogView: View {
@@ -35,7 +36,8 @@ struct AddLogView: View {
     @State private var showReceiptCamera = false
     @State private var showThoughtsEditor = false
     @State private var isProcessingOCR = false
-    @State private var showPhotoPicker = false
+    @State private var scanLibraryPhotos: [PhotosPickerItem] = []
+    @State private var showScanLibraryPicker = false
 
     init(selectedPlace: MKMapItem? = nil, quickScanMode: QuickScanMode? = nil, onComplete: (() -> Void)? = nil) {
         self.selectedPlace = selectedPlace
@@ -46,195 +48,11 @@ struct AddLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                FormSection(title: "Place") {
-                    VStack(spacing: 0) {
-                        HStack {
-                            TextField("Place name", text: $placeName)
-                            CopyButton(text: placeName)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-
-                        Divider().padding(.leading, 16)
-
-                        Picker("Category", selection: $category) {
-                            ForEach(Category.allCases) { cat in
-                                Label(cat.displayName, systemImage: cat.icon)
-                                    .tag(cat)
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                    }
-                }
-
-                FormSection(title: "Photos") {
-                    VStack(spacing: 0) {
-                        PhotosPicker(
-                            selection: $selectedPhotos,
-                            maxSelectionCount: PhotoLoader.maxSelectionCount,
-                            matching: .images
-                        ) {
-                            Label("Select Photos", systemImage: "photo.on.rectangle.angled")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .onChange(of: selectedPhotos) { _, newItems in
-                            Task { await loadPhotos(from: newItems) }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-
-                        Divider().padding(.leading, 16)
-
-                        Button {
-                            showCamera = true
-                        } label: {
-                            Label("Take Photo", systemImage: "camera")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-
-                        Divider().padding(.leading, 16)
-
-                        Button {
-                            showReceiptCamera = true
-                        } label: {
-                            HStack {
-                                Label("Scan Receipt / Ticket", systemImage: "doc.text.viewfinder")
-                                Spacer()
-                                if isProcessingOCR {
-                                    ProgressView()
-                                }
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-
-                        if !photoDataList.isEmpty {
-                            Divider().padding(.leading, 16)
-                            ScrollView(.horizontal) {
-                                HStack(spacing: 8) {
-                                    ForEach(photoDataList.indices, id: \.self) { index in
-                                        if let uiImage = UIImage(data: photoDataList[index]) {
-                                            ZStack(alignment: .bottomTrailing) {
-                                                Image(uiImage: uiImage)
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 80, height: 80)
-                                                    .clipped()
-                                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-
-                                                if receiptIndices.contains(index) {
-                                                    ReceiptBadge()
-                                                        .offset(x: 2, y: 2)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                        }
-                    }
-                }
-
-                FormSection(title: "Location") {
-                    VStack(spacing: 0) {
-                        if let lat = latitude, let lng = longitude {
-                            Label(
-                                String(format: "%.4f, %.4f", lat, lng),
-                                systemImage: "location.fill"
-                            )
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-
-                            Divider().padding(.leading, 16)
-                        }
-
-                        HStack {
-                            TextField("Address or Google Maps URL", text: $address)
-                            CopyButton(text: address)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .onChange(of: address) { _, newValue in
-                            if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
-                                Task { await handleGoogleMapsURL(newValue) }
-                            }
-                        }
-
-                        if selectedPlace == nil {
-                            Divider().padding(.leading, 16)
-                            Button {
-                                if let location = locationService.currentLocation {
-                                    latitude = location.coordinate.latitude
-                                    longitude = location.coordinate.longitude
-                                }
-                            } label: {
-                                Label("Use Current Location", systemImage: "location")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .disabled(locationService.currentLocation == nil)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                        }
-                    }
-                }
-
-                FormSection(title: "Date") {
-                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                }
-
-                FormSection(title: "Rating") {
-                    RatingView(rating: $rating)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                }
-
-                FormSection(title: "Impression") {
-                    Picker("Impression", selection: $impression) {
-                        ForEach(Impression.allCases) { imp in
-                            Text("\(imp.emoji) \(imp.displayName)")
-                                .tag(imp)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                }
-
-                FormSection(title: "Price") {
-                    HStack {
-                        TextField("Price", text: $priceText)
-                            .keyboardType(.numberPad)
-                        Text("yen")
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                }
-
-                FormSection(title: "Thoughts (free log)") {
-                    Button {
-                        showThoughtsEditor = true
-                    } label: {
-                        Text(memo.isEmpty ? "Tap to write..." : memo)
-                            .foregroundStyle(memo.isEmpty ? .secondary : .primary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .lineLimit(3)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
+                placeSection
+                photosSection
+                scanSection
+                locationSection
+                detailsSection
             }
             .padding(.horizontal, 16)
             .padding(.top, 8)
@@ -257,19 +75,39 @@ struct AddLogView: View {
             } else {
                 locationService.requestCurrentLocation()
             }
-            switch quickScanMode {
-            case .photoLibrary: showPhotoPicker = true
-            case .camera:       showCamera = true
-            case .receipt:      showReceiptCamera = true
-            case nil:           break
+            guard let mode = quickScanMode else { return }
+            // Wait for sheet animation to complete before presenting another sheet/cover
+            if mode != .paste {
+                try? await Task.sleep(for: .milliseconds(600))
+            }
+            switch mode {
+            case .scanCamera:   showReceiptCamera = true
+            case .scanLibrary:  showScanLibraryPicker = true
+            case .paste:        handleClipboard()
             }
         }
+        .onChange(of: selectedPhotos) { _, newItems in
+            Task { await loadPhotos(from: newItems) }
+        }
         .photosPicker(
-            isPresented: $showPhotoPicker,
-            selection: $selectedPhotos,
+            isPresented: $showScanLibraryPicker,
+            selection: $scanLibraryPhotos,
             maxSelectionCount: PhotoLoader.maxSelectionCount,
             matching: .images
         )
+        .onChange(of: scanLibraryPhotos) { _, newItems in
+            Task {
+                let dataList = await PhotoLoader.loadJPEGData(from: newItems)
+                let startIndex = photoDataList.count
+                for (i, data) in dataList.enumerated() {
+                    receiptIndices.insert(startIndex + i)
+                    photoDataList.append(data)
+                }
+                for data in dataList {
+                    await processReceiptOCR(data)
+                }
+            }
+        }
         .sheet(isPresented: $showThoughtsEditor) {
             FullTextEditorSheet(text: $memo)
         }
@@ -284,6 +122,31 @@ struct AddLogView: View {
                 photoDataList.append(imageData)
                 Task { await processReceiptOCR(imageData) }
             }
+        }
+    }
+
+    private func handleClipboard() {
+        let pb = UIPasteboard.general
+        if let image = pb.image,
+           let data = image.jpegData(compressionQuality: PhotoLoader.compressionQuality) {
+            receiptIndices.insert(photoDataList.count)
+            photoDataList.append(data)
+            Task { await processReceiptOCR(data) }
+        } else if let url = pb.url {
+            address = url.absoluteString
+            Task { await handleGoogleMapsURL(url.absoluteString) }
+        } else if let text = pb.string, !text.isEmpty {
+            applyPasteResult(PlaceInfoParser.parse(text))
+        }
+    }
+
+    private func applyPasteResult(_ result: PasteResult) {
+        if let name = result.placeName, placeName.isEmpty { placeName = name }
+        if let addr = result.address, address.isEmpty { address = addr }
+        if let price = result.price, priceText.isEmpty { priceText = String(price) }
+        if let date = result.date { self.date = date }
+        if !result.notes.isEmpty {
+            memo = memo.isEmpty ? result.notes : memo + "\n" + result.notes
         }
     }
 
@@ -359,6 +222,211 @@ struct AddLogView: View {
                 placeName = closest.name ?? ""
             }
             category = Category.from(poiCategory: closest.pointOfInterestCategory)
+        }
+    }
+
+    private var placeSection: some View {
+        FormSection(title: "Place") {
+            VStack(spacing: 0) {
+                HStack {
+                    TextField("Place name", text: $placeName)
+                    CopyButton(text: placeName)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Picker("Category", selection: $category) {
+                    ForEach(Category.allCases) { cat in
+                        Label(cat.displayName, systemImage: cat.icon).tag(cat)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+            }
+        }
+    }
+
+    private var locationSection: some View {
+        FormSection(title: "Location") {
+            VStack(spacing: 0) {
+                if let lat = latitude, let lng = longitude {
+                    Label(String(format: "%.4f, %.4f", lat, lng), systemImage: "location.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                    Divider().padding(.leading, 16)
+                }
+                HStack {
+                    TextField("Address or Google Maps URL", text: $address)
+                    CopyButton(text: address)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .onChange(of: address) { _, newValue in
+                    if GoogleMapsURLParser.isGoogleMapsURL(newValue) {
+                        Task { await handleGoogleMapsURL(newValue) }
+                    }
+                }
+                if selectedPlace == nil {
+                    Divider().padding(.leading, 16)
+                    Button {
+                        if let location = locationService.currentLocation {
+                            latitude = location.coordinate.latitude
+                            longitude = location.coordinate.longitude
+                        }
+                    } label: {
+                        Label("Use Current Location", systemImage: "location")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .disabled(locationService.currentLocation == nil)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+            }
+        }
+    }
+
+    private var detailsSection: some View {
+        VStack(spacing: 20) {
+            FormSection(title: "Date") {
+                DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+            }
+            FormSection(title: "Rating") {
+                RatingView(rating: $rating)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+            }
+            FormSection(title: "Impression") {
+                Picker("Impression", selection: $impression) {
+                    ForEach(Impression.allCases) { imp in
+                        Text("\(imp.emoji) \(imp.displayName)").tag(imp)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+            FormSection(title: "Price") {
+                HStack {
+                    TextField("Price", text: $priceText).keyboardType(.numberPad)
+                    Text("yen").foregroundStyle(.secondary)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+            FormSection(title: "Thoughts (free log)") {
+                Button {
+                    showThoughtsEditor = true
+                } label: {
+                    Text(memo.isEmpty ? "Tap to write..." : memo)
+                        .foregroundStyle(memo.isEmpty ? .secondary : .primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineLimit(3)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private var photosSection: some View {
+        FormSection(title: "Photos") {
+            VStack(spacing: 0) {
+                PhotosPicker(
+                    selection: $selectedPhotos,
+                    maxSelectionCount: PhotoLoader.maxSelectionCount,
+                    matching: .images
+                ) {
+                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Button {
+                    showCamera = true
+                } label: {
+                    Label("Take Photo", systemImage: "camera")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                if !photoDataList.isEmpty {
+                    Divider().padding(.leading, 16)
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 8) {
+                            ForEach(photoDataList.indices, id: \.self) { index in
+                                if let uiImage = UIImage(data: photoDataList[index]) {
+                                    ZStack(alignment: .bottomTrailing) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 80, height: 80)
+                                            .clipped()
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        if receiptIndices.contains(index) {
+                                            ReceiptBadge().offset(x: 2, y: 2)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+            }
+        }
+    }
+
+    private var scanSection: some View {
+        FormSection(title: "Scan") {
+            VStack(spacing: 0) {
+                Button {
+                    showReceiptCamera = true
+                } label: {
+                    HStack {
+                        Label("Scan from Camera", systemImage: "doc.text.viewfinder")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if isProcessingOCR { ProgressView() }
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Button {
+                    showScanLibraryPicker = true
+                } label: {
+                    Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                Divider().padding(.leading, 16)
+
+                Button {
+                    handleClipboard()
+                } label: {
+                    Label("Paste Image or Text", systemImage: "doc.on.clipboard")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
         }
     }
 

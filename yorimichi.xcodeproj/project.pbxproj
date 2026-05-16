@@ -43,6 +43,7 @@
 		5A1B2C3D4E5F607D /* View+FormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B2C3D4E5F607E /* View+FormSection.swift */; };
 		6C2A3B4D5E6F7081 /* ReceiptBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A3B4D5E6F7082 /* ReceiptBadge.swift */; };
 		7D3E4F5A6B7C8091 /* ReceiptOCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E4F5A6B7C8092 /* ReceiptOCRService.swift */; };
+		8E4F5A6B7C9D0011 /* PlaceInfoParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4F5A6B7C9D0012 /* PlaceInfoParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		5A1B2C3D4E5F607E /* View+FormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+FormSection.swift"; sourceTree = "<group>"; };
 		6C2A3B4D5E6F7082 /* ReceiptBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptBadge.swift; sourceTree = "<group>"; };
 		7D3E4F5A6B7C8092 /* ReceiptOCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptOCRService.swift; sourceTree = "<group>"; };
+		8E4F5A6B7C9D0012 /* PlaceInfoParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -184,6 +186,7 @@
 				8B99EE245068A8087244FD83 /* GoogleMapsURLParser.swift */,
 				8D00C43375916424BEE44E93 /* PhotoLoader.swift */,
 				7D3E4F5A6B7C8092 /* ReceiptOCRService.swift */,
+				8E4F5A6B7C9D0012 /* PlaceInfoParser.swift */,
 				0B20319C2182364B6188F84D /* URLResolver.swift */,
 			);
 			path = Utilities;
@@ -372,6 +375,7 @@
 				5A1B2C3D4E5F607D /* View+FormSection.swift in Sources */,
 				6C2A3B4D5E6F7081 /* ReceiptBadge.swift in Sources */,
 				7D3E4F5A6B7C8091 /* ReceiptOCRService.swift in Sources */,
+				8E4F5A6B7C9D0011 /* PlaceInfoParser.swift in Sources */,
 				EC0EEA7F5F44B7DB7FDCB2EE /* YorimichiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
