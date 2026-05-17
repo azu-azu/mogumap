@@ -71,13 +71,6 @@ struct LogListView: View {
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    GoogleMapsLauncher.openCurrentLocation()
-                } label: {
-                    Image(systemName: "map")
-                }
-            }
             ToolbarItem(placement: .primaryAction) {
                 HStack(spacing: 4) {
                     Button {

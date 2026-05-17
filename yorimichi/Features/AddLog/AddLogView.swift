@@ -436,6 +436,15 @@ struct AddLogView: View {
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                     Divider().padding(.leading, 16)
+                    Button {
+                        GoogleMapsLauncher.open(latitude: lat, longitude: lng, query: placeName.isEmpty ? nil : placeName)
+                    } label: {
+                        Label("Open in Google Maps", systemImage: "map")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    Divider().padding(.leading, 16)
                 }
                 HStack {
                     TextField("Address or Google Maps URL", text: $address)
