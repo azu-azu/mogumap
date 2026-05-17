@@ -31,6 +31,16 @@ enum ReceiptOCRService {
 
     private static let timeRegex = try? NSRegularExpression(pattern: #"(\d{1,2}):(\d{2})"#)
 
+    // 合計行: "合計", "税込合計", "TOTAL" 等のキーワード + 金額が同一行
+    // 注意: 小計（subtotal）は含めない。小計 ≠ 最終合計
+    private static let totalLineRegex = try? NSRegularExpression(
+        pattern: #"(合計|税込|TOTAL|Total|お支払|お会計)[^\n¥￥\d]*([¥￥]\s?[\d,]+|[\d,]+\s?円)"#
+    )
+    // 全金額パターン（件数カウント用）
+    private static let anyPriceRegex = try? NSRegularExpression(
+        pattern: #"[¥￥]\s?[\d,]+|[\d,]+\s?円"#
+    )
+
     static func recognizeText(from imageData: Data) async -> String? {
         guard let image = UIImage(data: imageData)?.cgImage else { return nil }
 
@@ -56,20 +66,33 @@ enum ReceiptOCRService {
         var result = ReceiptResult(notes: "")
         var usedLines: Set<Int> = []
 
-        // Price: ¥1,900 / ￥1900 / 1,900円
-        if let priceMatch = text.range(of: #"[¥￥]\s?[\d,]+"#, options: .regularExpression) {
-            let raw = String(text[priceMatch])
-            let digits = raw.filter { $0.isNumber }
-            result.price = Int(digits)
-        } else if let priceMatch = text.range(of: #"[\d,]+\s?円"#, options: .regularExpression) {
-            let raw = String(text[priceMatch])
-            let digits = raw.filter { $0.isNumber }
-            result.price = Int(digits)
-        }
-
-        // Date: 2026/05/09, 2026.05.09, 2026-05-09, 2026年5月9日
+        // Price detection:
+        // 1. 合計/TOTAL キーワード付きの行があればその金額を使う（レシートの合計額）
+        // 2. キーワードなし・金額1件のみ → シンプルなレシート/チケット → そのまま使う
+        // 3. キーワードなし・金額2件以上 → メニュー扱い → price = nil
         let ns = text as NSString
         let textRange = NSRange(text.startIndex..., in: text)
+
+        let priceCount = Self.anyPriceRegex.map {
+            $0.numberOfMatches(in: text, range: textRange)
+        } ?? 0
+
+        if let regex = Self.totalLineRegex,
+           let match = regex.firstMatch(in: text, range: textRange),
+           match.numberOfRanges >= 3 {
+            let raw = ns.substring(with: match.range(at: 2))
+            let digits = raw.filter(\.isNumber)
+            result.price = Int(digits)
+        } else if priceCount == 1 {
+            if let priceMatch = text.range(of: #"[¥￥]\s?[\d,]+"#, options: .regularExpression) {
+                result.price = Int(String(text[priceMatch]).filter(\.isNumber))
+            } else if let priceMatch = text.range(of: #"[\d,]+\s?円"#, options: .regularExpression) {
+                result.price = Int(String(text[priceMatch]).filter(\.isNumber))
+            }
+        }
+        // priceCount >= 2 かつ合計行なし → メニュー → result.price は nil のまま
+
+        // Date: 2026/05/09, 2026.05.09, 2026-05-09, 2026年5月9日
         for regex in Self.dateRegexes {
             guard let match = regex.firstMatch(in: text, range: textRange),
                   match.numberOfRanges >= 4,

@@ -33,6 +33,7 @@
 		C41856E6AA3F85191D7F43AB /* NearbyPlaceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E9878C474FB17B001D6D6 /* NearbyPlaceSearchView.swift */; };
 		C519D1488E8374F8F82D715E /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A396A579A9FFB3671B246E39 /* ColorExtensions.swift */; };
 		C92F2033FC2FDE45C65E41AF /* PhotoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBA2DA480B3F20FA4FF4848 /* PhotoGridView.swift */; };
+		AA1B2C3D4E5F6071 /* PhotoViewerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6072 /* PhotoViewerSheet.swift */; };
 		D375166A8A596C29C54A312A /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130DEA43CAAA30926B05037C /* AppState.swift */; };
 		D66CF967E07469696A42957F /* URLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B20319C2182364B6188F84D /* URLResolver.swift */; };
 		E5395EC5C013E7BD3FDAE5C4 /* CategoryBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D288AFB4094A864E795FEA4C /* CategoryBadge.swift */; };
@@ -60,6 +61,7 @@
 		4FE7CFCDD7DE0CA066D39EC4 /* Impression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Impression.swift; sourceTree = "<group>"; };
 		511D4F9B3CE8F607C780A446 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		5CBA2DA480B3F20FA4FF4848 /* PhotoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridView.swift; sourceTree = "<group>"; };
+		AA1B2C3D4E5F6072 /* PhotoViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerSheet.swift; sourceTree = "<group>"; };
 		5E94F438FB5912F60EA0097B /* AddLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogView.swift; sourceTree = "<group>"; };
 		6BBA83E2A36E69F22637CA1B /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		6C59C1B401DDFC6F4669D1EB /* LogRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRowView.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 				325E50A7753D7D2510517808 /* CopyButton.swift */,
 				7B5C1459FD39885031033F45 /* FullTextEditorSheet.swift */,
 				5CBA2DA480B3F20FA4FF4848 /* PhotoGridView.swift */,
+				AA1B2C3D4E5F6072 /* PhotoViewerSheet.swift */,
 				6C2A3B4D5E6F7082 /* ReceiptBadge.swift */,
 				FB216100D380FF9BDDBEC264 /* RatingView.swift */,
 			);
@@ -365,6 +368,7 @@
 				44A5DF9385AD094C9245D7A7 /* NearbyPlaceSearchViewModel.swift in Sources */,
 				886888259F045CE3E3888195 /* PhotoAttachment.swift in Sources */,
 				C92F2033FC2FDE45C65E41AF /* PhotoGridView.swift in Sources */,
+				AA1B2C3D4E5F6071 /* PhotoViewerSheet.swift in Sources */,
 				68D29DB6FD7DA60FE27353B3 /* PhotoLoader.swift in Sources */,
 				66B3905CE8A9EC9B2DCAAD19 /* PlaceAnnotationView.swift in Sources */,
 				6B9E91F9C2E297FFD4208A16 /* PlaceLog.swift in Sources */,

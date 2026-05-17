@@ -4,6 +4,8 @@ struct PhotoGridView: View {
     let photos: [PhotoAttachment]
     let columns: Int
 
+    @State private var viewingPhoto: UIImage?
+
     init(photos: [PhotoAttachment], columns: Int = 3) {
         self.photos = photos.sorted { $0.sortOrder < $1.sortOrder }
         self.columns = columns
@@ -30,7 +32,15 @@ struct PhotoGridView: View {
                                 .offset(x: -4, y: -4)
                         }
                     }
+                    .onTapGesture {
+                        viewingPhoto = uiImage
+                    }
                 }
+            }
+        }
+        .fullScreenCover(isPresented: Binding(get: { viewingPhoto != nil }, set: { if !$0 { viewingPhoto = nil } })) {
+            if let photo = viewingPhoto {
+                PhotoViewerSheet(image: photo)
             }
         }
     }

@@ -48,6 +48,7 @@ struct EditLogView: View {
                     Label("Select Photos", systemImage: "photo.on.rectangle.angled")
                 }
                 .onChange(of: selectedPhotos) { _, newItems in
+                    guard !newItems.isEmpty else { return }
                     Task { await loadPhotos(from: newItems) }
                 }
 
@@ -192,6 +193,7 @@ struct EditLogView: View {
             matching: .images
         )
         .onChange(of: scanLibraryPhotos) { _, newItems in
+            guard !newItems.isEmpty else { return }
             Task {
                 let dataList = await PhotoLoader.loadJPEGData(from: newItems)
                 let startIndex = newPhotoDataList.count
@@ -199,6 +201,7 @@ struct EditLogView: View {
                     newReceiptIndices.insert(startIndex + i)
                     newPhotoDataList.append(data)
                 }
+                scanLibraryPhotos = []
                 for data in dataList {
                     await processReceiptOCR(data)
                 }
@@ -278,7 +281,9 @@ struct EditLogView: View {
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
-        newPhotoDataList = await PhotoLoader.loadJPEGData(from: items)
+        let newData = await PhotoLoader.loadJPEGData(from: items)
+        newPhotoDataList.append(contentsOf: newData)
+        selectedPhotos = []
     }
 
     private func saveChanges() {

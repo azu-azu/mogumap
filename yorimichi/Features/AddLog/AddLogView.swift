@@ -97,6 +97,7 @@ struct AddLogView: View {
     @State private var showLibraryPicker = false
     @State private var showAttachmentPicker = false
     @State private var pendingAttachmentAction: AttachmentAction?
+    @State private var viewingPhoto: UIImage?
 
     private static let sheetAnimationDelay: Duration = .milliseconds(600)
 
@@ -148,6 +149,7 @@ struct AddLogView: View {
             }
         }
         .onChange(of: selectedPhotos) { _, newItems in
+            guard !newItems.isEmpty else { return }
             Task { await loadPhotos(from: newItems) }
         }
         .photosPicker(
@@ -163,6 +165,7 @@ struct AddLogView: View {
             matching: .images
         )
         .onChange(of: scanLibraryPhotos) { _, newItems in
+            guard !newItems.isEmpty else { return }
             Task {
                 let dataList = await PhotoLoader.loadJPEGData(from: newItems)
                 let startIndex = photoDataList.count
@@ -170,6 +173,7 @@ struct AddLogView: View {
                     receiptIndices.insert(startIndex + i)
                     photoDataList.append(data)
                 }
+                scanLibraryPhotos = []
                 for data in dataList {
                     await processReceiptOCR(data)
                 }
@@ -182,6 +186,11 @@ struct AddLogView: View {
         }
         .sheet(isPresented: $showThoughtsEditor) {
             FullTextEditorSheet(text: $memo)
+        }
+        .fullScreenCover(isPresented: Binding(get: { viewingPhoto != nil }, set: { if !$0 { viewingPhoto = nil } })) {
+            if let photo = viewingPhoto {
+                PhotoViewerSheet(image: photo)
+            }
         }
         .fullScreenCover(isPresented: $showCamera) {
             CameraView { imageData in
@@ -248,7 +257,9 @@ struct AddLogView: View {
     }
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
-        photoDataList = await PhotoLoader.loadJPEGData(from: items)
+        let newData = await PhotoLoader.loadJPEGData(from: items)
+        photoDataList.append(contentsOf: newData)
+        selectedPhotos = []
     }
 
     private func applySelectedPlace(_ item: MKMapItem) {
@@ -341,6 +352,9 @@ struct AddLogView: View {
                                         if receiptIndices.contains(index) {
                                             ReceiptBadge().offset(x: 2, y: 2)
                                         }
+                                    }
+                                    .onTapGesture {
+                                        viewingPhoto = uiImage
                                     }
                                 }
                             }
