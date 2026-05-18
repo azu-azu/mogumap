@@ -75,5 +75,17 @@
 "impression.bad" = "よくなかった";
 
 /* Settings */
+"settings.title" = "設定";
 "settings.language.title" = "言語";
 "settings.language.system" = "システム";
+
+/* Export */
+"nav.export" = "データを書き出す";
+"export.header" = "%d 件すべてを書き出す";
+"export.json_photos" = "JSON + 写真";
+"export.json_photos_desc" = "写真を含むフルバックアップ";
+"export.json_only" = "JSON のみ";
+"export.json_only_desc" = "軽量・AI 向け";
+"export.footer" = "ZIP ファイルを作成します。Files に保存するかシェアできます。";
+"export.failed" = "書き出しに失敗しました";
+"action.ok" = "OK";

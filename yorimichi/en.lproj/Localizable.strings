@@ -75,5 +75,17 @@
 "impression.bad" = "Bad";
 
 /* Settings */
+"settings.title" = "Settings";
 "settings.language.title" = "Language";
 "settings.language.system" = "System";
+
+/* Export */
+"nav.export" = "Export Data";
+"export.header" = "Export all %d logs";
+"export.json_photos" = "JSON + Photos";
+"export.json_photos_desc" = "Full backup including images";
+"export.json_only" = "JSON only";
+"export.json_only_desc" = "Lightweight, AI-friendly";
+"export.footer" = "Creates a ZIP file. Save to Files or share.";
+"export.failed" = "Export failed";
+"action.ok" = "OK";

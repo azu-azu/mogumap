@@ -12,7 +12,7 @@ struct LogListView: View {
     @State private var showScanOptions = false
     @State private var quickScanMode: QuickScanMode?
     @State private var showQuickAdd = false
-    @State private var showLanguageSettings = false
+    @State private var showSettings = false
 
     var body: some View {
         List {
@@ -74,9 +74,9 @@ struct LogListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
-                    showLanguageSettings = true
+                    showSettings = true
                 } label: {
-                    Image(systemName: "globe")
+                    Image(systemName: "gearshape")
                 }
             }
             ToolbarItem(placement: .primaryAction) {
@@ -112,9 +112,9 @@ struct LogListView: View {
                 AddLogView()
             }
         }
-        .sheet(isPresented: $showLanguageSettings) {
+        .sheet(isPresented: $showSettings) {
             NavigationStack {
-                LanguageSettingsView()
+                SettingsView()
             }
         }
         .confirmationDialog("Scan", isPresented: $showScanOptions) {
