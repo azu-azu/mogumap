@@ -43,7 +43,7 @@ struct TimelineView: View {
 
             Section {
                 HStack {
-                    Text("Results (\(filteredLogs.count))")
+                    Text(String(format: "label.results".localized, filteredLogs.count))
                     Spacer()
                     if totalPrice > 0 {
                         Text("¥\(totalPrice)")
@@ -73,7 +73,7 @@ struct TimelineView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
-        .searchable(text: $searchText, prompt: "Search places...")
+        .searchable(text: $searchText, prompt: "field.search".localized)
         .navigationDestination(for: PlaceLog.self) { log in
             LogDetailView(log: log)
         }
@@ -82,7 +82,7 @@ struct TimelineView: View {
     private var categoryFilter: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                filterChip(label: "All", isSelected: selectedCategory == nil) {
+                filterChip(label: "label.all".localized, isSelected: selectedCategory == nil) {
                     selectedCategory = nil
                 }
                 ForEach(Category.allCases) { cat in
@@ -104,13 +104,13 @@ struct TimelineView: View {
     }
 
     private var priceFilter: some View {
-        Toggle("Price only", isOn: $priceOnly)
+        Toggle("label.price_only".localized, isOn: $priceOnly)
             .font(.subheadline)
     }
 
     private var ratingFilter: some View {
         HStack {
-            Text("Min Rating")
+            Text("label.min_rating".localized)
                 .font(.subheadline)
             Spacer()
             RatingView(rating: $minimumRating)

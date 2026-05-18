@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var appState = AppState()
+    @ObservedObject private var languageProvider = LanguageProvider.shared
 
     var body: some View {
         TabView(selection: $appState.selectedTab) {
@@ -9,7 +10,7 @@ struct ContentView: View {
                 LogListView()
             }
             .tabItem {
-                Label("Home", systemImage: "house.fill")
+                Label("nav.home".localized, systemImage: "house.fill")
             }
             .tag(AppState.Tab.home)
 
@@ -17,7 +18,7 @@ struct ContentView: View {
                 MapTabView()
             }
             .tabItem {
-                Label("Map", systemImage: "map.fill")
+                Label("nav.map".localized, systemImage: "map.fill")
             }
             .tag(AppState.Tab.map)
 
@@ -25,10 +26,11 @@ struct ContentView: View {
                 TimelineView()
             }
             .tabItem {
-                Label("Timeline", systemImage: "clock.fill")
+                Label("nav.timeline".localized, systemImage: "clock.fill")
             }
             .tag(AppState.Tab.timeline)
         }
+        .id(languageProvider.language)
         .environment(appState)
         .fontDesign(.rounded)
     }

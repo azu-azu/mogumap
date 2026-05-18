@@ -1,0 +1,79 @@
+/* Navigation */
+"nav.home" = "ホーム";
+"nav.map" = "マップ";
+"nav.timeline" = "タイムライン";
+"nav.newlog" = "新しいログ";
+"nav.detail" = "詳細";
+"nav.edit" = "編集";
+"nav.settings" = "設定";
+
+/* Sections */
+"section.date" = "日時";
+"section.place" = "場所";
+"section.media" = "メディア";
+"section.price" = "金額";
+"section.thoughts" = "メモ";
+"section.rating" = "評価";
+"section.impression" = "印象";
+"section.location" = "位置情報";
+"section.address" = "住所";
+"section.photos" = "写真";
+"section.scan" = "スキャン";
+"section.nearby" = "近く";
+
+/* Fields */
+"field.placename" = "場所の名前";
+"field.price" = "金額";
+"field.address" = "住所または Google Maps URL";
+"field.address_short" = "住所";
+"field.search" = "場所を検索...";
+"field.thoughts" = "タップして入力...";
+
+/* Actions */
+"action.save" = "保存";
+"action.done" = "完了";
+"action.delete" = "削除";
+"action.edit" = "編集";
+"action.add" = "追加";
+"action.scan_camera" = "カメラでスキャン";
+"action.scan_library" = "ライブラリからスキャン";
+"action.paste" = "画像またはテキストを貼り付け";
+"action.take_photo" = "写真を撮る";
+"action.select_library" = "ライブラリから選択";
+"action.select_photos" = "写真を選択";
+"action.use_location" = "現在地を使用";
+"action.open_maps" = "Google Maps で開く";
+"action.show_map" = "マップに表示";
+"action.delete_log" = "ログを削除";
+
+/* Labels */
+"label.yen" = "円";
+"label.favorite" = "お気に入り";
+"label.unfavorite" = "お気に入り解除";
+"label.price_only" = "金額あり";
+"label.min_rating" = "最低評価";
+"label.all" = "すべて";
+"label.results" = "結果 (%d)";
+"label.scan_ocr" = "スキャン (OCR)";
+
+/* Empty states */
+"empty.nearby_title" = "近くのログなし";
+"empty.nearby_desc" = "この辺りの訪問記録はありません。";
+
+/* Confirmations */
+"confirm.delete" = "このログを削除しますか？";
+
+/* Categories */
+"category.cafe" = "カフェ";
+"category.restaurant" = "レストラン";
+"category.bar" = "バー";
+"category.other" = "その他";
+
+/* Impressions */
+"impression.good" = "よかった";
+"impression.neutral" = "まあまあ";
+"impression.bad" = "よくなかった";
+
+/* Settings */
+"settings.language.title" = "言語";
+"settings.language.system" = "システム";

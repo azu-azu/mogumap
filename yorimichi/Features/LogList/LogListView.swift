@@ -12,6 +12,7 @@ struct LogListView: View {
     @State private var showScanOptions = false
     @State private var quickScanMode: QuickScanMode?
     @State private var showQuickAdd = false
+    @State private var showLanguageSettings = false
 
     var body: some View {
         List {
@@ -20,9 +21,9 @@ struct LogListView: View {
             if nearbyLogs.isEmpty {
                 Section {
                     ContentUnavailableView(
-                        "No Logs Nearby",
+                        "empty.nearby_title".localized,
                         systemImage: "mappin.slash",
-                        description: Text("No past visits around here.")
+                        description: Text("empty.nearby_desc".localized)
                     )
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
@@ -48,7 +49,7 @@ struct LogListView: View {
                                 Button(role: .destructive) {
                                     modelContext.delete(log)
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Label("action.delete".localized, systemImage: "trash")
                                 }
                             }
                             .swipeActions(edge: .leading) {
@@ -56,7 +57,7 @@ struct LogListView: View {
                                     log.isFavorite.toggle()
                                 } label: {
                                     Label(
-                                        log.isFavorite ? "Unfavorite" : "Favorite",
+                                        log.isFavorite ? "label.unfavorite".localized : "label.favorite".localized,
                                         systemImage: log.isFavorite ? "heart.slash" : "heart.fill"
                                     )
                                 }
@@ -71,6 +72,13 @@ struct LogListView: View {
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    showLanguageSettings = true
+                } label: {
+                    Image(systemName: "globe")
+                }
+            }
             ToolbarItem(placement: .primaryAction) {
                 HStack(spacing: 4) {
                     Button {
@@ -104,16 +112,21 @@ struct LogListView: View {
                 AddLogView()
             }
         }
+        .sheet(isPresented: $showLanguageSettings) {
+            NavigationStack {
+                LanguageSettingsView()
+            }
+        }
         .confirmationDialog("Scan", isPresented: $showScanOptions) {
-            Button("Scan from Camera") {
+            Button("action.scan_camera".localized) {
                 quickScanMode = .scanCamera
                 showQuickAdd = true
             }
-            Button("Scan from Library") {
+            Button("action.scan_library".localized) {
                 quickScanMode = .scanLibrary
                 showQuickAdd = true
             }
-            Button("Paste Image or Text") {
+            Button("action.paste".localized) {
                 quickScanMode = .paste
                 showQuickAdd = true
             }
@@ -136,7 +149,7 @@ struct LogListView: View {
 
     @ViewBuilder
     private var nearbySection: some View {
-        Section("Nearby") {
+        Section("section.nearby".localized) {
             if let vm = nearbyViewModel {
                 if vm.isSearching && vm.results.isEmpty {
                     HStack {

@@ -1,0 +1,79 @@
+/* Navigation */
+"nav.home" = "Home";
+"nav.map" = "Map";
+"nav.timeline" = "Timeline";
+"nav.newlog" = "New Log";
+"nav.detail" = "Detail";
+"nav.edit" = "Edit";
+"nav.settings" = "Settings";
+
+/* Sections */
+"section.date" = "Date";
+"section.place" = "Place";
+"section.media" = "Media";
+"section.price" = "Price";
+"section.thoughts" = "Thoughts";
+"section.rating" = "Rating";
+"section.impression" = "Impression";
+"section.location" = "Location";
+"section.address" = "Address";
+"section.photos" = "Photos";
+"section.scan" = "Scan";
+"section.nearby" = "Nearby";
+
+/* Fields */
+"field.placename" = "Place name";
+"field.price" = "Price";
+"field.address" = "Address or Google Maps URL";
+"field.address_short" = "Address";
+"field.search" = "Search places...";
+"field.thoughts" = "Tap to write...";
+
+/* Actions */
+"action.save" = "Save";
+"action.done" = "Done";
+"action.delete" = "Delete";
+"action.edit" = "Edit";
+"action.add" = "Add";
+"action.scan_camera" = "Scan from Camera";
+"action.scan_library" = "Scan from Library";
+"action.paste" = "Paste Image or Text";
+"action.take_photo" = "Take Photo";
+"action.select_library" = "Select from Library";
+"action.select_photos" = "Select Photos";
+"action.use_location" = "Use Current Location";
+"action.open_maps" = "Open in Google Maps";
+"action.show_map" = "Show on Map";
+"action.delete_log" = "Delete Log";
+
+/* Labels */
+"label.yen" = "yen";
+"label.favorite" = "Favorite";
+"label.unfavorite" = "Unfavorite";
+"label.price_only" = "Price only";
+"label.min_rating" = "Min Rating";
+"label.all" = "All";
+"label.results" = "Results (%d)";
+"label.scan_ocr" = "Scan (OCR)";
+
+/* Empty states */
+"empty.nearby_title" = "No Logs Nearby";
+"empty.nearby_desc" = "No past visits around here.";
+
+/* Confirmations */
+"confirm.delete" = "Delete this log?";
+
+/* Categories */
+"category.cafe" = "Cafe";
+"category.restaurant" = "Restaurant";
+"category.bar" = "Bar";
+"category.other" = "Other";
+
+/* Impressions */
+"impression.good" = "Good";
+"impression.neutral" = "So-so";
+"impression.bad" = "Bad";
+
+/* Settings */
+"settings.language.title" = "Language";
+"settings.language.system" = "System";

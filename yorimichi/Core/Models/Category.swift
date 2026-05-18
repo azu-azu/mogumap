@@ -10,10 +10,10 @@ enum Category: String, CaseIterable, Identifiable, Codable {
 
     var displayName: String {
         switch self {
-        case .cafe:       "Cafe"
-        case .restaurant: "Restaurant"
-        case .bar:        "Bar"
-        case .other:      "Other"
+        case .cafe:       "category.cafe".localized
+        case .restaurant: "category.restaurant".localized
+        case .bar:        "category.bar".localized
+        case .other:      "category.other".localized
         }
     }
 

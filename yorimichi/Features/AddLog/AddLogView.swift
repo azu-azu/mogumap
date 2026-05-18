@@ -23,17 +23,17 @@ private struct AttachmentPickerSheet: View {
 
     var body: some View {
         List {
-            Section("Photos") {
-                row("Take Photo", icon: "camera", action: .takePhoto)
-                row("Select from Library", icon: "photo.on.rectangle.angled", action: .selectLibrary)
+            Section("section.photos".localized) {
+                row("action.take_photo".localized, icon: "camera", action: .takePhoto)
+                row("action.select_library".localized, icon: "photo.on.rectangle.angled", action: .selectLibrary)
             }
             Section {
-                row("Scan from Camera", icon: "doc.text.viewfinder", action: .scanCamera)
-                row("Scan from Library", icon: "photo.on.rectangle.angled", action: .scanLibrary)
-                row("Paste Image or Text", icon: "doc.on.clipboard", action: .paste)
+                row("action.scan_camera".localized, icon: "doc.text.viewfinder", action: .scanCamera)
+                row("action.scan_library".localized, icon: "photo.on.rectangle.angled", action: .scanLibrary)
+                row("action.paste".localized, icon: "doc.on.clipboard", action: .paste)
             } header: {
                 HStack(spacing: 6) {
-                    Text("Scan (OCR)")
+                    Text("label.scan_ocr".localized)
                     if isProcessingOCR { ProgressView().scaleEffect(0.7) }
                 }
             }
@@ -123,12 +123,12 @@ struct AddLogView: View {
             .padding(.top, 8)
         }
         .background(DesignTokens.Background.base.ignoresSafeArea())
-        .navigationTitle("New Log")
+        .navigationTitle("nav.newlog".localized)
         .navigationBarTitleDisplayMode(.inline)
         .keyboardCloseToolbar()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") { save() }
+                Button("action.save".localized) { save() }
                     .disabled(placeName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
@@ -304,18 +304,18 @@ struct AddLogView: View {
     // MARK: - Sections
 
     private var dateSection: some View {
-        FormSection(title: "Date") {
-            DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+        FormSection(title: "section.date".localized) {
+            DatePicker("section.date".localized, selection: $date, displayedComponents: [.date, .hourAndMinute])
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
         }
     }
 
     private var placeSection: some View {
-        FormSection(title: "Place") {
+        FormSection(title: "section.place".localized) {
             VStack(spacing: 0) {
                 HStack {
-                    TextField("Place name", text: $placeName)
+                    TextField("field.placename".localized, text: $placeName)
                     CopyButton(text: placeName)
                 }
                 .padding(.horizontal, 16)
@@ -323,7 +323,7 @@ struct AddLogView: View {
 
                 Divider().padding(.leading, 16)
 
-                Picker("Category", selection: $category) {
+                Picker("section.place".localized, selection: $category) {
                     ForEach(Category.allCases) { cat in
                         Label(cat.displayName, systemImage: cat.icon).tag(cat)
                     }
@@ -335,7 +335,7 @@ struct AddLogView: View {
     }
 
     private var mediaSection: some View {
-        FormSection(title: "Media") {
+        FormSection(title: "section.media".localized) {
             VStack(spacing: 0) {
                 if !photoDataList.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -367,7 +367,7 @@ struct AddLogView: View {
                 Button {
                     showAttachmentPicker = true
                 } label: {
-                    Label("Add", systemImage: "plus.circle")
+                    Label("action.add".localized, systemImage: "plus.circle")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 16)
@@ -377,10 +377,10 @@ struct AddLogView: View {
     }
 
     private var priceSection: some View {
-        FormSection(title: "Price") {
+        FormSection(title: "section.price".localized) {
             HStack {
-                TextField("Price", text: $priceText).keyboardType(.numberPad)
-                Text("yen").foregroundStyle(.secondary)
+                TextField("field.price".localized, text: $priceText).keyboardType(.numberPad)
+                Text("label.yen".localized).foregroundStyle(.secondary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -388,11 +388,11 @@ struct AddLogView: View {
     }
 
     private var thoughtsSection: some View {
-        FormSection(title: "Thoughts (free log)") {
+        FormSection(title: "section.thoughts".localized) {
             Button {
                 showThoughtsEditor = true
             } label: {
-                Text(memo.isEmpty ? "Tap to write..." : memo)
+                Text(memo.isEmpty ? "field.thoughts".localized : memo)
                     .foregroundStyle(memo.isEmpty ? .secondary : .primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .lineLimit(3)
@@ -405,7 +405,7 @@ struct AddLogView: View {
     }
 
     private var ratingSection: some View {
-        FormSection(title: "Rating") {
+        FormSection(title: "section.rating".localized) {
             RatingView(rating: $rating)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
@@ -413,8 +413,8 @@ struct AddLogView: View {
     }
 
     private var impressionSection: some View {
-        FormSection(title: "Impression") {
-            Picker("Impression", selection: $impression) {
+        FormSection(title: "section.impression".localized) {
+            Picker("section.impression".localized, selection: $impression) {
                 ForEach(Impression.allCases) { imp in
                     Text("\(imp.emoji) \(imp.displayName)").tag(imp)
                 }
@@ -426,7 +426,7 @@ struct AddLogView: View {
     }
 
     private var locationSection: some View {
-        FormSection(title: "Location") {
+        FormSection(title: "section.location".localized) {
             VStack(spacing: 0) {
                 if let lat = latitude, let lng = longitude {
                     Label(String(format: "%.4f, %.4f", lat, lng), systemImage: "location.fill")
@@ -439,7 +439,7 @@ struct AddLogView: View {
                     Button {
                         GoogleMapsLauncher.open(latitude: lat, longitude: lng, query: placeName.isEmpty ? nil : placeName)
                     } label: {
-                        Label("Open in Google Maps", systemImage: "map")
+                        Label("action.open_maps".localized, systemImage: "map")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .padding(.horizontal, 16)
@@ -447,7 +447,7 @@ struct AddLogView: View {
                     Divider().padding(.leading, 16)
                 }
                 HStack {
-                    TextField("Address or Google Maps URL", text: $address)
+                    TextField("field.address".localized, text: $address)
                     CopyButton(text: address)
                 }
                 .padding(.horizontal, 16)
@@ -465,7 +465,7 @@ struct AddLogView: View {
                             longitude = location.coordinate.longitude
                         }
                     } label: {
-                        Label("Use Current Location", systemImage: "location")
+                        Label("action.use_location".localized, systemImage: "location")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .disabled(locationService.currentLocation == nil)

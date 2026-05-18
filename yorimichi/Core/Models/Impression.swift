@@ -9,9 +9,9 @@ enum Impression: String, CaseIterable, Identifiable, Codable {
 
     var displayName: String {
         switch self {
-        case .good: "Good"
-        case .neutral: "So-so"
-        case .bad: "Bad"
+        case .good:    "impression.good".localized
+        case .neutral: "impression.neutral".localized
+        case .bad:     "impression.bad".localized
         }
     }
 

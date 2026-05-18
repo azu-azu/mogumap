@@ -34,7 +34,7 @@ struct LogDetailView: View {
                 }
             }
 
-            Section("Date") {
+            Section("section.date".localized) {
                 Label {
                     Text(log.date, format: .dateTime.year().month().day().hour().minute())
                 } icon: {
@@ -43,19 +43,19 @@ struct LogDetailView: View {
             }
 
             if log.rating > 0 {
-                Section("Rating") {
+                Section("section.rating".localized) {
                     RatingDisplayView(rating: log.rating)
                 }
             }
 
             if let price = log.price {
-                Section("Price") {
-                    Label("\(price) yen", systemImage: "yensign.circle")
+                Section("section.price".localized) {
+                    Label("\(price) \("label.yen".localized)", systemImage: "yensign.circle")
                 }
             }
 
             if let address = log.address, !address.isEmpty {
-                Section("Address") {
+                Section("section.address".localized) {
                     HStack {
                         Label {
                             Text(address)
@@ -69,13 +69,13 @@ struct LogDetailView: View {
             }
 
             if !log.photos.isEmpty {
-                Section("Photos") {
+                Section("section.photos".localized) {
                     PhotoGridView(photos: log.photos)
                 }
             }
 
             if !log.memo.isEmpty {
-                Section("Thoughts (free log)") {
+                Section("section.thoughts".localized) {
                     Text(log.memo)
                 }
             }
@@ -85,13 +85,13 @@ struct LogDetailView: View {
                     Button {
                         showOnMap()
                     } label: {
-                        Label("Show on Map", systemImage: "mappin.and.ellipse")
+                        Label("action.show_map".localized, systemImage: "mappin.and.ellipse")
                     }
 
                     Button {
                         openInGoogleMaps()
                     } label: {
-                        Label("Open in Google Maps", systemImage: "map")
+                        Label("action.open_maps".localized, systemImage: "map")
                     }
                 }
             }
@@ -100,24 +100,24 @@ struct LogDetailView: View {
                 Button(role: .destructive) {
                     showDeleteConfirm = true
                 } label: {
-                    Label("Delete Log", systemImage: "trash")
+                    Label("action.delete_log".localized, systemImage: "trash")
                 }
             }
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base.ignoresSafeArea())
-        .navigationTitle("Detail")
+        .navigationTitle("nav.detail".localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                NavigationLink("Edit") {
+                NavigationLink("action.edit".localized) {
                     EditLogView(log: log)
                 }
             }
         }
-        .confirmationDialog("Delete this log?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
-            Button("Delete", role: .destructive) {
+        .confirmationDialog("confirm.delete".localized, isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+            Button("action.delete".localized, role: .destructive) {
                 modelContext.delete(log)
                 dismiss()
             }

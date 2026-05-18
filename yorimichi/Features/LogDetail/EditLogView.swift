@@ -28,10 +28,10 @@ struct EditLogView: View {
 
     var body: some View {
         List {
-            Section("Place") {
-                TextField("Place name", text: $log.placeName)
+            Section("section.place".localized) {
+                TextField("field.placename".localized, text: $log.placeName)
 
-                Picker("Category", selection: categoryBinding) {
+                Picker("section.place".localized, selection: categoryBinding) {
                     ForEach(Category.allCases) { cat in
                         Label(cat.displayName, systemImage: cat.icon)
                             .tag(cat)
@@ -39,13 +39,13 @@ struct EditLogView: View {
                 }
             }
 
-            Section("Photos") {
+            Section("section.photos".localized) {
                 PhotosPicker(
                     selection: $selectedPhotos,
                     maxSelectionCount: PhotoLoader.maxSelectionCount,
                     matching: .images
                 ) {
-                    Label("Select Photos", systemImage: "photo.on.rectangle.angled")
+                    Label("action.select_photos".localized, systemImage: "photo.on.rectangle.angled")
                 }
                 .onChange(of: selectedPhotos) { _, newItems in
                     guard !newItems.isEmpty else { return }
@@ -55,7 +55,7 @@ struct EditLogView: View {
                 Button {
                     showCamera = true
                 } label: {
-                    Label("Take Photo", systemImage: "camera")
+                    Label("action.take_photo".localized, systemImage: "camera")
                 }
 
                 if !log.photos.isEmpty || !newPhotoDataList.isEmpty {
@@ -81,12 +81,12 @@ struct EditLogView: View {
                 }
             }
 
-            Section("Scan") {
+            Section("section.scan".localized) {
                 Button {
                     showReceiptCamera = true
                 } label: {
                     HStack {
-                        Label("Scan from Camera", systemImage: "doc.text.viewfinder")
+                        Label("action.scan_camera".localized, systemImage: "doc.text.viewfinder")
                         Spacer()
                         if isProcessingOCR {
                             ProgressView()
@@ -97,33 +97,33 @@ struct EditLogView: View {
                 Button {
                     showScanLibraryPicker = true
                 } label: {
-                    Label("Scan from Library", systemImage: "photo.on.rectangle.angled")
+                    Label("action.scan_library".localized, systemImage: "photo.on.rectangle.angled")
                 }
 
                 Button {
                     handleClipboard()
                 } label: {
-                    Label("Paste Image or Text", systemImage: "doc.on.clipboard")
+                    Label("action.paste".localized, systemImage: "doc.on.clipboard")
                 }
             }
 
-            Section("Location") {
-                TextField("Address", text: Binding(
+            Section("section.location".localized) {
+                TextField("field.address_short".localized, text: Binding(
                     get: { log.address ?? "" },
                     set: { log.address = $0.isEmpty ? nil : $0 }
                 ))
             }
 
-            Section("Date") {
-                DatePicker("Date", selection: $log.date, displayedComponents: [.date, .hourAndMinute])
+            Section("section.date".localized) {
+                DatePicker("section.date".localized, selection: $log.date, displayedComponents: [.date, .hourAndMinute])
             }
 
-            Section("Rating") {
+            Section("section.rating".localized) {
                 RatingView(rating: $log.rating)
             }
 
-            Section("Impression") {
-                Picker("Impression", selection: impressionBinding) {
+            Section("section.impression".localized) {
+                Picker("section.impression".localized, selection: impressionBinding) {
                     ForEach(Impression.allCases) { imp in
                         Text("\(imp.emoji) \(imp.displayName)")
                             .tag(imp)
@@ -132,20 +132,20 @@ struct EditLogView: View {
                 .pickerStyle(.segmented)
             }
 
-            Section("Price") {
+            Section("section.price".localized) {
                 HStack {
-                    TextField("Price", text: $priceText)
+                    TextField("field.price".localized, text: $priceText)
                         .keyboardType(.numberPad)
-                    Text("yen")
+                    Text("label.yen".localized)
                         .foregroundStyle(.secondary)
                 }
             }
 
-            Section("Thoughts (free log)") {
+            Section("section.thoughts".localized) {
                 Button {
                     showThoughtsEditor = true
                 } label: {
-                    Text(log.memo.isEmpty ? "Tap to write..." : log.memo)
+                    Text(log.memo.isEmpty ? "field.thoughts".localized : log.memo)
                         .foregroundStyle(log.memo.isEmpty ? .secondary : .primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .lineLimit(3)
@@ -155,18 +155,18 @@ struct EditLogView: View {
             }
 
             Section {
-                Toggle("Favorite", isOn: $log.isFavorite)
+                Toggle("label.favorite".localized, isOn: $log.isFavorite)
             }
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(DesignTokens.Background.base.ignoresSafeArea())
-        .navigationTitle("Edit")
+        .navigationTitle("nav.edit".localized)
         .navigationBarTitleDisplayMode(.inline)
         .keyboardCloseToolbar()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
+                Button("action.done".localized) {
                     saveChanges()
                 }
             }
