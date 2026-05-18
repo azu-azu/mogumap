@@ -18,7 +18,7 @@ struct LogRowView: View {
                         .foregroundStyle(.secondary)
 
                     if let price = log.price {
-                        Text("¥\(price)")
+                        Text("\(price) \("label.yen".localized)")
                             .font(.caption)
                             .fontDesign(.monospaced)
                             .foregroundStyle(.secondary)

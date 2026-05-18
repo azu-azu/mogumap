@@ -1,6 +1,14 @@
 import SwiftUI
 import SwiftData
 
+private enum ChipLayout {
+    static let hSpacing: CGFloat = 8
+    static let iconLabelSpacing: CGFloat = 4
+    static let scrollPaddingV: CGFloat = 4
+    static let paddingH: CGFloat = 10
+    static let paddingV: CGFloat = 6
+}
+
 struct TimelineView: View {
     @Query(sort: \PlaceLog.date, order: .reverse) private var allLogs: [PlaceLog]
 
@@ -59,7 +67,7 @@ struct TimelineView: View {
                     Text(String(format: "label.results".localized, filteredLogs.count))
                     Spacer()
                     if totalPrice > 0 {
-                        Text("¥\(totalPrice)")
+                        Text("\(totalPrice) \("label.yen".localized)")
                             .fontDesign(.monospaced)
                     }
                 }
@@ -79,7 +87,7 @@ struct TimelineView: View {
 
     private var categoryFilter: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
+            HStack(spacing: ChipLayout.hSpacing) {
                 filterChip(label: "label.all".localized, isSelected: selectedCategory == nil) {
                     selectedCategory = nil
                 }
@@ -93,7 +101,7 @@ struct TimelineView: View {
                     }
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.vertical, ChipLayout.scrollPaddingV)
         }
     }
 
@@ -122,7 +130,7 @@ struct TimelineView: View {
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            HStack(spacing: 4) {
+            HStack(spacing: ChipLayout.iconLabelSpacing) {
                 if let icon {
                     Image(systemName: icon)
                         .font(.caption2)
@@ -130,8 +138,8 @@ struct TimelineView: View {
                 Text(label)
                     .font(.caption)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
+            .padding(.horizontal, ChipLayout.paddingH)
+            .padding(.vertical, ChipLayout.paddingV)
             .background(isSelected ? DesignTokens.Accent.primary : .clear)
             .foregroundStyle(isSelected ? .white : DesignTokens.Text.secondary)
             .clipShape(Capsule())
