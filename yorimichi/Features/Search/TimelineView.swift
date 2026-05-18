@@ -42,20 +42,6 @@ struct TimelineView: View {
             }
 
             Section {
-                HStack {
-                    Text(String(format: "label.results".localized, filteredLogs.count))
-                    Spacer()
-                    if totalPrice > 0 {
-                        Text("¥\(totalPrice)")
-                            .fontDesign(.monospaced)
-                    }
-                }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 16))
-
                 if filteredLogs.isEmpty {
                     ContentUnavailableView.search(text: searchText)
                 } else {
@@ -68,6 +54,18 @@ struct TimelineView: View {
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
                 }
+            } header: {
+                HStack {
+                    Text(String(format: "label.results".localized, filteredLogs.count))
+                    Spacer()
+                    if totalPrice > 0 {
+                        Text("¥\(totalPrice)")
+                            .fontDesign(.monospaced)
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .textCase(nil)
             }
         }
         .listStyle(.insetGrouped)
