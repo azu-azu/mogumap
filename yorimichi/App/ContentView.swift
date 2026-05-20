@@ -48,6 +48,14 @@ struct ContentView: View {
             .fontDesign(.rounded)
         }
         .environment(appState)
+        .overlay(alignment: .top) {
+            GeometryReader { geo in
+                StatusBarView(safeAreaTop: geo.safeAreaInsets.top)
+            }
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+        }
+        .statusBarHidden(true)
     }
 }
 
