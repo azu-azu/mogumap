@@ -13,10 +13,7 @@ enum PlaceInfoParser {
     private static let addrRegex = try? NSRegularExpression(
         pattern: #"〒\s?\d{3}-?\d{4}|.+(都|道|府|県).+(市|区|町|村)"#
     )
-    private static let dateRegexes: [NSRegularExpression] = [
-        #"(\d{4})[/.\-](\d{1,2})[/.\-](\d{1,2})"#,
-        #"(\d{4})年(\d{1,2})月(\d{1,2})日"#
-    ].compactMap { try? NSRegularExpression(pattern: $0) }
+    private static var dateRegexes: [NSRegularExpression] { DatePatterns.regexes }
     private static let pricePatterns = [#"[¥￥]\s?[\d,]+"#, #"[\d,]+\s?円"#]
 
     static func parse(_ text: String) -> PasteResult {

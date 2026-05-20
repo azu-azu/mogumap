@@ -24,10 +24,7 @@ struct ReceiptResult {
 
 enum ReceiptOCRService {
 
-    private static let dateRegexes: [NSRegularExpression] = [
-        #"(\d{4})[/.\-](\d{1,2})[/.\-](\d{1,2})"#,
-        #"(\d{4})年(\d{1,2})月(\d{1,2})日"#,
-    ].compactMap { try? NSRegularExpression(pattern: $0) }
+    private static var dateRegexes: [NSRegularExpression] { DatePatterns.regexes }
 
     private static let timeRegex = try? NSRegularExpression(pattern: #"(\d{1,2}):(\d{2})"#)
 

@@ -56,6 +56,16 @@
 "label.results" = "Results (%d)";
 "label.scan_ocr" = "Scan (OCR)";
 
+/* Nearby search */
+"nearby.title" = "Nearby Places";
+"nearby.manual_entry" = "Manual Entry";
+"nearby.no_results" = "No Places Found";
+"nearby.no_results_desc" = "Try a different search term.";
+"nearby.search_prompt" = "Search nearby...";
+"label.getting_location" = "Getting location...";
+"label.unknown" = "Unknown";
+"action.close" = "Close";
+
 /* Empty states */
 "empty.nearby_title" = "No Logs Nearby";
 "empty.nearby_desc" = "No past visits around here.";

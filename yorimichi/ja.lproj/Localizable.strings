@@ -56,6 +56,16 @@
 "label.results" = "結果 (%d)";
 "label.scan_ocr" = "スキャン (OCR)";
 
+/* Nearby search */
+"nearby.title" = "近くの場所";
+"nearby.manual_entry" = "手動入力";
+"nearby.no_results" = "近くの場所なし";
+"nearby.no_results_desc" = "別のキーワードで検索してみてください。";
+"nearby.search_prompt" = "近くを検索...";
+"label.getting_location" = "位置情報を取得中...";
+"label.unknown" = "不明";
+"action.close" = "閉じる";
+
 /* Empty states */
 "empty.nearby_title" = "近くのログなし";
 "empty.nearby_desc" = "この辺りの訪問記録はありません。";

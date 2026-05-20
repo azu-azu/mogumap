@@ -117,7 +117,7 @@ struct LogListView: View {
                 SettingsView()
             }
         }
-        .confirmationDialog("Scan", isPresented: $showScanOptions) {
+        .confirmationDialog("section.scan".localized, isPresented: $showScanOptions) {
             Button("action.scan_camera".localized) {
                 quickScanMode = .scanCamera
                 showQuickAdd = true
@@ -170,7 +170,7 @@ struct LogListView: View {
             } else {
                 HStack {
                     Spacer()
-                    ProgressView("Getting location...")
+                    ProgressView("label.getting_location".localized)
                     Spacer()
                 }
             }
@@ -186,16 +186,16 @@ struct LogListView: View {
         }
     }
 
-    private static let dateFormatter: DateFormatter = {
+    private var dateFormatter: DateFormatter {
         let f = DateFormatter()
         f.dateStyle = .long
-        f.locale = Locale(identifier: "ja_JP")
+        f.locale = Locale(identifier: LanguageProvider.shared.language.resolvedLanguageCode)
         return f
-    }()
+    }
 
     private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
         let grouped = Dictionary(grouping: nearbyLogs) { log in
-            Self.dateFormatter.string(from: log.date)
+            dateFormatter.string(from: log.date)
         }
         return grouped.sorted { ($0.value.first?.date ?? .distantPast) > ($1.value.first?.date ?? .distantPast) }
     }

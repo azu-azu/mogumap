@@ -22,7 +22,7 @@ struct NearbyPlaceSearchView: View {
 
                         Section {
                             NavigationLink(value: "manual") {
-                                Label("Manual Entry", systemImage: "pencil")
+                                Label("nearby.manual_entry".localized, systemImage: "pencil")
                             }
                         }
                     }
@@ -31,9 +31,9 @@ struct NearbyPlaceSearchView: View {
                             ProgressView()
                         } else if !viewModel.isSearching && viewModel.results.isEmpty {
                             ContentUnavailableView(
-                                "No Places Found",
+                                "nearby.no_results".localized,
                                 systemImage: "mappin.slash",
-                                description: Text("Try a different search term.")
+                                description: Text("nearby.no_results_desc".localized)
                             )
                         }
                     }
@@ -43,16 +43,16 @@ struct NearbyPlaceSearchView: View {
                             viewModel.searchText = newValue
                             viewModel.onSearchTextChanged()
                         }
-                    ), prompt: "Search nearby...")
+                    ), prompt: "nearby.search_prompt".localized)
                 } else {
-                    ProgressView("Getting location...")
+                    ProgressView("label.getting_location".localized)
                 }
             }
-            .navigationTitle("Nearby Places")
+            .navigationTitle("nearby.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
+                    Button("action.close".localized) { dismiss() }
                 }
             }
             .navigationDestination(for: MKMapItem.self) { item in
@@ -82,7 +82,7 @@ private struct PlaceRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(item.name ?? "Unknown")
+            Text(item.name ?? "label.unknown".localized)
                 .font(.body)
                 .foregroundStyle(.primary)
 
