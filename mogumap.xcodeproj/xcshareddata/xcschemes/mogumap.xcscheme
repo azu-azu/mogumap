@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CB35A0C5DB148394028BF27D"
-               BuildableName = "yorimichi.app"
-               BlueprintName = "yorimichi"
-               ReferencedContainer = "container:yorimichi.xcodeproj">
+               BuildableName = "mogumap.app"
+               BlueprintName = "mogumap"
+               ReferencedContainer = "container:mogumap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,9 +31,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CB35A0C5DB148394028BF27D"
-            BuildableName = "yorimichi.app"
-            BlueprintName = "yorimichi"
-            ReferencedContainer = "container:yorimichi.xcodeproj">
+            BuildableName = "mogumap.app"
+            BlueprintName = "mogumap"
+            ReferencedContainer = "container:mogumap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -54,9 +54,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CB35A0C5DB148394028BF27D"
-            BuildableName = "yorimichi.app"
-            BlueprintName = "yorimichi"
-            ReferencedContainer = "container:yorimichi.xcodeproj">
+            BuildableName = "mogumap.app"
+            BlueprintName = "mogumap"
+            ReferencedContainer = "container:mogumap.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CB35A0C5DB148394028BF27D"
-            BuildableName = "yorimichi.app"
-            BlueprintName = "yorimichi"
-            ReferencedContainer = "container:yorimichi.xcodeproj">
+            BuildableName = "mogumap.app"
+            BlueprintName = "mogumap"
+            ReferencedContainer = "container:mogumap.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

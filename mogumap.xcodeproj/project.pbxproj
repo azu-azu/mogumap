@@ -96,7 +96,7 @@
 		A83F76567B9455752EF817FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA1B2C3D4E5F6072 /* PhotoViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerSheet.swift; sourceTree = "<group>"; };
 		B124572651EE4A4ED274DD73 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		B3B611DA7E14859307509082 /* yorimichi.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = yorimichi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3B611DA7E14859307509082 /* mogumap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = mogumap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFBA76D6984CEA89C82D1D0 /* GoogleMapsLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsLauncher.swift; sourceTree = "<group>"; };
 		C836909687DA226DE9D812F3 /* EditLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLogView.swift; sourceTree = "<group>"; };
 		D288AFB4094A864E795FEA4C /* CategoryBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBadge.swift; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 				3E6B6BC1FDA67CE2F3014AD5 /* DesignSystem */,
 				316E98F09E0EBBCA5F8C5E3F /* Features */,
 			);
-			path = yorimichi;
+			path = mogumap;
 			sourceTree = "<group>";
 		};
 		67CCEF4428A2FBE471D54062 /* AddLog */ = {
@@ -271,7 +271,7 @@
 		BC92C1D8329A078CE9DDE43D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B3B611DA7E14859307509082 /* yorimichi.app */,
+				B3B611DA7E14859307509082 /* mogumap.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -321,7 +321,7 @@
 /* Begin PBXNativeTarget section */
 		CB35A0C5DB148394028BF27D /* yorimichi */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CBD247D443B2ED56CED259E3 /* Build configuration list for PBXNativeTarget "yorimichi" */;
+			buildConfigurationList = CBD247D443B2ED56CED259E3 /* Build configuration list for PBXNativeTarget "mogumap" */;
 			buildPhases = (
 				06C0FCC3AECE55BF5CEAD8A0 /* Sources */,
 				A9B0C1D2E3F4A074 /* Frameworks */,
@@ -331,12 +331,12 @@
 			);
 			dependencies = (
 			);
-			name = yorimichi;
+			name = mogumap;
 			packageProductDependencies = (
 				A9B0C1D2E3F4A072 /* ZIPFoundation */,
 			);
-			productName = yorimichi;
-			productReference = B3B611DA7E14859307509082 /* yorimichi.app */;
+			productName = mogumap;
+			productReference = B3B611DA7E14859307509082 /* mogumap.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -354,7 +354,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C4BA10D6E829EB1401920AD6 /* Build configuration list for PBXProject "yorimichi" */;
+			buildConfigurationList = C4BA10D6E829EB1401920AD6 /* Build configuration list for PBXProject "mogumap" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -477,7 +477,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = yorimichi/Info.plist;
+				INFOPLIST_FILE = mogumap/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "写真を撮影してログに添付します。";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地を取得して、チェックイン場所を記録します。";
@@ -487,7 +487,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yorimichi.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsukiusagi.mogumap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -566,7 +566,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = yorimichi/Info.plist;
+				INFOPLIST_FILE = mogumap/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "写真を撮影してログに添付します。";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地を取得して、チェックイン場所を記録します。";
@@ -576,7 +576,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yorimichi.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsukiusagi.mogumap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -644,7 +644,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C4BA10D6E829EB1401920AD6 /* Build configuration list for PBXProject "yorimichi" */ = {
+		C4BA10D6E829EB1401920AD6 /* Build configuration list for PBXProject "mogumap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				730590B1AFF5BFB3CE7B7602 /* Debug */,
@@ -653,7 +653,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		CBD247D443B2ED56CED259E3 /* Build configuration list for PBXNativeTarget "yorimichi" */ = {
+		CBD247D443B2ED56CED259E3 /* Build configuration list for PBXNativeTarget "mogumap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				37E40E1AA12C8E95D773DF60 /* Debug */,

@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct YorimichiApp: App {
+struct MoguMapApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
