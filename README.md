@@ -1,4 +1,4 @@
-# Yorimichi
+# mogumap
 
 自分が生きた瞬間を、地図に残すアプリ。  
 *"A personal map of lived moments."*
@@ -27,5 +27,5 @@ Travel / Food のライフログを Swarm + 写真 + 食べ歩きメモとして
 
 ```bash
 xcodegen generate
-open yorimichi.xcodeproj
+open mogumap.xcodeproj
 ```
