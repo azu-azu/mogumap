@@ -11,12 +11,19 @@ settings:
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: ZD854UM35V
     GENERATE_INFOPLIST_FILE: YES
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation
+    version: 0.9.20
+
 targets:
   mogumap:
     type: application
     platform: iOS
     sources:
       - mogumap
+    dependencies:
+      - package: ZIPFoundation
     info:
       path: mogumap/Info.plist
       properties:

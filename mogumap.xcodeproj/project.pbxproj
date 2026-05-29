@@ -39,6 +39,7 @@
 		90C7FAB19A67FD643D6F5CCA /* View+FormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5F10CE6CAF1A366E7669A3 /* View+FormSection.swift */; };
 		93583142DA0457A833ED366A /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD95E6498A022D8A9B4FE89 /* ExportView.swift */; };
 		96901E0933E1A6EE51428C60 /* PlaceAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0976931A33BB05A167DE79FF /* PlaceAnnotationView.swift */; };
+		9BFC780A54805D5908DBF285 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 277B0AAE2515E808C514A9A9 /* ZIPFoundation */; };
 		9E61070800FBB2ABBADE3A1C /* FullTextEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8FA52E03C00E9AD0ECB12F /* FullTextEditorSheet.swift */; };
 		A11CF3CE9BB7AF991579C662 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9775562E2E74E1C998A5962 /* PhotoAttachment.swift */; };
 		AC74FD50D75320778601AB0C /* LogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8C5064A3FEB84558B7AA5B /* LogListView.swift */; };
@@ -112,6 +113,17 @@
 		F666324FCD38094ABB9E653A /* URLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResolver.swift; sourceTree = "<group>"; };
 		F9B4E6435C27F762D1A4839B /* AddLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		72FB1BA111ED1775EB75C99C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BFC780A54805D5908DBF285 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		03A37A01EBED28534B6409BE /* Location */ = {
@@ -324,6 +336,7 @@
 			buildPhases = (
 				3DC53F0E023413C84D08D6CF /* Sources */,
 				930298D96EC3C61397DE564C /* Resources */,
+				72FB1BA111ED1775EB75C99C /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -331,6 +344,7 @@
 			);
 			name = mogumap;
 			packageProductDependencies = (
+				277B0AAE2515E808C514A9A9 /* ZIPFoundation */,
 			);
 			productName = mogumap;
 			productReference = E9605CEE9D87E7FEF49F25BE /* mogumap.app */;
@@ -361,6 +375,9 @@
 			);
 			mainGroup = 2F53E6FB0E83263577628AA4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EE7AE3551DDA4408A29567FA /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6E7CDA1E83D9E602D2F62BB6 /* Products */;
 			projectDirPath = "";
@@ -646,6 +663,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EE7AE3551DDA4408A29567FA /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation";
+			requirement = {
+				kind = exactVersion;
+				version = 0.9.20;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		277B0AAE2515E808C514A9A9 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE7AE3551DDA4408A29567FA /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 794772248BF06C6C4A060AF9 /* Project object */;
 }
