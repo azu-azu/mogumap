@@ -1,0 +1,5 @@
+# Local overrides — fill in your own values before running xcodegen.
+# See local.yml.example for reference.
+settings:
+  base:
+    DEVELOPMENT_TEAM: ""

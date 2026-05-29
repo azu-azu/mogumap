@@ -31,5 +31,7 @@ playground.xcworkspace
 
 tmp.md
 
+# Local overrides (contains DEVELOPMENT_TEAM etc.)
+
 # Internal docs
 docs/internal/
