@@ -16,9 +16,14 @@ struct LogListView: View {
 
     var body: some View {
         List {
-            nearbySection
+            let locationDenied = locationService.authorizationStatus == .denied
+                || locationService.authorizationStatus == .restricted
 
-            if nearbyLogs.isEmpty {
+            if !locationDenied {
+                nearbySection
+            }
+
+            if !locationDenied && nearbyLogs.isEmpty {
                 Section {
                     ContentUnavailableView(
                         "empty.nearby_title".localized,
@@ -28,7 +33,7 @@ struct LogListView: View {
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
                 }
-            } else {
+            } else if !locationDenied {
                 ForEach(nearbyGroupedByDate, id: \.key) { day, dayLogs in
                     Section {
                         Text(day)
