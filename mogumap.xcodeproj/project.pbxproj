@@ -108,7 +108,7 @@
 		D9775562E2E74E1C998A5962 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		DB18F7175A03FAAA6EF01729 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E29451CEED2A57AE215115E6 /* LogRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRowView.swift; sourceTree = "<group>"; };
-		E9605CEE9D87E7FEF49F25BE /* mogumap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = mogumap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9605CEE9D87E7FEF49F25BE /* mogumap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mogumap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB446C090763F291E520E745 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		F2F599CA7C7D3ADB07B4C319 /* LanguageSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSettingsView.swift; sourceTree = "<group>"; };
 		F3A0095513B42035E2D11DF6 /* String+Localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
@@ -548,10 +548,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = mogumap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MoguMap;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_NSCameraUsageDescription = "写真を撮影してログに添付します。";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地を取得して、チェックイン場所を記録します。";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "写真をログに添付するため、フォトライブラリにアクセスします。";
@@ -572,10 +574,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = mogumap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MoguMap;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_NSCameraUsageDescription = "写真を撮影してログに添付します。";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地を取得して、チェックイン場所を記録します。";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "写真をログに添付するため、フォトライブラリにアクセスします。";
