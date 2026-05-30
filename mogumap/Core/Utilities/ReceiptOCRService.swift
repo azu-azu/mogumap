@@ -100,17 +100,17 @@ enum ReceiptOCRService {
                 result.price = Int(ns.substring(with: match.range(at: 2)).filter(\.isNumber))
             }
         }
-        // キーワード行の後にある「価格だけの行」を探す helper
+        // 価格のみからなる行のインデックスを一度だけ収集（tier 1/2 で共用）
         // "価格だけの行" = ¥XXXX 単体、または XXXX円 単体（他のテキストが混在しない）
+        let priceOnlyIndices = lines.indices.filter { i in
+            let l = lines[i].trimmingCharacters(in: .whitespaces)
+            return l.range(of: #"^[¥￥]\s?[\d,]+(内)?$"#, options: .regularExpression) != nil
+                || l.range(of: #"^[\d,]+\s?円$"#, options: .regularExpression) != nil
+        }
+
+        // キーワード行の後の最初の価格のみ行を返す helper
         // 間に何行あっても対応（OCR が列単位で observation を返す場合も含む）
         func nearestPriceOnlyLine(afterKeyword keyRegex: NSRegularExpression) -> Int? {
-            // 価格のみからなる行のインデックスを収集
-            let priceOnlyIndices = lines.indices.filter { i in
-                let l = lines[i].trimmingCharacters(in: .whitespaces)
-                return l.range(of: #"^[¥￥]\s?[\d,]+(内)?$"#, options: .regularExpression) != nil
-                    || l.range(of: #"^[\d,]+\s?円$"#, options: .regularExpression) != nil
-            }
-            // 最後のキーワード行を探し、その後の最初の価格のみ行を返す
             for (i, line) in lines.enumerated().reversed() {
                 let lr = NSRange(line.startIndex..., in: line)
                 guard keyRegex.firstMatch(in: line, range: lr) != nil else { continue }

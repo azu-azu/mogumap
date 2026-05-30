@@ -281,7 +281,7 @@ struct EditLogView: View {
             address: &addressBridge
         )
         if log.address == nil && !addressBridge.isEmpty { log.address = addressBridge }
-	} 
+}
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
         let newData = await PhotoLoader.loadJPEGData(from: items)
