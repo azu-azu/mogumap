@@ -272,13 +272,16 @@ struct EditLogView: View {
         defer { isProcessingOCR = false }
 
         guard let text = await ReceiptOCRService.recognizeText(from: imageData) else { return }
+        var addressBridge = log.address ?? ""
         ReceiptOCRService.parse(text).apply(
             placeName: &log.placeName,
             priceText: &priceText,
             date: &log.date,
-            memo: &log.memo
+            memo: &log.memo,
+            address: &addressBridge
         )
-    }
+        if log.address == nil && !addressBridge.isEmpty { log.address = addressBridge }
+	} 
 
     private func loadPhotos(from items: [PhotosPickerItem]) async {
         let newData = await PhotoLoader.loadJPEGData(from: items)

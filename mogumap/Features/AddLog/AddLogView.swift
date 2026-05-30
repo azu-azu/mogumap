@@ -252,7 +252,8 @@ struct AddLogView: View {
             placeName: &placeName,
             priceText: &priceText,
             date: &date,
-            memo: &memo
+            memo: &memo,
+            address: &address
         )
     }
 

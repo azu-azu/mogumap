@@ -12,11 +12,11 @@ struct FullTextEditorSheet: View {
                 .scrollContentBackground(.hidden)
                 .padding()
                 .background(DesignTokens.Background.base.ignoresSafeArea())
-                .navigationTitle("Thoughts")
+                .navigationTitle("section.thoughts".localized)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") { dismiss() }
+                        Button("action.done".localized) { dismiss() }
                     }
                 }
                 .keyboardCloseToolbar()
