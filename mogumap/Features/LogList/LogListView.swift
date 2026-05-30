@@ -22,12 +22,17 @@ struct LogListView: View {
 
             if locationDenied {
                 Section {
-                    Button("action.open_settings".localized) {
-                        if let url = URL(string: UIApplication.openSettingsURLString) {
-                            UIApplication.shared.open(url)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("nearby.location_denied".localized)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Button("action.open_settings".localized) {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
                         }
+                        .font(.caption)
                     }
-                    .font(.caption)
                 }
             } else {
                 nearbySection
