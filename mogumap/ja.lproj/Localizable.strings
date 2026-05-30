@@ -64,6 +64,7 @@
 "nearby.search_prompt" = "近くを検索...";
 "nearby.location_denied" = "位置情報へのアクセスが拒否されています";
 "nearby.location_denied_desc" = "設定から位置情報へのアクセスを許可してください。";
+"action.open_settings" = "設定を開く";
 "label.getting_location" = "位置情報を取得中...";
 "label.unknown" = "不明";
 "action.close" = "閉じる";

@@ -64,6 +64,7 @@
 "nearby.search_prompt" = "Search nearby...";
 "nearby.location_denied" = "Location Access Denied";
 "nearby.location_denied_desc" = "Allow location access in Settings to find nearby places.";
+"action.open_settings" = "Open Settings";
 "label.getting_location" = "Getting location...";
 "label.unknown" = "Unknown";
 "action.close" = "Close";

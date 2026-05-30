@@ -50,7 +50,13 @@ struct NearbyPlaceSearchView: View {
                         "nearby.location_denied".localized,
                         systemImage: "location.slash",
                         description: Text("nearby.location_denied_desc".localized)
-                    )
+                    ) {
+                        Button("action.open_settings".localized) {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                    }
                 } else {
                     ProgressView("label.getting_location".localized)
                 }

@@ -174,9 +174,12 @@ struct LogListView: View {
                 }
             } else if locationService.authorizationStatus == .denied
                           || locationService.authorizationStatus == .restricted {
-                Text("nearby.location_denied".localized)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Button("action.open_settings".localized) {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                .font(.caption)
             } else {
                 HStack {
                     Spacer()
