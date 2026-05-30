@@ -24,7 +24,7 @@ struct NearbyPlaceSearchView: View {
                     AddLogView(onComplete: { didComplete = true })
                 }
                 .onChange(of: didComplete) { _, completed in
-						if completed { dismiss() }
+                    if completed { dismiss() }
                 }
                 .task {
                     locationService.requestCurrentLocation()

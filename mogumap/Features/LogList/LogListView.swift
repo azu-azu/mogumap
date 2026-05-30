@@ -13,7 +13,12 @@ struct LogListView: View {
     @State private var quickScanMode: QuickScanMode?
     @State private var showQuickAdd = false
     @State private var showSettings = false
-    @State private var cachedFormatter: DateFormatter = DateFormatter()
+    @State private var cachedFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .long
+        f.locale = Locale(identifier: LanguageProvider.shared.language.resolvedLanguageCode)
+        return f
+    }()
 
     var body: some View {
         List {

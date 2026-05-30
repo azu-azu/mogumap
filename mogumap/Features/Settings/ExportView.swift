@@ -5,7 +5,7 @@ struct ExportView: View {
     @Query(sort: \PlaceLog.date, order: .reverse) private var logs: [PlaceLog]
     @State private var exportingOption: ExportService.Option?
     @State private var exportURL: URL?
-    @State private var showShareSheet = false
+    @State private var showExportPicker = false
     @State private var errorMessage: String?
 
     var body: some View {
@@ -42,7 +42,7 @@ struct ExportView: View {
         } message: {
             Text(errorMessage ?? "")
         }
-        .sheet(isPresented: $showShareSheet) {
+        .sheet(isPresented: $showExportPicker) {
             if let url = exportURL {
                 SaveToFilesPicker(url: url)
             }
@@ -87,7 +87,7 @@ struct ExportView: View {
             defer { exportingOption = nil }
             do {
                 exportURL = try ExportService.export(logs: logs, option: option)
-                showShareSheet = true
+                showExportPicker = true
             } catch {
                 errorMessage = error.localizedDescription
             }
