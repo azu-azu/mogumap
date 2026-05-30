@@ -44,6 +44,13 @@ struct NearbyPlaceSearchView: View {
                             viewModel.onSearchTextChanged()
                         }
                     ), prompt: "nearby.search_prompt".localized)
+                } else if locationService.authorizationStatus == .denied
+                            || locationService.authorizationStatus == .restricted {
+                    ContentUnavailableView(
+                        "nearby.location_denied".localized,
+                        systemImage: "location.slash",
+                        description: Text("nearby.location_denied_desc".localized)
+                    )
                 } else {
                     ProgressView("label.getting_location".localized)
                 }

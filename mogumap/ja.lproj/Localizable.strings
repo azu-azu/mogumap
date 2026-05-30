@@ -62,6 +62,8 @@
 "nearby.no_results" = "近くの場所なし";
 "nearby.no_results_desc" = "別のキーワードで検索してみてください。";
 "nearby.search_prompt" = "近くを検索...";
+"nearby.location_denied" = "位置情報へのアクセスが拒否されています";
+"nearby.location_denied_desc" = "設定から位置情報へのアクセスを許可してください。";
 "label.getting_location" = "位置情報を取得中...";
 "label.unknown" = "不明";
 "action.close" = "閉じる";

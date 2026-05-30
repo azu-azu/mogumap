@@ -167,6 +167,11 @@ struct LogListView: View {
                         .buttonStyle(.plain)
                     }
                 }
+            } else if locationService.authorizationStatus == .denied
+                          || locationService.authorizationStatus == .restricted {
+                Text("nearby.location_denied".localized)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             } else {
                 HStack {
                     Spacer()

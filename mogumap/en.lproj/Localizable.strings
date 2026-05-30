@@ -62,6 +62,8 @@
 "nearby.no_results" = "No Places Found";
 "nearby.no_results_desc" = "Try a different search term.";
 "nearby.search_prompt" = "Search nearby...";
+"nearby.location_denied" = "Location Access Denied";
+"nearby.location_denied_desc" = "Allow location access in Settings to find nearby places.";
 "label.getting_location" = "Getting location...";
 "label.unknown" = "Unknown";
 "action.close" = "Close";
