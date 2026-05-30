@@ -33,7 +33,7 @@ struct LogListView: View {
             }
 
             let displayedGroups = locationDenied ? allGroupedByDate : nearbyGroupedByDate
-            if displayedGroups.isEmpty {
+            if !locationDenied && displayedGroups.isEmpty {
                 Section {
                     ContentUnavailableView(
                         "empty.nearby_title".localized,
