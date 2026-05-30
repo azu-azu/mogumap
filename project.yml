@@ -28,6 +28,9 @@ targets:
       path: mogumap/Info.plist
       properties:
         CFBundleIconName: AppIcon
+        NSLocationWhenInUseUsageDescription: "現在地を取得して、チェックイン場所を記録します。"
+        NSCameraUsageDescription: "写真を撮影してログに添付します。"
+        NSPhotoLibraryUsageDescription: "写真をログに添付するため、フォトライブラリにアクセスします。"
         LSApplicationQueriesSchemes:
           - comgooglemaps
         UIApplicationSceneManifest:
