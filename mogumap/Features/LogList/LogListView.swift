@@ -19,11 +19,21 @@ struct LogListView: View {
             let locationDenied = locationService.authorizationStatus == .denied
                 || locationService.authorizationStatus == .restricted
 
-            if !locationDenied {
+            if locationDenied {
+                Section {
+                    Button("action.open_settings".localized) {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    .font(.caption)
+                }
+            } else {
                 nearbySection
             }
 
-            if !locationDenied && nearbyLogs.isEmpty {
+            let displayedGroups = locationDenied ? allGroupedByDate : nearbyGroupedByDate
+            if displayedGroups.isEmpty {
                 Section {
                     ContentUnavailableView(
                         "empty.nearby_title".localized,
@@ -33,8 +43,8 @@ struct LogListView: View {
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
                 }
-            } else if !locationDenied {
-                ForEach(nearbyGroupedByDate, id: \.key) { day, dayLogs in
+            } else {
+                ForEach(displayedGroups, id: \.key) { day, dayLogs in
                     Section {
                         Text(day)
                             .font(.caption)
@@ -207,7 +217,15 @@ struct LogListView: View {
     }
 
     private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
-        let grouped = Dictionary(grouping: nearbyLogs) { log in
+        groupedByDate(nearbyLogs)
+    }
+
+    private var allGroupedByDate: [(key: String, value: [PlaceLog])] {
+        groupedByDate(logs)
+    }
+
+    private func groupedByDate(_ source: [PlaceLog]) -> [(key: String, value: [PlaceLog])] {
+        let grouped = Dictionary(grouping: source) { log in
             dateFormatter.string(from: log.date)
         }
         return grouped.sorted { ($0.value.first?.date ?? .distantPast) > ($1.value.first?.date ?? .distantPast) }
