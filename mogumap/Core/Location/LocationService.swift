@@ -8,6 +8,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     var locationVersion = 0
     var locationError: Error?
     var authorizationStatus: CLAuthorizationStatus = .notDetermined
+    var permissionRequested = false
 
     private let manager = CLLocationManager()
 
@@ -17,7 +18,13 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
     }
 
+    /// permission ダイアログを求めた後、ユーザーが "Ask Next Time" を選んだ状態
+    var isDeclinedForNow: Bool {
+        permissionRequested && authorizationStatus == .notDetermined && currentLocation == nil
+    }
+
     func requestPermission() {
+        permissionRequested = true
         manager.requestWhenInUseAuthorization()
     }
 

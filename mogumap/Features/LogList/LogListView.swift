@@ -18,6 +18,7 @@ struct LogListView: View {
         List {
             let locationDenied = locationService.authorizationStatus == .denied
                 || locationService.authorizationStatus == .restricted
+                || locationService.isDeclinedForNow
 
             if locationDenied {
                 Section {
@@ -183,7 +184,8 @@ struct LogListView: View {
                     }
                 }
             } else if locationService.authorizationStatus == .denied
-                          || locationService.authorizationStatus == .restricted {
+                          || locationService.authorizationStatus == .restricted
+                          || locationService.isDeclinedForNow {
                 Button("action.open_settings".localized) {
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         UIApplication.shared.open(url)

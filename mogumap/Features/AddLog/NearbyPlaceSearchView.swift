@@ -43,7 +43,8 @@ struct NearbyPlaceSearchView: View {
         if let viewModel {
             resultsList(viewModel: viewModel)
         } else if locationService.authorizationStatus == .denied
-                    || locationService.authorizationStatus == .restricted {
+                    || locationService.authorizationStatus == .restricted
+                    || locationService.isDeclinedForNow {
             locationDeniedView
         } else {
             ProgressView("label.getting_location".localized)
