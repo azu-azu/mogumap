@@ -13,6 +13,8 @@ struct LogListView: View {
     @State private var quickScanMode: QuickScanMode?
     @State private var showQuickAdd = false
     @State private var showSettings = false
+    @State private var cachedFormatterLanguage: String = ""
+    @State private var cachedFormatter: DateFormatter = DateFormatter()
 
     var body: some View {
         List {
@@ -208,10 +210,15 @@ struct LogListView: View {
     }
 
     private var dateFormatter: DateFormatter {
-        let f = DateFormatter()
-        f.dateStyle = .long
-        f.locale = Locale(identifier: LanguageProvider.shared.language.resolvedLanguageCode)
-        return f
+        let lang = LanguageProvider.shared.language.resolvedLanguageCode
+        if lang != cachedFormatterLanguage {
+            let f = DateFormatter()
+            f.dateStyle = .long
+            f.locale = Locale(identifier: lang)
+            cachedFormatter = f
+            cachedFormatterLanguage = lang
+        }
+        return cachedFormatter
     }
 
     private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
@@ -236,7 +243,7 @@ private struct NearbyPlaceRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(item.name ?? "Unknown")
+                Text(item.name ?? "label.unknown".localized)
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundStyle(.primary)
