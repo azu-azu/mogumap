@@ -24,12 +24,6 @@
 	<array>
 		<string>comgooglemaps</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>写真を撮影してログに添付します。</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>現在地を取得して、チェックイン場所を記録します。</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>写真をログに添付するため、フォトライブラリにアクセスします。</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

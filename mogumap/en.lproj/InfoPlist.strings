@@ -1,0 +1,3 @@
+NSLocationWhenInUseUsageDescription = "Used to record the location of places you visit.";
+NSCameraUsageDescription = "Used to attach photos to your place logs.";
+NSPhotoLibraryUsageDescription = "Used to select photos to attach to your place logs.";
