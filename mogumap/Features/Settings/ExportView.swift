@@ -44,7 +44,7 @@ struct ExportView: View {
         }
         .sheet(isPresented: $showShareSheet) {
             if let url = exportURL {
-                ShareSheet(url: url)
+                SaveToFilesPicker(url: url)
             }
         }
     }
@@ -95,16 +95,16 @@ struct ExportView: View {
     }
 }
 
-// MARK: - Share sheet bridge
+// MARK: - Files export picker
 
-private struct ShareSheet: UIViewControllerRepresentable {
+private struct SaveToFilesPicker: UIViewControllerRepresentable {
     let url: URL
 
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [url], applicationActivities: nil)
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        UIDocumentPickerViewController(forExporting: [url], asCopy: true)
     }
 
-    func updateUIViewController(_ uvc: UIActivityViewController, context: Context) {}
+    func updateUIViewController(_ uvc: UIDocumentPickerViewController, context: Context) {}
 }
 
 #Preview {

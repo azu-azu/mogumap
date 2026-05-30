@@ -23,7 +23,7 @@ enum ExportService {
         let tempDir = fm.temporaryDirectory
 
         // Unique work directory for this export run
-        let workDir = tempDir.appendingPathComponent("yorimichi-export-\(UUID().uuidString)")
+        let workDir = tempDir.appendingPathComponent("mogumap-export-\(UUID().uuidString)")
         try fm.createDirectory(at: workDir, withIntermediateDirectories: true)
 
         var cleanupNeeded = true
@@ -111,7 +111,7 @@ enum ExportService {
 
     private static func createZip(from workDir: URL, tempDir: URL, fm: FileManager) throws -> URL {
         let dateTag = ISO8601DateFormatter().string(from: Date()).prefix(10) // "2026-05-18"
-        let zipURL = tempDir.appendingPathComponent("yorimichi-\(dateTag).zip")
+        let zipURL = tempDir.appendingPathComponent("mogumap-\(dateTag).zip")
 
         if fm.fileExists(atPath: zipURL.path) {
             try fm.removeItem(at: zipURL)

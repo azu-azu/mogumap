@@ -13,7 +13,6 @@ struct LogListView: View {
     @State private var quickScanMode: QuickScanMode?
     @State private var showQuickAdd = false
     @State private var showSettings = false
-    @State private var cachedFormatterLanguage: String = ""
     @State private var cachedFormatter: DateFormatter = DateFormatter()
 
     var body: some View {
@@ -161,6 +160,10 @@ struct LogListView: View {
         }
         .task {
             locationService.requestCurrentLocation()
+            updateFormatter()
+        }
+        .onChange(of: LanguageProvider.shared.language) { _, _ in
+            updateFormatter()
         }
         .onChange(of: locationService.locationVersion) { _, _ in
             guard nearbyViewModel == nil, let location = locationService.currentLocation else { return }
@@ -209,16 +212,12 @@ struct LogListView: View {
         }
     }
 
-    private var dateFormatter: DateFormatter {
+    private func updateFormatter() {
         let lang = LanguageProvider.shared.language.resolvedLanguageCode
-        if lang != cachedFormatterLanguage {
-            let f = DateFormatter()
-            f.dateStyle = .long
-            f.locale = Locale(identifier: lang)
-            cachedFormatter = f
-            cachedFormatterLanguage = lang
-        }
-        return cachedFormatter
+        let f = DateFormatter()
+        f.dateStyle = .long
+        f.locale = Locale(identifier: lang)
+        cachedFormatter = f
     }
 
     private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
@@ -231,7 +230,7 @@ struct LogListView: View {
 
     private func groupedByDate(_ source: [PlaceLog]) -> [(key: String, value: [PlaceLog])] {
         let grouped = Dictionary(grouping: source) { log in
-            dateFormatter.string(from: log.date)
+            cachedFormatter.string(from: log.date)
         }
         return grouped.sorted { ($0.value.first?.date ?? .distantPast) > ($1.value.first?.date ?? .distantPast) }
     }
