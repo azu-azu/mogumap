@@ -3,7 +3,7 @@ import SwiftData
 import PhotosUI
 import UIKit
 import CoreLocation
-@preconcurrency import MapKit
+import MapKit
 
 struct EditLogView: View {
     @Environment(\.dismiss) private var dismiss

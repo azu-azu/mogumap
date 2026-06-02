@@ -69,6 +69,7 @@ private struct AttachmentPickerSheet: View {
 struct AddLogView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppState.self) private var appState
 
     let selectedPlace: MKMapItem?
     let quickScanMode: QuickScanMode?
@@ -83,7 +84,6 @@ struct AddLogView: View {
     @State private var latitude: Double?
     @State private var longitude: Double?
     @State private var address: String = ""
-    @State private var locationService = LocationService()
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoDataList: [Data] = []
     @State private var priceText = ""
@@ -136,7 +136,7 @@ struct AddLogView: View {
             if let place = selectedPlace {
                 applySelectedPlace(place)
             } else {
-                locationService.requestCurrentLocation()
+                appState.locationService.requestCurrentLocation()
             }
             guard let mode = quickScanMode else { return }
             if mode != .paste {
@@ -339,30 +339,7 @@ struct AddLogView: View {
         FormSection(title: "section.media".localized) {
             VStack(spacing: 0) {
                 if !photoDataList.isEmpty {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(photoDataList.indices, id: \.self) { index in
-                                if let uiImage = UIImage(data: photoDataList[index]) {
-                                    ZStack(alignment: .bottomTrailing) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 80, height: 80)
-                                            .clipped()
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        if receiptIndices.contains(index) {
-                                            ReceiptBadge().offset(x: 2, y: 2)
-                                        }
-                                    }
-                                    .onTapGesture {
-                                        viewingPhoto = uiImage
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    photoThumbnailsSection
                     Divider().padding(.leading, 16)
                 }
                 Button {
@@ -375,6 +352,33 @@ struct AddLogView: View {
                 .padding(.vertical, 12)
             }
         }
+    }
+
+    private var photoThumbnailsSection: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(photoDataList.indices, id: \.self) { index in
+                    if let uiImage = UIImage(data: photoDataList[index]) {
+                        ZStack(alignment: .bottomTrailing) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 80)
+                                .clipped()
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                            if receiptIndices.contains(index) {
+                                ReceiptBadge().offset(x: 2, y: 2)
+                            }
+                        }
+                        .onTapGesture {
+                            viewingPhoto = uiImage
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 
     private var priceSection: some View {
@@ -461,7 +465,7 @@ struct AddLogView: View {
                 if selectedPlace == nil {
                     Divider().padding(.leading, 16)
                     Button {
-                        if let location = locationService.currentLocation {
+                        if let location = appState.locationService.currentLocation {
                             latitude = location.coordinate.latitude
                             longitude = location.coordinate.longitude
                         }
@@ -469,7 +473,7 @@ struct AddLogView: View {
                         Label("action.use_location".localized, systemImage: "location")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .disabled(locationService.currentLocation == nil)
+                    .disabled(appState.locationService.currentLocation == nil)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                 }

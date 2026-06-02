@@ -4,8 +4,8 @@ import MapKit
 
 struct LogListView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppState.self) private var appState
     @Query(sort: \PlaceLog.date, order: .reverse) private var logs: [PlaceLog]
-    @State private var locationService = LocationService()
     @State private var nearbyViewModel: NearbyPlaceSearchViewModel?
     @State private var selectedPlace: MKMapItem?
     @State private var showManualAdd = false
@@ -13,7 +13,7 @@ struct LogListView: View {
     @State private var quickScanMode: QuickScanMode?
     @State private var showQuickAdd = false
     @State private var showSettings = false
-    @State private var cachedFormatter: DateFormatter = {
+    @State private var localizedDateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .long
         f.locale = Locale(identifier: LanguageProvider.shared.language.resolvedLanguageCode)
@@ -22,9 +22,9 @@ struct LogListView: View {
 
     var body: some View {
         List {
-            let locationDenied = locationService.authorizationStatus == .denied
-                || locationService.authorizationStatus == .restricted
-                || locationService.isDeclinedForNow
+            let locationDenied = appState.locationService.authorizationStatus == .denied
+                || appState.locationService.authorizationStatus == .restricted
+                || appState.locationService.isDeclinedForNow
 
             if locationDenied {
                 Section {
@@ -45,7 +45,7 @@ struct LogListView: View {
             }
 
             let displayedGroups = locationDenied ? allGroupedByDate : nearbyGroupedByDate
-            if !locationDenied && locationService.currentLocation != nil && displayedGroups.isEmpty {
+            if !locationDenied && appState.locationService.currentLocation != nil && displayedGroups.isEmpty {
                 Section {
                     ContentUnavailableView(
                         "empty.nearby_title".localized,
@@ -164,14 +164,13 @@ struct LogListView: View {
             }
         }
         .task {
-            locationService.requestCurrentLocation()
             updateFormatter()
         }
         .onChange(of: LanguageProvider.shared.language) { _, _ in
             updateFormatter()
         }
-        .onChange(of: locationService.locationVersion) { _, _ in
-            guard nearbyViewModel == nil, let location = locationService.currentLocation else { return }
+        .onChange(of: appState.locationService.locationVersion) { _, _ in
+            guard nearbyViewModel == nil, let location = appState.locationService.currentLocation else { return }
             let vm = NearbyPlaceSearchViewModel(coordinate: location.coordinate)
             nearbyViewModel = vm
             Task { await vm.searchNearby() }
@@ -209,7 +208,7 @@ struct LogListView: View {
     }
 
     private var nearbyLogs: [PlaceLog] {
-        guard let current = locationService.currentLocation else { return [] }
+        guard let current = appState.locationService.currentLocation else { return [] }
         return logs.filter { log in
             guard let coord = log.coordinate else { return false }
             let logLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
@@ -222,7 +221,7 @@ struct LogListView: View {
         let f = DateFormatter()
         f.dateStyle = .long
         f.locale = Locale(identifier: lang)
-        cachedFormatter = f
+        localizedDateFormatter = f
     }
 
     private var nearbyGroupedByDate: [(key: String, value: [PlaceLog])] {
@@ -235,7 +234,7 @@ struct LogListView: View {
 
     private func groupedByDate(_ source: [PlaceLog]) -> [(key: String, value: [PlaceLog])] {
         let grouped = Dictionary(grouping: source) { log in
-            cachedFormatter.string(from: log.date)
+            localizedDateFormatter.string(from: log.date)
         }
         return grouped.sorted { ($0.value.first?.date ?? .distantPast) > ($1.value.first?.date ?? .distantPast) }
     }

@@ -2,9 +2,9 @@ import SwiftUI
 import SwiftData
 
 private enum ChipLayout {
-    static let hSpacing: CGFloat = 8
-    static let iconLabelSpacing: CGFloat = 4
-    static let scrollPaddingV: CGFloat = 4
+    static let hSpacing: CGFloat = DesignTokens.Spacing.sm
+    static let iconLabelSpacing: CGFloat = DesignTokens.Spacing.xs
+    static let scrollPaddingV: CGFloat = DesignTokens.Spacing.xs
     static let paddingH: CGFloat = 10
     static let paddingV: CGFloat = 6
 }

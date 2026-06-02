@@ -5,7 +5,7 @@ struct RatingView: View {
     var maxRating = 5
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DesignTokens.Spacing.xs) {
             ForEach(1...maxRating, id: \.self) { index in
                 Image(systemName: index <= rating ? "star.fill" : "star")
                     .foregroundStyle(index <= rating ? DesignTokens.Accent.primary : DesignTokens.Semantic.neutral.opacity(0.4))
@@ -23,7 +23,7 @@ struct RatingDisplayView: View {
     var maxRating = 5
 
     var body: some View {
-        HStack(spacing: 2) {
+        HStack(spacing: DesignTokens.Spacing.xs / 2) {
             ForEach(1...maxRating, id: \.self) { index in
                 Image(systemName: index <= rating ? "star.fill" : "star")
                     .foregroundStyle(index <= rating ? DesignTokens.Accent.primary : DesignTokens.Semantic.neutral.opacity(0.4))

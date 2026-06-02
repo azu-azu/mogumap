@@ -12,11 +12,11 @@ struct PhotoGridView: View {
     }
 
     private var gridColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: 4), count: columns)
+        Array(repeating: GridItem(.flexible(), spacing: DesignTokens.Spacing.xs), count: columns)
     }
 
     var body: some View {
-        LazyVGrid(columns: gridColumns, spacing: 4) {
+        LazyVGrid(columns: gridColumns, spacing: DesignTokens.Spacing.xs) {
             ForEach(photos) { photo in
                 if let uiImage = UIImage(data: photo.imageData) {
                     ZStack(alignment: .bottomTrailing) {

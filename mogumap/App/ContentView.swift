@@ -48,6 +48,9 @@ struct ContentView: View {
             .fontDesign(.rounded)
         }
         .environment(appState)
+        .task {
+            appState.locationService.requestCurrentLocation()
+        }
         .overlay(alignment: .top) {
             GeometryReader { geo in
                 StatusBarView(safeAreaTop: geo.safeAreaInsets.top)

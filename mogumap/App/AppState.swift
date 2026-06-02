@@ -14,6 +14,8 @@ final class AppState {
     var mapFocusCoordinate: CLLocationCoordinate2D?
     var mapFocusVersion = 0
 
+    let locationService = LocationService()
+
     func focusMap(on coordinate: CLLocationCoordinate2D) {
         mapFocusCoordinate = coordinate
         mapFocusVersion += 1

@@ -8,7 +8,7 @@ struct PlaceAnnotationView: View {
         let imp = log.impression.flatMap(Impression.init(rawValue:))
 
         VStack(spacing: 0) {
-            VStack(spacing: 2) {
+            VStack(spacing: DesignTokens.Spacing.xs / 2) {
                 Image(systemName: cat.icon)
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.white)
@@ -19,8 +19,8 @@ struct PlaceAnnotationView: View {
                     .lineLimit(1)
                     .frame(maxWidth: 72)
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
+            .padding(.horizontal, DesignTokens.Spacing.sm)
+            .padding(.vertical, DesignTokens.Spacing.md / 2)
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(DesignTokens.Accent.primary)

@@ -25,14 +25,13 @@ enum PlaceInfoParser {
         var usedIndices: Set<Int> = []
 
         // Price: ¥1,900 / 1,900円
+        // Int 変換失敗時は次の pattern を試す
         for pattern in Self.pricePatterns {
-            if let match = text.range(of: pattern, options: .regularExpression) {
-                let digits = String(text[match]).filter(\.isNumber)
-                if let p = Int(digits), p > 0 {
-                    result.price = p
-                    break
-                }
-            }
+            guard let match = text.range(of: pattern, options: .regularExpression) else { continue }
+            let digits = String(text[match]).filter(\.isNumber)
+            guard let p = Int(digits), p > 0 else { continue }
+            result.price = p
+            break
         }
 
         // Date: 2026/05/09, 2026年5月9日

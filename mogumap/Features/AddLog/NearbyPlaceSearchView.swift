@@ -3,7 +3,7 @@ import MapKit
 
 struct NearbyPlaceSearchView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var locationService = LocationService()
+    @Environment(AppState.self) private var appState
     @State private var viewModel: NearbyPlaceSearchViewModel?
     @State private var didComplete = false
 
@@ -27,10 +27,10 @@ struct NearbyPlaceSearchView: View {
                     if completed { dismiss() }
                 }
                 .task {
-                    locationService.requestCurrentLocation()
+                    appState.locationService.requestCurrentLocation()
                 }
-                .onChange(of: locationService.locationVersion) { _, _ in
-                    guard viewModel == nil, let location = locationService.currentLocation else { return }
+                .onChange(of: appState.locationService.locationVersion) { _, _ in
+                    guard viewModel == nil, let location = appState.locationService.currentLocation else { return }
                     let vm = NearbyPlaceSearchViewModel(coordinate: location.coordinate)
                     viewModel = vm
                     Task { await vm.searchNearby() }
@@ -42,9 +42,9 @@ struct NearbyPlaceSearchView: View {
     private var content: some View {
         if let viewModel {
             resultsList(viewModel: viewModel)
-        } else if locationService.authorizationStatus == .denied
-                    || locationService.authorizationStatus == .restricted
-                    || locationService.isDeclinedForNow {
+        } else if appState.locationService.authorizationStatus == .denied
+                    || appState.locationService.authorizationStatus == .restricted
+                    || appState.locationService.isDeclinedForNow {
             locationDeniedView
         } else {
             ProgressView("label.getting_location".localized)
